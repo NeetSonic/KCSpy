@@ -109,11 +109,11 @@ namespace KCSpy.View
                         FileTool.OpenTextFile(file);
                         break;
                     }
-                    BeginInvoke(new MethodInvoker(() =>
-                    {
-                        MessageBoxEx.Info(@"任务执行完成！");
-                    }));
                 }
+                BeginInvoke(new MethodInvoker(() =>
+                {
+                    MessageBoxEx.Info(@"任务执行完成！");
+                }));
             });
             //users.Sort(new KitCmp());
             //users.Reverse();
