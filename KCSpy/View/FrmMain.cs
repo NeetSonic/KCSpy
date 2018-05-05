@@ -51,7 +51,6 @@ namespace KCSpy.View
 
         private void btnTest_Click(object sender, EventArgs e)
         {
-            int errcount = 0;
             if(txtContent.Text.Length > 0 && DialogResult.OK == MessageBoxEx.Confirm(@"是否清空当前已有文本？"))
             {
                 txtContent.Clear();
@@ -105,15 +104,15 @@ namespace KCSpy.View
                     }
                     catch(Exception ex)
                     {
-                        errcount++;
-                        if(errcount >= 3)
-                        {
-                            string file = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), @"error");
-                            FileTool.CreateAndWriteText(file, txtContent.Text);
-                            FileTool.OpenTextFile(file);
-                            break;
-                        }
+                        string file = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), @"error");
+                        FileTool.CreateAndWriteText(file, txtContent.Text);
+                        FileTool.OpenTextFile(file);
+                        break;
                     }
+                    BeginInvoke(new MethodInvoker(() =>
+                    {
+                        MessageBoxEx.Info(@"任务执行完成！");
+                    }));
                 }
             });
             //users.Sort(new KitCmp());
