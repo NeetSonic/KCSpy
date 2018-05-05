@@ -9,12 +9,15 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using KCSpy.Model;
 using Neetsonic.Tool;
+using Neetsonic.Tool.Extensions;
 using Newtonsoft.Json;
 
 namespace KCSpy.View
 {
     public partial class FrmMain : Form
     {
+        private static bool Stop;
+
         public FrmMain()
         {
             InitializeComponent();
@@ -30,16 +33,33 @@ namespace KCSpy.View
             }
         }
 
+        private void BtnClear_Click(object sender, EventArgs e)
+        {
+            txtContent.Clear();
+        }
+
         private void BtnSelectAll_Click(object sender, EventArgs e)
         {
             txtContent.Focus();
             txtContent.SelectAll();
         }
 
+        private void BtnStop_Click(object sender, EventArgs e)
+        {
+            Stop = true;
+        }
+
         private void btnTest_Click(object sender, EventArgs e)
         {
+            int errcount = 0;
+            if(txtContent.Text.Length > 0 && DialogResult.OK == MessageBoxEx.Confirm(@"是否清空当前已有文本？"))
+            {
+                txtContent.Clear();
+            }
+
             Task.Run(() =>
             {
+                Stop = false;
                 List<UserKit> users = new List<UserKit>();
                 for(int i = int.Parse(txtBeginID.Text); i <= int.Parse(txtEndID.Text); i++)
                 {
@@ -81,13 +101,18 @@ namespace KCSpy.View
                             }));
                         }
                         //users.Add(kit);
+                        if(Stop) break;
                     }
                     catch(Exception ex)
                     {
-                        string file = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), @"error");
-                        FileTool.CreateAndWriteText(file, txtContent.Text);
-                        FileTool.OpenTextFile(file);
-                        break;
+                        errcount++;
+                        if(errcount >= 3)
+                        {
+                            string file = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), @"error");
+                            FileTool.CreateAndWriteText(file, txtContent.Text);
+                            FileTool.OpenTextFile(file);
+                            break;
+                        }
                     }
                 }
             });

@@ -39,11 +39,49 @@
             this.txtReferer = new System.Windows.Forms.TextBox();
             this.txtBeginID = new System.Windows.Forms.TextBox();
             this.txtEndID = new System.Windows.Forms.TextBox();
+            this.btnClear = new System.Windows.Forms.Button();
+            this.btnStop = new System.Windows.Forms.Button();
             label1 = new System.Windows.Forms.Label();
             label2 = new System.Windows.Forms.Label();
             label3 = new System.Windows.Forms.Label();
             label4 = new System.Windows.Forms.Label();
             this.SuspendLayout();
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Location = new System.Drawing.Point(12, 9);
+            label1.Name = "label1";
+            label1.Size = new System.Drawing.Size(51, 20);
+            label1.TabIndex = 3;
+            label1.Text = "Token";
+            // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.Location = new System.Drawing.Point(12, 46);
+            label2.Name = "label2";
+            label2.Size = new System.Drawing.Size(57, 20);
+            label2.TabIndex = 5;
+            label2.Text = "Referer";
+            // 
+            // label3
+            // 
+            label3.AutoSize = true;
+            label3.Location = new System.Drawing.Point(12, 91);
+            label3.Name = "label3";
+            label3.Size = new System.Drawing.Size(52, 20);
+            label3.TabIndex = 7;
+            label3.Text = "起点ID";
+            // 
+            // label4
+            // 
+            label4.AutoSize = true;
+            label4.Location = new System.Drawing.Point(186, 91);
+            label4.Name = "label4";
+            label4.Size = new System.Drawing.Size(52, 20);
+            label4.TabIndex = 9;
+            label4.Text = "终点ID";
             // 
             // btnTest
             // 
@@ -67,22 +105,13 @@
             // 
             // btnSelectAll
             // 
-            this.btnSelectAll.Location = new System.Drawing.Point(214, 128);
+            this.btnSelectAll.Location = new System.Drawing.Point(216, 128);
             this.btnSelectAll.Name = "btnSelectAll";
             this.btnSelectAll.Size = new System.Drawing.Size(75, 34);
             this.btnSelectAll.TabIndex = 2;
             this.btnSelectAll.Text = "全选";
             this.btnSelectAll.UseVisualStyleBackColor = true;
             this.btnSelectAll.Click += new System.EventHandler(this.BtnSelectAll_Click);
-            // 
-            // label1
-            // 
-            label1.AutoSize = true;
-            label1.Location = new System.Drawing.Point(12, 9);
-            label1.Name = "label1";
-            label1.Size = new System.Drawing.Size(51, 20);
-            label1.TabIndex = 3;
-            label1.Text = "Token";
             // 
             // txtToken
             // 
@@ -98,24 +127,6 @@
             this.txtReferer.Size = new System.Drawing.Size(297, 26);
             this.txtReferer.TabIndex = 6;
             // 
-            // label2
-            // 
-            label2.AutoSize = true;
-            label2.Location = new System.Drawing.Point(12, 46);
-            label2.Name = "label2";
-            label2.Size = new System.Drawing.Size(57, 20);
-            label2.TabIndex = 5;
-            label2.Text = "Referer";
-            // 
-            // label3
-            // 
-            label3.AutoSize = true;
-            label3.Location = new System.Drawing.Point(12, 91);
-            label3.Name = "label3";
-            label3.Size = new System.Drawing.Size(52, 20);
-            label3.TabIndex = 7;
-            label3.Text = "起点ID";
-            // 
             // txtBeginID
             // 
             this.txtBeginID.Location = new System.Drawing.Point(75, 88);
@@ -130,20 +141,33 @@
             this.txtEndID.Size = new System.Drawing.Size(94, 26);
             this.txtEndID.TabIndex = 10;
             // 
-            // label4
+            // btnClear
             // 
-            label4.AutoSize = true;
-            label4.Location = new System.Drawing.Point(186, 91);
-            label4.Name = "label4";
-            label4.Size = new System.Drawing.Size(52, 20);
-            label4.TabIndex = 9;
-            label4.Text = "终点ID";
+            this.btnClear.Location = new System.Drawing.Point(297, 128);
+            this.btnClear.Name = "btnClear";
+            this.btnClear.Size = new System.Drawing.Size(75, 34);
+            this.btnClear.TabIndex = 11;
+            this.btnClear.Text = "清空";
+            this.btnClear.UseVisualStyleBackColor = true;
+            this.btnClear.Click += new System.EventHandler(this.BtnClear_Click);
+            // 
+            // btnStop
+            // 
+            this.btnStop.Location = new System.Drawing.Point(109, 128);
+            this.btnStop.Name = "btnStop";
+            this.btnStop.Size = new System.Drawing.Size(75, 34);
+            this.btnStop.TabIndex = 12;
+            this.btnStop.Text = "中断";
+            this.btnStop.UseVisualStyleBackColor = true;
+            this.btnStop.Click += new System.EventHandler(this.BtnStop_Click);
             // 
             // FrmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(384, 361);
+            this.Controls.Add(this.btnStop);
+            this.Controls.Add(this.btnClear);
             this.Controls.Add(this.txtEndID);
             this.Controls.Add(label4);
             this.Controls.Add(this.txtBeginID);
@@ -176,5 +200,7 @@
         private System.Windows.Forms.TextBox txtReferer;
         private System.Windows.Forms.TextBox txtBeginID;
         private System.Windows.Forms.TextBox txtEndID;
+        private System.Windows.Forms.Button btnClear;
+        private System.Windows.Forms.Button btnStop;
     }
 }
