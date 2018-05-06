@@ -102,7 +102,7 @@ namespace KCSpy.View
                         //users.Add(kit);
                         if(Stop) break;
                     }
-                    catch(Exception ex)
+                    catch(Exception)
                     {
                         string errFile = @"error.txt";
                         string dir = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
