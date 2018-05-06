@@ -104,7 +104,11 @@ namespace KCSpy.View
                     }
                     catch(Exception ex)
                     {
-                        string file = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), @"error");
+                        string errFile = @"error.txt";
+                        string dir = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+                        string file = Path.Combine(dir, errFile);
+                        int count = 0;
+                        while(File.Exists(file)) file = Path.Combine(dir, errFile.Insert(5,(++count).ToString())); 
                         FileTool.CreateAndWriteText(file, txtContent.Text);
                         FileTool.OpenTextFile(file);
                         break;
