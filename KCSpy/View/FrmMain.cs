@@ -90,20 +90,20 @@ namespace KCSpy.View
                         //request.Referer = txtReferer.Text;
                         //request.UserAgent = "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.87 Safari/537.36";
 
-                        //大凑
-                        HttpWebRequest request = (HttpWebRequest)WebRequest.Create(@"http://203.104.209.150/kcsapi/api_req_member/get_practice_enemyinfo");
-                        request.Method = "POST";
-                        request.Accept = @"*/*";
-                        request.Headers.Add("Accept-Encoding", @"gzip, deflate");
-                        request.Headers.Add("Accept-Language", @"zh-CN,zh;q=0.9,ja;q=0.8,en;q=0.7,zh-TW;q=0.6");
-                        request.ContentLength = data.Length;
-                        request.ContentType = "application/x-www-form-urlencoded";
-                        request.Host = "203.104.209.150";
-                        request.Headers.Add("Origin", @"http://203.104.209.150");
-                        SetHeaderValue(request.Headers, @"Proxy-Connection", @"keep-alive");
-                        request.Referer = txtReferer.Text;
-                        request.UserAgent = "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36";
-                        request.Headers.Add("X-Requested-With", @"ShockwaveFlash/27.0.0.187");
+                        ////大凑
+                        //HttpWebRequest request = (HttpWebRequest)WebRequest.Create(@"http://203.104.209.150/kcsapi/api_req_member/get_practice_enemyinfo");
+                        //request.Method = "POST";
+                        //request.Accept = @"*/*";
+                        //request.Headers.Add("Accept-Encoding", @"gzip, deflate");
+                        //request.Headers.Add("Accept-Language", @"zh-CN,zh;q=0.9,ja;q=0.8,en;q=0.7,zh-TW;q=0.6");
+                        //request.ContentLength = data.Length;
+                        //request.ContentType = "application/x-www-form-urlencoded";
+                        //request.Host = "203.104.209.150";
+                        //request.Headers.Add("Origin", @"http://203.104.209.150");
+                        //SetHeaderValue(request.Headers, @"Proxy-Connection", @"keep-alive");
+                        //request.Referer = txtReferer.Text;
+                        //request.UserAgent = "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36";
+                        //request.Headers.Add("X-Requested-With", @"ShockwaveFlash/27.0.0.187");
 
                         //塔威
                         //HttpWebRequest request = (HttpWebRequest)WebRequest.Create(@"http://125.6.189.71/kcsapi/api_req_member/get_practice_enemyinfo");
@@ -119,6 +119,21 @@ namespace KCSpy.View
                         //request.Referer = txtReferer.Text;
                         //request.UserAgent = "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36";
                         //request.Headers.Add("X-Requested-With", @"ShockwaveFlash/27.0.0.187");
+
+                        //特鲁克
+                        HttpWebRequest request = (HttpWebRequest)WebRequest.Create(@"http://203.104.209.134/kcsapi/api_req_member/get_practice_enemyinfo");
+                        request.Method = "POST";
+                        request.Accept = @"*/*";
+                        request.Headers.Add("Accept-Encoding", @"gzip, deflate");
+                        request.Headers.Add("Accept-Language", @"zh-CN,zh;q=0.9,ja;q=0.8,en;q=0.7,zh-TW;q=0.6");
+                        request.ContentLength = data.Length;
+                        request.ContentType = "application/x-www-form-urlencoded";
+                        request.Host = "203.104.209.134";
+                        request.Headers.Add("Origin", @"http://203.104.209.134");
+                        SetHeaderValue(request.Headers, @"Proxy-Connection", @"keep-alive");
+                        request.Referer = txtReferer.Text;
+                        request.UserAgent = "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36";
+                        request.Headers.Add("X-Requested-With", @"ShockwaveFlash/27.0.0.187");
 
                         Stream newStream = request.GetRequestStream();
 
