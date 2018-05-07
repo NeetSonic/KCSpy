@@ -41,6 +41,7 @@
             this.txtEndID = new System.Windows.Forms.TextBox();
             this.btnClear = new System.Windows.Forms.Button();
             this.btnStop = new System.Windows.Forms.Button();
+            this.lblCurrCount = new System.Windows.Forms.Label();
             label1 = new System.Windows.Forms.Label();
             label2 = new System.Windows.Forms.Label();
             label3 = new System.Windows.Forms.Label();
@@ -161,11 +162,21 @@
             this.btnStop.UseVisualStyleBackColor = true;
             this.btnStop.Click += new System.EventHandler(this.BtnStop_Click);
             // 
+            // lblCurrCount
+            // 
+            this.lblCurrCount.AutoSize = true;
+            this.lblCurrCount.Location = new System.Drawing.Point(8, 347);
+            this.lblCurrCount.Name = "lblCurrCount";
+            this.lblCurrCount.Size = new System.Drawing.Size(37, 20);
+            this.lblCurrCount.TabIndex = 13;
+            this.lblCurrCount.Text = "当前";
+            // 
             // FrmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(384, 361);
+            this.ClientSize = new System.Drawing.Size(384, 376);
+            this.Controls.Add(this.lblCurrCount);
             this.Controls.Add(this.btnStop);
             this.Controls.Add(this.btnClear);
             this.Controls.Add(this.txtEndID);
@@ -202,5 +213,6 @@
         private System.Windows.Forms.TextBox txtEndID;
         private System.Windows.Forms.Button btnClear;
         private System.Windows.Forms.Button btnStop;
+        private System.Windows.Forms.Label lblCurrCount;
     }
 }

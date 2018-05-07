@@ -58,17 +58,25 @@ namespace KCSpy.View
 
             Task.Run(() =>
             {
+                string ret = null;
                 Stop = false;
                 List<UserKit> users = new List<UserKit>();
                 for(int i = int.Parse(txtBeginID.Text); i <= int.Parse(txtEndID.Text); i++)
                 {
+                    BeginInvoke(new MethodInvoker(() =>
+                    {
+                        lblCurrCount.Text = string.Format($@"当前 {i:D8}");
+                    }));
+                    //users.Add(kit);
+                    if(Stop)
+                        break;
                     try
                     {
                         //data  
-                        string postData = string.Format($@"api_verno=1&api_token={txtToken.Text}&api_member_id={i:D6}");
+                        string postData = string.Format($@"api_verno=1&api_token={txtToken.Text}&api_member_id={i}");
                         byte[] data = Encoding.UTF8.GetBytes(postData);
 
-                        //// Prepare web request...  
+                        //肖特兰
                         //HttpWebRequest request = (HttpWebRequest)WebRequest.Create(@"http://125.6.189.7/kcsapi/api_req_member/get_practice_enemyinfo");
                         //request.Method = "POST";
                         //request.Accept = @"*/*";
@@ -82,18 +90,35 @@ namespace KCSpy.View
                         //request.Referer = txtReferer.Text;
                         //request.UserAgent = "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.87 Safari/537.36";
 
+                        //大凑
                         HttpWebRequest request = (HttpWebRequest)WebRequest.Create(@"http://203.104.209.150/kcsapi/api_req_member/get_practice_enemyinfo");
                         request.Method = "POST";
                         request.Accept = @"*/*";
                         request.Headers.Add("Accept-Encoding", @"gzip, deflate");
-                        request.Headers.Add("Accept-Language", @"zh-CN,zh;q=0.8,ja;q=0.6,en;q=0.4,zh-TW;q=0.2");
+                        request.Headers.Add("Accept-Language", @"zh-CN,zh;q=0.9,ja;q=0.8,en;q=0.7,zh-TW;q=0.6");
                         request.ContentLength = data.Length;
                         request.ContentType = "application/x-www-form-urlencoded";
                         request.Host = "203.104.209.150";
                         request.Headers.Add("Origin", @"http://203.104.209.150");
-                        SetHeaderValue(request.Headers, @"Proxy-Connection", @"Keep-Alive");
+                        SetHeaderValue(request.Headers, @"Proxy-Connection", @"keep-alive");
                         request.Referer = txtReferer.Text;
-                        request.UserAgent = "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.87 Safari/537.36";
+                        request.UserAgent = "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36";
+                        request.Headers.Add("X-Requested-With", @"ShockwaveFlash/27.0.0.187");
+
+                        //塔威
+                        //HttpWebRequest request = (HttpWebRequest)WebRequest.Create(@"http://125.6.189.71/kcsapi/api_req_member/get_practice_enemyinfo");
+                        //request.Method = "POST";
+                        //request.Accept = @"*/*";
+                        //request.Headers.Add("Accept-Encoding", @"gzip, deflate");
+                        //request.Headers.Add("Accept-Language", @"zh-CN,zh;q=0.9,ja;q=0.8,en;q=0.7,zh-TW;q=0.6");
+                        //request.ContentLength = data.Length;
+                        //request.ContentType = "application/x-www-form-urlencoded";
+                        //request.Host = "125.6.189.71";
+                        //request.Headers.Add("Origin", @"http://125.6.189.71");
+                        //SetHeaderValue(request.Headers, @"Proxy-Connection", @"Keep-Alive");
+                        //request.Referer = txtReferer.Text;
+                        //request.UserAgent = "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36";
+                        //request.Headers.Add("X-Requested-With", @"ShockwaveFlash/27.0.0.187");
 
                         Stream newStream = request.GetRequestStream();
 
@@ -104,29 +129,69 @@ namespace KCSpy.View
                         // Get response  
                         HttpWebResponse myResponse = (HttpWebResponse)request.GetResponse();
                         StreamReader reader = new StreamReader(myResponse.GetResponseStream(), Encoding.UTF8);
-                        UserKit kit = JsonConvert.DeserializeObject<UserKitCover>(reader.ReadToEnd().Substring(7)).api_data;
+                        ret = reader.ReadToEnd();
+                        UserKit kit = JsonConvert.DeserializeObject<UserKitCover>(ret.Substring(7)).api_data;
                         if(null != kit)
                         {
                             BeginInvoke(new MethodInvoker(() =>
                             {
-                                txtContent.AppendText(string.Format("{0}\t{1}\t{2}\t{3}", kit.api_nickname, kit.api_experience[0], kit.api_member_id, Environment.NewLine));
+                                txtContent.AppendText(string.Format("{0}\t{1}\t{2:D8}\t{3}", kit.api_nickname, kit.api_experience[0], kit.api_member_id, Environment.NewLine));
                             }));
                         }
-                        //users.Add(kit);
-                        if(Stop) break;
+                        else
+                        {
+                            ErrorKit err = JsonConvert.DeserializeObject<ErrorKit>(ret.Substring(7));
+                            if(null != err)
+                            {
+                                switch(err.api_result)
+                                {
+                                    case 100: continue;
+                                    case 201:
+                                    {
+                                        BeginInvoke(new MethodInvoker(() =>
+                                        {
+                                            txtContent.AppendText(string.Format(@"猫了{0}", Environment.NewLine));
+                                        }));
+                                        break;
+                                    }
+                                    default:
+                                    {
+                                        BeginInvoke(new MethodInvoker(() =>
+                                        {
+                                            txtContent.AppendText(ret);
+                                        }));
+                                        break;
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                BeginInvoke(new MethodInvoker(() =>
+                                {
+                                    txtContent.AppendText(ret);
+                                }));
+                            }
+                        }
+
+
                     }
                     catch(Exception)
                     {
+                        BeginInvoke(new MethodInvoker(() =>
+                        {
+                            txtContent.AppendText(ret);
+                        }));
                         string errFile = @"error.txt";
                         string dir = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
                         string file = Path.Combine(dir, errFile);
                         int count = 0;
-                        while(File.Exists(file)) file = Path.Combine(dir, errFile.Insert(5,(++count).ToString())); 
+                        while(File.Exists(file)) file = Path.Combine(dir, errFile.Insert(5, (++count).ToString()));
                         FileTool.CreateAndWriteText(file, txtContent.Text);
                         FileTool.OpenTextFile(file);
                         break;
                     }
                 }
+
                 BeginInvoke(new MethodInvoker(() =>
                 {
                     MessageBoxEx.Info(@"任务执行完成！");

@@ -18,4 +18,10 @@ namespace KCSpy.Model
         public string api_result_msg { get; set; }
         public UserKit api_data { get; set; }
     }
+
+    public sealed class ErrorKit
+    {
+        public int api_result { get; set; }
+        public string api_result_msg { get; set; }
+    }
 }
