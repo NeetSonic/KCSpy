@@ -29,7 +29,8 @@ namespace KCSpy.View
             new Server {Name = @"肖特兰", IP = @"125.6.189.7"},
             new Server {Name = @"大凑", IP = @"203.104.209.150"},
             new Server {Name = @"塔威", IP = @"125.6.189.71"},
-            new Server {Name = @"特鲁克", IP = @"203.104.209.134"}
+            new Server {Name = @"特鲁克", IP = @"203.104.209.134"},
+            new Server {Name = @"林加", IP = @"203.104.209.167"}
         };
 
         private static void SetHeaderValue(WebHeaderCollection header, string name, string value)
