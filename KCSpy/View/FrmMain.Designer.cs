@@ -32,6 +32,7 @@
             System.Windows.Forms.Label label2;
             System.Windows.Forms.Label label3;
             System.Windows.Forms.Label label4;
+            System.Windows.Forms.Label label5;
             this.btnTest = new System.Windows.Forms.Button();
             this.txtContent = new System.Windows.Forms.TextBox();
             this.btnSelectAll = new System.Windows.Forms.Button();
@@ -42,16 +43,18 @@
             this.btnClear = new System.Windows.Forms.Button();
             this.btnStop = new System.Windows.Forms.Button();
             this.lblCurrCount = new System.Windows.Forms.Label();
+            this.cmbServer = new System.Windows.Forms.ComboBox();
             label1 = new System.Windows.Forms.Label();
             label2 = new System.Windows.Forms.Label();
             label3 = new System.Windows.Forms.Label();
             label4 = new System.Windows.Forms.Label();
+            label5 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new System.Drawing.Point(12, 9);
+            label1.Location = new System.Drawing.Point(12, 43);
             label1.Name = "label1";
             label1.Size = new System.Drawing.Size(51, 20);
             label1.TabIndex = 3;
@@ -60,7 +63,7 @@
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new System.Drawing.Point(12, 46);
+            label2.Location = new System.Drawing.Point(12, 80);
             label2.Name = "label2";
             label2.Size = new System.Drawing.Size(57, 20);
             label2.TabIndex = 5;
@@ -69,7 +72,7 @@
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new System.Drawing.Point(12, 91);
+            label3.Location = new System.Drawing.Point(12, 125);
             label3.Name = "label3";
             label3.Size = new System.Drawing.Size(52, 20);
             label3.TabIndex = 7;
@@ -78,7 +81,7 @@
             // label4
             // 
             label4.AutoSize = true;
-            label4.Location = new System.Drawing.Point(186, 91);
+            label4.Location = new System.Drawing.Point(186, 125);
             label4.Name = "label4";
             label4.Size = new System.Drawing.Size(52, 20);
             label4.TabIndex = 9;
@@ -86,18 +89,18 @@
             // 
             // btnTest
             // 
-            this.btnTest.Location = new System.Drawing.Point(12, 128);
+            this.btnTest.Location = new System.Drawing.Point(12, 162);
             this.btnTest.Name = "btnTest";
             this.btnTest.Size = new System.Drawing.Size(75, 34);
             this.btnTest.TabIndex = 0;
             this.btnTest.Text = "Test";
             this.btnTest.UseVisualStyleBackColor = true;
-            this.btnTest.Click += new System.EventHandler(this.btnTest_Click);
+            this.btnTest.Click += new System.EventHandler(this.BtnTest_Click);
             // 
             // txtContent
             // 
             this.txtContent.AcceptsReturn = true;
-            this.txtContent.Location = new System.Drawing.Point(12, 175);
+            this.txtContent.Location = new System.Drawing.Point(12, 209);
             this.txtContent.MaxLength = 3276700;
             this.txtContent.Multiline = true;
             this.txtContent.Name = "txtContent";
@@ -106,7 +109,7 @@
             // 
             // btnSelectAll
             // 
-            this.btnSelectAll.Location = new System.Drawing.Point(216, 128);
+            this.btnSelectAll.Location = new System.Drawing.Point(216, 162);
             this.btnSelectAll.Name = "btnSelectAll";
             this.btnSelectAll.Size = new System.Drawing.Size(75, 34);
             this.btnSelectAll.TabIndex = 2;
@@ -116,35 +119,35 @@
             // 
             // txtToken
             // 
-            this.txtToken.Location = new System.Drawing.Point(75, 6);
+            this.txtToken.Location = new System.Drawing.Point(75, 40);
             this.txtToken.Name = "txtToken";
             this.txtToken.Size = new System.Drawing.Size(297, 26);
             this.txtToken.TabIndex = 4;
             // 
             // txtReferer
             // 
-            this.txtReferer.Location = new System.Drawing.Point(75, 43);
+            this.txtReferer.Location = new System.Drawing.Point(75, 77);
             this.txtReferer.Name = "txtReferer";
             this.txtReferer.Size = new System.Drawing.Size(297, 26);
             this.txtReferer.TabIndex = 6;
             // 
             // txtBeginID
             // 
-            this.txtBeginID.Location = new System.Drawing.Point(75, 88);
+            this.txtBeginID.Location = new System.Drawing.Point(75, 122);
             this.txtBeginID.Name = "txtBeginID";
             this.txtBeginID.Size = new System.Drawing.Size(94, 26);
             this.txtBeginID.TabIndex = 8;
             // 
             // txtEndID
             // 
-            this.txtEndID.Location = new System.Drawing.Point(249, 88);
+            this.txtEndID.Location = new System.Drawing.Point(249, 122);
             this.txtEndID.Name = "txtEndID";
             this.txtEndID.Size = new System.Drawing.Size(94, 26);
             this.txtEndID.TabIndex = 10;
             // 
             // btnClear
             // 
-            this.btnClear.Location = new System.Drawing.Point(297, 128);
+            this.btnClear.Location = new System.Drawing.Point(297, 162);
             this.btnClear.Name = "btnClear";
             this.btnClear.Size = new System.Drawing.Size(75, 34);
             this.btnClear.TabIndex = 11;
@@ -154,7 +157,7 @@
             // 
             // btnStop
             // 
-            this.btnStop.Location = new System.Drawing.Point(109, 128);
+            this.btnStop.Location = new System.Drawing.Point(109, 162);
             this.btnStop.Name = "btnStop";
             this.btnStop.Size = new System.Drawing.Size(75, 34);
             this.btnStop.TabIndex = 12;
@@ -165,17 +168,37 @@
             // lblCurrCount
             // 
             this.lblCurrCount.AutoSize = true;
-            this.lblCurrCount.Location = new System.Drawing.Point(8, 347);
+            this.lblCurrCount.Location = new System.Drawing.Point(8, 381);
             this.lblCurrCount.Name = "lblCurrCount";
             this.lblCurrCount.Size = new System.Drawing.Size(37, 20);
             this.lblCurrCount.TabIndex = 13;
             this.lblCurrCount.Text = "当前";
             // 
+            // label5
+            // 
+            label5.AutoSize = true;
+            label5.Location = new System.Drawing.Point(13, 9);
+            label5.Name = "label5";
+            label5.Size = new System.Drawing.Size(51, 20);
+            label5.TabIndex = 14;
+            label5.Text = "服务器";
+            // 
+            // cmbServer
+            // 
+            this.cmbServer.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbServer.FormattingEnabled = true;
+            this.cmbServer.Location = new System.Drawing.Point(75, 6);
+            this.cmbServer.Name = "cmbServer";
+            this.cmbServer.Size = new System.Drawing.Size(297, 28);
+            this.cmbServer.TabIndex = 15;
+            // 
             // FrmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(384, 376);
+            this.ClientSize = new System.Drawing.Size(384, 416);
+            this.Controls.Add(this.cmbServer);
+            this.Controls.Add(label5);
             this.Controls.Add(this.lblCurrCount);
             this.Controls.Add(this.btnStop);
             this.Controls.Add(this.btnClear);
@@ -197,6 +220,7 @@
             this.Name = "FrmMain";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "KCSpy";
+            this.Load += new System.EventHandler(this.FrmMain_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -214,5 +238,6 @@
         private System.Windows.Forms.Button btnClear;
         private System.Windows.Forms.Button btnStop;
         private System.Windows.Forms.Label lblCurrCount;
+        private System.Windows.Forms.ComboBox cmbServer;
     }
 }

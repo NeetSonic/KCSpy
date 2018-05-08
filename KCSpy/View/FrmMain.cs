@@ -17,11 +17,20 @@ namespace KCSpy.View
     public partial class FrmMain : Form
     {
         private static bool Stop;
+        private static readonly List<Server> Servers;
 
         public FrmMain()
         {
             InitializeComponent();
         }
+
+        static FrmMain() => Servers = new List<Server>
+        {
+            new Server {Name = @"肖特兰", IP = @"125.6.189.7"},
+            new Server {Name = @"大凑", IP = @"203.104.209.150"},
+            new Server {Name = @"塔威", IP = @"125.6.189.71"},
+            new Server {Name = @"特鲁克", IP = @"203.104.209.134"}
+        };
 
         private static void SetHeaderValue(WebHeaderCollection header, string name, string value)
         {
@@ -29,7 +38,8 @@ namespace KCSpy.View
             if(property != null)
             {
                 NameValueCollection collection = property.GetValue(header, null) as NameValueCollection;
-                if(collection != null) collection[name] = value;
+                if(collection != null)
+                    collection[name] = value;
             }
         }
 
@@ -49,13 +59,11 @@ namespace KCSpy.View
             Stop = true;
         }
 
-        private void btnTest_Click(object sender, EventArgs e)
+        private void BtnTest_Click(object sender, EventArgs e)
         {
             if(txtContent.Text.Length > 0 && DialogResult.OK == MessageBoxEx.Confirm(@"是否清空当前已有文本？"))
-            {
                 txtContent.Clear();
-            }
-
+            string IP = cmbServer.SelectedValue.ToString();
             Task.Run(() =>
             {
                 string ret = null;
@@ -76,60 +84,15 @@ namespace KCSpy.View
                         string postData = string.Format($@"api_verno=1&api_token={txtToken.Text}&api_member_id={i}");
                         byte[] data = Encoding.UTF8.GetBytes(postData);
 
-                        //肖特兰
-                        //HttpWebRequest request = (HttpWebRequest)WebRequest.Create(@"http://125.6.189.7/kcsapi/api_req_member/get_practice_enemyinfo");
-                        //request.Method = "POST";
-                        //request.Accept = @"*/*";
-                        //request.Headers.Add("Accept-Encoding", @"gzip, deflate");
-                        //request.Headers.Add("Accept-Language", @"zh-CN,zh;q=0.8,ja;q=0.6,en;q=0.4,zh-TW;q=0.2");
-                        //request.ContentLength = data.Length;
-                        //request.ContentType = "application/x-www-form-urlencoded";
-                        //request.Host = "125.6.189.7";
-                        //request.Headers.Add("Origin", @"http://125.6.189.7");
-                        //SetHeaderValue(request.Headers, @"Proxy-Connection", @"Keep-Alive");
-                        //request.Referer = txtReferer.Text;
-                        //request.UserAgent = "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.87 Safari/537.36";
-
-                        ////大凑
-                        //HttpWebRequest request = (HttpWebRequest)WebRequest.Create(@"http://203.104.209.150/kcsapi/api_req_member/get_practice_enemyinfo");
-                        //request.Method = "POST";
-                        //request.Accept = @"*/*";
-                        //request.Headers.Add("Accept-Encoding", @"gzip, deflate");
-                        //request.Headers.Add("Accept-Language", @"zh-CN,zh;q=0.9,ja;q=0.8,en;q=0.7,zh-TW;q=0.6");
-                        //request.ContentLength = data.Length;
-                        //request.ContentType = "application/x-www-form-urlencoded";
-                        //request.Host = "203.104.209.150";
-                        //request.Headers.Add("Origin", @"http://203.104.209.150");
-                        //SetHeaderValue(request.Headers, @"Proxy-Connection", @"keep-alive");
-                        //request.Referer = txtReferer.Text;
-                        //request.UserAgent = "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36";
-                        //request.Headers.Add("X-Requested-With", @"ShockwaveFlash/27.0.0.187");
-
-                        //塔威
-                        //HttpWebRequest request = (HttpWebRequest)WebRequest.Create(@"http://125.6.189.71/kcsapi/api_req_member/get_practice_enemyinfo");
-                        //request.Method = "POST";
-                        //request.Accept = @"*/*";
-                        //request.Headers.Add("Accept-Encoding", @"gzip, deflate");
-                        //request.Headers.Add("Accept-Language", @"zh-CN,zh;q=0.9,ja;q=0.8,en;q=0.7,zh-TW;q=0.6");
-                        //request.ContentLength = data.Length;
-                        //request.ContentType = "application/x-www-form-urlencoded";
-                        //request.Host = "125.6.189.71";
-                        //request.Headers.Add("Origin", @"http://125.6.189.71");
-                        //SetHeaderValue(request.Headers, @"Proxy-Connection", @"Keep-Alive");
-                        //request.Referer = txtReferer.Text;
-                        //request.UserAgent = "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36";
-                        //request.Headers.Add("X-Requested-With", @"ShockwaveFlash/27.0.0.187");
-
-                        //特鲁克
-                        HttpWebRequest request = (HttpWebRequest)WebRequest.Create(@"http://203.104.209.134/kcsapi/api_req_member/get_practice_enemyinfo");
+                        HttpWebRequest request = (HttpWebRequest)WebRequest.Create(string.Format($@"http://{IP}/kcsapi/api_req_member/get_practice_enemyinfo"));
                         request.Method = "POST";
                         request.Accept = @"*/*";
                         request.Headers.Add("Accept-Encoding", @"gzip, deflate");
                         request.Headers.Add("Accept-Language", @"zh-CN,zh;q=0.9,ja;q=0.8,en;q=0.7,zh-TW;q=0.6");
                         request.ContentLength = data.Length;
                         request.ContentType = "application/x-www-form-urlencoded";
-                        request.Host = "203.104.209.134";
-                        request.Headers.Add("Origin", @"http://203.104.209.134");
+                        request.Host = IP;
+                        request.Headers.Add("Origin", string.Format($@"http://{IP}"));
                         SetHeaderValue(request.Headers, @"Proxy-Connection", @"keep-alive");
                         request.Referer = txtReferer.Text;
                         request.UserAgent = "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36";
@@ -147,20 +110,18 @@ namespace KCSpy.View
                         ret = reader.ReadToEnd();
                         UserKit kit = JsonConvert.DeserializeObject<UserKitCover>(ret.Substring(7)).api_data;
                         if(null != kit)
-                        {
                             BeginInvoke(new MethodInvoker(() =>
                             {
                                 txtContent.AppendText(string.Format("{0}\t{1}\t{2:D8}{3}", kit.api_nickname, kit.api_experience[0], kit.api_member_id, Environment.NewLine));
                             }));
-                        }
                         else
                         {
                             ErrorKit err = JsonConvert.DeserializeObject<ErrorKit>(ret.Substring(7));
                             if(null != err)
-                            {
                                 switch(err.api_result)
                                 {
-                                    case 100: continue;
+                                    case 100:
+                                        continue;
                                     case 201:
                                     {
                                         BeginInvoke(new MethodInvoker(() =>
@@ -178,17 +139,12 @@ namespace KCSpy.View
                                         break;
                                     }
                                 }
-                            }
                             else
-                            {
                                 BeginInvoke(new MethodInvoker(() =>
                                 {
                                     txtContent.AppendText(ret);
                                 }));
-                            }
                         }
-
-
                     }
                     catch(Exception)
                     {
@@ -196,11 +152,12 @@ namespace KCSpy.View
                         {
                             txtContent.AppendText(ret);
                         }));
-                        string errFile = @"error.txt";
+                        const string errFile = @"error.txt";
                         string dir = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
                         string file = Path.Combine(dir, errFile);
                         int count = 0;
-                        while(File.Exists(file)) file = Path.Combine(dir, errFile.Insert(5, (++count).ToString()));
+                        while(File.Exists(file))
+                            file = Path.Combine(dir, errFile.Insert(5, (++count).ToString()));
                         FileTool.CreateAndWriteText(file, txtContent.Text);
                         FileTool.OpenTextFile(file);
                         break;
@@ -215,6 +172,13 @@ namespace KCSpy.View
             //users.Sort(new KitCmp());
             //users.Reverse();
             //foreach(UserKit kit in users) txtContent.AppendText(string.Format($@"提督名：{kit.api_nickname}  经验值：{kit.api_experience[0]}{Environment.NewLine}  ID:{kit.api_member_id}"));
+        }
+
+        private void FrmMain_Load(object sender, EventArgs e)
+        {
+            cmbServer.DataSource = Servers;
+            cmbServer.DisplayMember = @"Name";
+            cmbServer.ValueMember = @"IP";
         }
 
         internal class KitCmp : IComparer<UserKit>
