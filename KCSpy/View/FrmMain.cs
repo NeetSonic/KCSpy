@@ -26,11 +26,12 @@ namespace KCSpy.View
 
         static FrmMain() => Servers = new List<Server>
         {
-            new Server {Name = @"肖特兰", IP = @"125.6.189.7"},
-            new Server {Name = @"大凑", IP = @"203.104.209.150"},
-            new Server {Name = @"塔威", IP = @"125.6.189.71"},
-            new Server {Name = @"特鲁克", IP = @"203.104.209.134"},
-            new Server {Name = @"林加", IP = @"203.104.209.167"}
+                new Server {Name = @"大凑", IP = @"203.104.209.150"},
+                new Server {Name = @"特鲁克", IP = @"203.104.209.134"},
+                new Server {Name = @"林加", IP = @"203.104.209.167"},
+                new Server {Name = @"肖特兰", IP = @"125.6.189.7"},
+                new Server {Name = @"塔威", IP = @"125.6.189.71"},
+                new Server {Name = @"柱島", IP = @"203.104.209.102"}
         };
 
         private static void SetHeaderValue(WebHeaderCollection header, string name, string value)
@@ -38,8 +39,7 @@ namespace KCSpy.View
             PropertyInfo property = typeof(WebHeaderCollection).GetProperty("InnerCollection", BindingFlags.Instance | BindingFlags.NonPublic);
             if(property != null)
             {
-                NameValueCollection collection = property.GetValue(header, null) as NameValueCollection;
-                if(collection != null)
+                if(property.GetValue(header, null) is NameValueCollection collection)
                     collection[name] = value;
             }
         }
