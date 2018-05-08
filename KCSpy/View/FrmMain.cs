@@ -68,14 +68,12 @@ namespace KCSpy.View
             {
                 string ret = null;
                 Stop = false;
-                List<UserKit> users = new List<UserKit>();
                 for(int i = int.Parse(txtBeginID.Text); i <= int.Parse(txtEndID.Text); i++)
                 {
                     BeginInvoke(new MethodInvoker(() =>
                     {
                         lblCurrCount.Text = string.Format($@"当前 {i:D8}");
                     }));
-                    //users.Add(kit);
                     if(Stop)
                         break;
                     try
@@ -169,9 +167,6 @@ namespace KCSpy.View
                     MessageBoxEx.Info(@"任务执行完成！");
                 }));
             });
-            //users.Sort(new KitCmp());
-            //users.Reverse();
-            //foreach(UserKit kit in users) txtContent.AppendText(string.Format($@"提督名：{kit.api_nickname}  经验值：{kit.api_experience[0]}{Environment.NewLine}  ID:{kit.api_member_id}"));
         }
 
         private void FrmMain_Load(object sender, EventArgs e)
