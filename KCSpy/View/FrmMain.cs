@@ -150,7 +150,7 @@ namespace KCSpy.View
                         {
                             BeginInvoke(new MethodInvoker(() =>
                             {
-                                txtContent.AppendText(string.Format("{0}\t{1}\t{2:D8}\t{3}", kit.api_nickname, kit.api_experience[0], kit.api_member_id, Environment.NewLine));
+                                txtContent.AppendText(string.Format("{0}\t{1}\t{2:D8}{3}", kit.api_nickname, kit.api_experience[0], kit.api_member_id, Environment.NewLine));
                             }));
                         }
                         else
