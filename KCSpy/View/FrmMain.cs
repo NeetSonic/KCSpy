@@ -26,12 +26,13 @@ namespace KCSpy.View
 
         static FrmMain() => Servers = new List<Server>
         {
-                new Server {Name = @"大凑", IP = @"203.104.209.150"},
-                new Server {Name = @"特鲁克", IP = @"203.104.209.134"},
-                new Server {Name = @"林加", IP = @"203.104.209.167"},
-                new Server {Name = @"肖特兰", IP = @"125.6.189.7"},
-                new Server {Name = @"塔威", IP = @"125.6.189.71"},
-                new Server {Name = @"柱島", IP = @"203.104.209.102"}
+            new Server {Name = @"大凑", IP = @"203.104.209.150"},
+            new Server {Name = @"特鲁克", IP = @"203.104.209.134"},
+            new Server {Name = @"林加", IP = @"203.104.209.167"},
+            new Server {Name = @"肖特兰", IP = @"125.6.189.7"},
+            new Server {Name = @"塔威", IP = @"125.6.189.71"},
+            new Server {Name = @"岩川", IP = @"203.104.209.39"},
+            new Server {Name = @"柱島", IP = @"203.104.209.102"}
         };
 
         private static void SetHeaderValue(WebHeaderCollection header, string name, string value)
@@ -60,23 +61,22 @@ namespace KCSpy.View
             Stop = true;
         }
 
-        private void BtnTest_Click(object sender, EventArgs e)
+        private async void BtnTest_Click(object sender, EventArgs e)
         {
-            if(txtContent.Text.Length > 0 && DialogResult.OK == MessageBoxEx.Confirm(@"是否清空当前已有文本？"))
-                txtContent.Clear();
+            if(txtContent.Text.Length > 0 && DialogResult.OK == MessageBoxEx.Confirm(@"是否清空当前已有文本？")) txtContent.Clear();
             string IP = cmbServer.SelectedValue.ToString();
-            Task.Run(() =>
+            await Task.Run(() =>
             {
                 string ret = null;
                 Stop = false;
                 for(int i = int.Parse(txtBeginID.Text); i <= int.Parse(txtEndID.Text); i++)
                 {
+                    if(Stop)
+                        break;
                     BeginInvoke(new MethodInvoker(() =>
                     {
                         lblCurrCount.Text = string.Format($@"当前 {i:D8}");
                     }));
-                    if(Stop)
-                        break;
                     try
                     {
                         //data  
@@ -162,12 +162,8 @@ namespace KCSpy.View
                         break;
                     }
                 }
-
-                BeginInvoke(new MethodInvoker(() =>
-                {
-                    MessageBoxEx.Info(@"任务执行完成！");
-                }));
             });
+            MessageBoxEx.Info(@"任务执行完成！");
         }
 
         private void FrmMain_Load(object sender, EventArgs e)
@@ -175,11 +171,6 @@ namespace KCSpy.View
             cmbServer.DataSource = Servers;
             cmbServer.DisplayMember = @"Name";
             cmbServer.ValueMember = @"IP";
-        }
-
-        internal class KitCmp : IComparer<UserKit>
-        {
-            public int Compare(UserKit x, UserKit y) => x.api_experience[0] - y.api_experience[0];
         }
     }
 }
