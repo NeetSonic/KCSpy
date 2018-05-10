@@ -5,6 +5,7 @@ using System.IO;
 using System.Net;
 using System.Reflection;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using KCSpy.Model;
@@ -57,7 +58,7 @@ namespace KCSpy.View
 
         private void BtnStop_Click(object sender, EventArgs e) => Stop = true;
 
-        private async void BtnTest_Click(object sender, EventArgs e)
+        private async void BtnTest_ClickAsync(object sender, EventArgs e)
         {
             if(txtContent.Text.Length > 0 && DialogResult.OK == MessageBoxEx.Confirm(@"是否清空当前已有文本？")) txtContent.Clear();
             string IP = cmbServer.SelectedValue.ToString();
