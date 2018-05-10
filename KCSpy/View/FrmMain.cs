@@ -26,15 +26,15 @@ namespace KCSpy.View
 
         static FrmMain() => Servers = new List<Server>
         {
-                new Server {Name = @"大凑", IP = @"203.104.209.150"},
-                new Server {Name = @"特鲁克", IP = @"203.104.209.134"},
-                new Server {Name = @"林加", IP = @"203.104.209.167"},
-                new Server {Name = @"肖特兰", IP = @"125.6.189.7"},
-                new Server {Name = @"塔威", IP = @"125.6.189.71"},
-                new Server {Name = @"宿毛湾", IP = @"125.6.189.247"},
-                new Server {Name = @"岩川", IP = @"203.104.209.39"},
-                new Server {Name = @"佐伯湾", IP = @"203.104.209.55"},
-                new Server {Name = @"柱島", IP = @"203.104.209.102"}
+            new Server {Name = @"大凑", IP = @"203.104.209.150"},
+            new Server {Name = @"特鲁克", IP = @"203.104.209.134"},
+            new Server {Name = @"林加", IP = @"203.104.209.167"},
+            new Server {Name = @"肖特兰", IP = @"125.6.189.7"},
+            new Server {Name = @"塔威", IP = @"125.6.189.71"},
+            new Server {Name = @"宿毛湾", IP = @"125.6.189.247"},
+            new Server {Name = @"岩川", IP = @"203.104.209.39"},
+            new Server {Name = @"佐伯湾", IP = @"203.104.209.55"},
+            new Server {Name = @"柱島", IP = @"203.104.209.102"}
         };
 
         private static void SetHeaderValue(WebHeaderCollection header, string name, string value)
@@ -47,10 +47,7 @@ namespace KCSpy.View
             }
         }
 
-        private void BtnClear_Click(object sender, EventArgs e)
-        {
-            txtContent.Clear();
-        }
+        private void BtnClear_Click(object sender, EventArgs e) => txtContent.Clear();
 
         private void BtnSelectAll_Click(object sender, EventArgs e)
         {
@@ -58,10 +55,7 @@ namespace KCSpy.View
             txtContent.SelectAll();
         }
 
-        private void BtnStop_Click(object sender, EventArgs e)
-        {
-            Stop = true;
-        }
+        private void BtnStop_Click(object sender, EventArgs e) => Stop = true;
 
         private async void BtnTest_Click(object sender, EventArgs e)
         {
@@ -111,10 +105,12 @@ namespace KCSpy.View
                         ret = reader.ReadToEnd();
                         UserKit kit = JsonConvert.DeserializeObject<UserKitCover>(ret.Substring(7)).api_data;
                         if(null != kit)
+                        {
                             BeginInvoke(new MethodInvoker(() =>
                             {
                                 txtContent.AppendText(string.Format("{0}\t{1}\t{2:D8}{3}", kit.api_nickname, kit.api_experience[0], kit.api_member_id, Environment.NewLine));
                             }));
+                        }
                         else
                         {
                             ErrorKit err = JsonConvert.DeserializeObject<ErrorKit>(ret.Substring(7));
