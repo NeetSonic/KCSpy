@@ -50,11 +50,7 @@ namespace KCSpy.View
 
         private void BtnClear_Click(object sender, EventArgs e) => txtContent.Clear();
 
-        private void BtnSelectAll_Click(object sender, EventArgs e)
-        {
-            txtContent.Focus();
-            txtContent.SelectAll();
-        }
+        private void BtnSelectAll_Click(object sender, EventArgs e) => txtContent.Highlight();
 
         private void BtnStop_Click(object sender, EventArgs e) => Stop = true;
 

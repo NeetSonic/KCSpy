@@ -34,7 +34,7 @@
             System.Windows.Forms.Label label4;
             System.Windows.Forms.Label label5;
             this.btnTest = new System.Windows.Forms.Button();
-            this.txtContent = new System.Windows.Forms.TextBox();
+            this.txtContent =new Neetsonic.Control.TextBox();
             this.btnSelectAll = new System.Windows.Forms.Button();
             this.txtToken = new System.Windows.Forms.TextBox();
             this.txtReferer = new System.Windows.Forms.TextBox();
@@ -229,7 +229,7 @@
         #endregion
 
         private System.Windows.Forms.Button btnTest;
-        private System.Windows.Forms.TextBox txtContent;
+        private Neetsonic.Control.TextBox txtContent;
         private System.Windows.Forms.Button btnSelectAll;
         private System.Windows.Forms.TextBox txtToken;
         private System.Windows.Forms.TextBox txtReferer;
