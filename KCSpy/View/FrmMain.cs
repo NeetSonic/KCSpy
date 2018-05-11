@@ -18,7 +18,7 @@ namespace KCSpy.View
     {
         private static bool Stop;
         private static readonly List<Server> Servers;
-
+                
         public FrmMain()
         {
             InitializeComponent();
@@ -33,6 +33,7 @@ namespace KCSpy.View
                 new Server {Name = @"布因", IP = @"125.6.189.39"},
                 new Server {Name = @"塔威", IP = @"125.6.189.71"},
                 new Server {Name = @"帕劳", IP = @"125.6.189.103"},
+                new Server {Name = @"幌筵", IP = @"125.6.189.215"},
                 new Server {Name = @"宿毛湾", IP = @"125.6.189.247"},
                 new Server {Name = @"鹿屋", IP = @"203.104.209.23"},
                 new Server {Name = @"岩川", IP = @"203.104.209.39"},
