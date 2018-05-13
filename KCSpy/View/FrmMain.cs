@@ -248,6 +248,7 @@ namespace KCSpy.View
             cmbServer.DisplayMember = @"Name";
             cmbServer.ValueMember = @"IP";
         }
+
         private string Post(string IP, byte[] data)
         {
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(string.Format($@"http://{IP}/kcsapi/api_req_member/get_practice_enemyinfo"));
