@@ -34,7 +34,7 @@
             System.Windows.Forms.Label label4;
             System.Windows.Forms.Label label5;
             this.btnTest = new System.Windows.Forms.Button();
-            this.txtContent =new Neetsonic.Control.TextBox();
+            this.txtContent = new Neetsonic.Control.TextBox();
             this.btnSelectAll = new System.Windows.Forms.Button();
             this.txtToken = new System.Windows.Forms.TextBox();
             this.txtReferer = new System.Windows.Forms.TextBox();
@@ -44,6 +44,8 @@
             this.btnStop = new System.Windows.Forms.Button();
             this.lblCurrCount = new System.Windows.Forms.Label();
             this.cmbServer = new System.Windows.Forms.ComboBox();
+            this.chkFile = new System.Windows.Forms.CheckBox();
+            this.txtFile = new System.Windows.Forms.TextBox();
             label1 = new System.Windows.Forms.Label();
             label2 = new System.Windows.Forms.Label();
             label3 = new System.Windows.Forms.Label();
@@ -87,9 +89,18 @@
             label4.TabIndex = 9;
             label4.Text = "终点ID";
             // 
+            // label5
+            // 
+            label5.AutoSize = true;
+            label5.Location = new System.Drawing.Point(13, 9);
+            label5.Name = "label5";
+            label5.Size = new System.Drawing.Size(51, 20);
+            label5.TabIndex = 14;
+            label5.Text = "服务器";
+            // 
             // btnTest
             // 
-            this.btnTest.Location = new System.Drawing.Point(12, 162);
+            this.btnTest.Location = new System.Drawing.Point(12, 200);
             this.btnTest.Name = "btnTest";
             this.btnTest.Size = new System.Drawing.Size(75, 34);
             this.btnTest.TabIndex = 0;
@@ -100,7 +111,7 @@
             // txtContent
             // 
             this.txtContent.AcceptsReturn = true;
-            this.txtContent.Location = new System.Drawing.Point(12, 209);
+            this.txtContent.Location = new System.Drawing.Point(12, 247);
             this.txtContent.MaxLength = 3276700;
             this.txtContent.Multiline = true;
             this.txtContent.Name = "txtContent";
@@ -109,7 +120,7 @@
             // 
             // btnSelectAll
             // 
-            this.btnSelectAll.Location = new System.Drawing.Point(216, 162);
+            this.btnSelectAll.Location = new System.Drawing.Point(216, 200);
             this.btnSelectAll.Name = "btnSelectAll";
             this.btnSelectAll.Size = new System.Drawing.Size(75, 34);
             this.btnSelectAll.TabIndex = 2;
@@ -147,7 +158,7 @@
             // 
             // btnClear
             // 
-            this.btnClear.Location = new System.Drawing.Point(297, 162);
+            this.btnClear.Location = new System.Drawing.Point(297, 200);
             this.btnClear.Name = "btnClear";
             this.btnClear.Size = new System.Drawing.Size(75, 34);
             this.btnClear.TabIndex = 11;
@@ -157,7 +168,7 @@
             // 
             // btnStop
             // 
-            this.btnStop.Location = new System.Drawing.Point(109, 162);
+            this.btnStop.Location = new System.Drawing.Point(109, 200);
             this.btnStop.Name = "btnStop";
             this.btnStop.Size = new System.Drawing.Size(75, 34);
             this.btnStop.TabIndex = 12;
@@ -168,20 +179,11 @@
             // lblCurrCount
             // 
             this.lblCurrCount.AutoSize = true;
-            this.lblCurrCount.Location = new System.Drawing.Point(8, 381);
+            this.lblCurrCount.Location = new System.Drawing.Point(8, 419);
             this.lblCurrCount.Name = "lblCurrCount";
             this.lblCurrCount.Size = new System.Drawing.Size(37, 20);
             this.lblCurrCount.TabIndex = 13;
             this.lblCurrCount.Text = "当前";
-            // 
-            // label5
-            // 
-            label5.AutoSize = true;
-            label5.Location = new System.Drawing.Point(13, 9);
-            label5.Name = "label5";
-            label5.Size = new System.Drawing.Size(51, 20);
-            label5.TabIndex = 14;
-            label5.Text = "服务器";
             // 
             // cmbServer
             // 
@@ -192,11 +194,32 @@
             this.cmbServer.Size = new System.Drawing.Size(297, 28);
             this.cmbServer.TabIndex = 15;
             // 
+            // chkFile
+            // 
+            this.chkFile.AutoSize = true;
+            this.chkFile.Location = new System.Drawing.Point(17, 163);
+            this.chkFile.Name = "chkFile";
+            this.chkFile.Size = new System.Drawing.Size(113, 24);
+            this.chkFile.TabIndex = 16;
+            this.chkFile.Text = "从文件读取ID";
+            this.chkFile.UseVisualStyleBackColor = true;
+            this.chkFile.CheckedChanged += new System.EventHandler(this.ChkFile_CheckedChanged);
+            // 
+            // txtFile
+            // 
+            this.txtFile.Location = new System.Drawing.Point(136, 161);
+            this.txtFile.Name = "txtFile";
+            this.txtFile.ReadOnly = true;
+            this.txtFile.Size = new System.Drawing.Size(236, 26);
+            this.txtFile.TabIndex = 17;
+            // 
             // FrmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(384, 416);
+            this.ClientSize = new System.Drawing.Size(384, 449);
+            this.Controls.Add(this.txtFile);
+            this.Controls.Add(this.chkFile);
             this.Controls.Add(this.cmbServer);
             this.Controls.Add(label5);
             this.Controls.Add(this.lblCurrCount);
@@ -239,5 +262,7 @@
         private System.Windows.Forms.Button btnStop;
         private System.Windows.Forms.Label lblCurrCount;
         private System.Windows.Forms.ComboBox cmbServer;
+        private System.Windows.Forms.CheckBox chkFile;
+        private System.Windows.Forms.TextBox txtFile;
     }
 }

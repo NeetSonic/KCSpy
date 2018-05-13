@@ -18,7 +18,7 @@ namespace KCSpy.View
     {
         private static bool Stop;
         private static readonly List<Server> Servers;
-                
+
         public FrmMain()
         {
             InitializeComponent();
@@ -62,107 +62,184 @@ namespace KCSpy.View
         {
             if(txtContent.Text.Length > 0 && DialogResult.OK == MessageBoxEx.Confirm(@"是否清空当前已有文本？")) txtContent.Clear();
             string IP = cmbServer.SelectedValue.ToString();
+            bool fromFile = chkFile.Checked;
             await Task.Run(() =>
             {
-                string ret = null;
                 Stop = false;
-                for(int i = int.Parse(txtBeginID.Text); i <= int.Parse(txtEndID.Text); i++)
+                string ret = null;
+                if(fromFile)
                 {
-                    if(Stop)
-                        break;
-                    BeginInvoke(new MethodInvoker(() =>
+                    using(StreamReader sr = new StreamReader(txtFile.Text))
                     {
-                        lblCurrCount.Text = string.Format($@"当前 {i:D8}");
-                    }));
-                    try
-                    {
-                        //data  
-                        string postData = string.Format($@"api_verno=1&api_token={txtToken.Text}&api_member_id={i}");
-                        byte[] data = Encoding.UTF8.GetBytes(postData);
-
-                        HttpWebRequest request = (HttpWebRequest)WebRequest.Create(string.Format($@"http://{IP}/kcsapi/api_req_member/get_practice_enemyinfo"));
-                        request.Method = "POST";
-                        request.Accept = @"*/*";
-                        request.Headers.Add("Accept-Encoding", @"gzip, deflate");
-                        request.Headers.Add("Accept-Language", @"zh-CN,zh;q=0.9,ja;q=0.8,en;q=0.7,zh-TW;q=0.6");
-                        request.ContentLength = data.Length;
-                        request.ContentType = "application/x-www-form-urlencoded";
-                        request.Host = IP;
-                        request.Headers.Add("Origin", string.Format($@"http://{IP}"));
-                        SetHeaderValue(request.Headers, @"Proxy-Connection", @"keep-alive");
-                        request.Referer = txtReferer.Text;
-                        request.UserAgent = "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36";
-                        request.Headers.Add("X-Requested-With", @"ShockwaveFlash/27.0.0.187");
-
-                        Stream newStream = request.GetRequestStream();
-
-                        // Send the data.  
-                        newStream.Write(data, 0, data.Length);
-                        newStream.Close();
-
-                        // Get response  
-                        HttpWebResponse myResponse = (HttpWebResponse)request.GetResponse();
-                        StreamReader reader = new StreamReader(myResponse.GetResponseStream(), Encoding.UTF8);
-                        ret = reader.ReadToEnd();
-                        UserKit kit = JsonConvert.DeserializeObject<UserKitCover>(ret.Substring(7)).api_data;
-                        if(null != kit)
+                        string id;
+                        while((id = sr.ReadLine()) != null)
                         {
+                            if(Stop)
+                                break;
                             BeginInvoke(new MethodInvoker(() =>
                             {
-                                txtContent.AppendText(string.Format("{0}\t{1}\t{2:D8}{3}", kit.api_nickname, kit.api_experience[0], kit.api_member_id, Environment.NewLine));
+                                lblCurrCount.Text = string.Format($@"当前 {int.Parse(id):D8}");
                             }));
-                        }
-                        else
-                        {
-                            ErrorKit err = JsonConvert.DeserializeObject<ErrorKit>(ret.Substring(7));
-                            if(null != err)
-                                switch(err.api_result)
+                            string postData = string.Format($@"api_verno=1&api_token={txtToken.Text}&api_member_id={id}");
+                            byte[] data = Encoding.UTF8.GetBytes(postData);
+                            try
+                            {
+                                ret = Post(IP, data);
+                                UserKit kit = JsonConvert.DeserializeObject<UserKitCover>(ret.Substring(7)).api_data;
+                                if(null != kit)
                                 {
-                                    case 100:
-                                        continue;
-                                    case 201:
+                                    BeginInvoke(new MethodInvoker(() =>
                                     {
-                                        BeginInvoke(new MethodInvoker(() =>
+                                        txtContent.AppendText(string.Format("{0}\t{1}\t{2:D8}{3}", kit.api_nickname, kit.api_experience[0], kit.api_member_id, Environment.NewLine));
+                                    }));
+                                }
+                                else
+                                {
+                                    ErrorKit err = JsonConvert.DeserializeObject<ErrorKit>(ret.Substring(7));
+                                    if(null != err)
+                                        switch(err.api_result)
                                         {
-                                            txtContent.AppendText(string.Format(@"猫了{0}", Environment.NewLine));
-                                        }));
-                                        break;
-                                    }
-                                    default:
-                                    {
+                                            case 100:
+                                                continue;
+                                            case 201:
+                                            {
+                                                BeginInvoke(new MethodInvoker(() =>
+                                                {
+                                                    txtContent.AppendText(string.Format(@"猫了{0}", Environment.NewLine));
+                                                }));
+                                                break;
+                                            }
+                                            default:
+                                            {
+                                                BeginInvoke(new MethodInvoker(() =>
+                                                {
+                                                    txtContent.AppendText(ret);
+                                                }));
+                                                break;
+                                            }
+                                        }
+                                    else
                                         BeginInvoke(new MethodInvoker(() =>
                                         {
                                             txtContent.AppendText(ret);
                                         }));
-                                        break;
-                                    }
                                 }
-                            else
+                            }
+                            catch(Exception)
+                            {
                                 BeginInvoke(new MethodInvoker(() =>
                                 {
                                     txtContent.AppendText(ret);
                                 }));
+                                const string errFile = @"error.txt";
+                                string dir = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+                                string file = Path.Combine(dir, errFile);
+                                int count = 0;
+                                while(File.Exists(file))
+                                    file = Path.Combine(dir, errFile.Insert(5, (++count).ToString()));
+                                FileTool.CreateAndWriteText(file, txtContent.Text);
+                                FileTool.OpenTextFile(file);
+                                break;
+                            }
                         }
                     }
-                    catch(Exception)
+                }
+                else
+                {
+                    for(int i = int.Parse(txtBeginID.Text); i <= int.Parse(txtEndID.Text); i++)
                     {
+                        if(Stop)
+                            break;
                         BeginInvoke(new MethodInvoker(() =>
                         {
-                            txtContent.AppendText(ret);
+                            lblCurrCount.Text = string.Format($@"当前 {i:D8}");
                         }));
-                        const string errFile = @"error.txt";
-                        string dir = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-                        string file = Path.Combine(dir, errFile);
-                        int count = 0;
-                        while(File.Exists(file))
-                            file = Path.Combine(dir, errFile.Insert(5, (++count).ToString()));
-                        FileTool.CreateAndWriteText(file, txtContent.Text);
-                        FileTool.OpenTextFile(file);
-                        break;
+                        //data  
+                        string postData = string.Format($@"api_verno=1&api_token={txtToken.Text}&api_member_id={i}");
+                        byte[] data = Encoding.UTF8.GetBytes(postData);
+                        try
+                        {
+                            ret = Post(IP, data);
+                            UserKit kit = JsonConvert.DeserializeObject<UserKitCover>(ret.Substring(7)).api_data;
+                            if(null != kit)
+                            {
+                                BeginInvoke(new MethodInvoker(() =>
+                                {
+                                    txtContent.AppendText(string.Format("{0}\t{1}\t{2:D8}{3}", kit.api_nickname, kit.api_experience[0], kit.api_member_id, Environment.NewLine));
+                                }));
+                            }
+                            else
+                            {
+                                ErrorKit err = JsonConvert.DeserializeObject<ErrorKit>(ret.Substring(7));
+                                if(null != err)
+                                    switch(err.api_result)
+                                    {
+                                        case 100:
+                                            continue;
+                                        case 201:
+                                        {
+                                            BeginInvoke(new MethodInvoker(() =>
+                                            {
+                                                txtContent.AppendText(string.Format(@"猫了{0}", Environment.NewLine));
+                                            }));
+                                            break;
+                                        }
+                                        default:
+                                        {
+                                            BeginInvoke(new MethodInvoker(() =>
+                                            {
+                                                txtContent.AppendText(ret);
+                                            }));
+                                            break;
+                                        }
+                                    }
+                                else
+                                    BeginInvoke(new MethodInvoker(() =>
+                                    {
+                                        txtContent.AppendText(ret);
+                                    }));
+                            }
+                        }
+                        catch(Exception)
+                        {
+                            BeginInvoke(new MethodInvoker(() =>
+                            {
+                                txtContent.AppendText(ret);
+                            }));
+                            const string errFile = @"error.txt";
+                            string dir = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+                            string file = Path.Combine(dir, errFile);
+                            int count = 0;
+                            while(File.Exists(file))
+                                file = Path.Combine(dir, errFile.Insert(5, (++count).ToString()));
+                            FileTool.CreateAndWriteText(file, txtContent.Text);
+                            FileTool.OpenTextFile(file);
+                            break;
+                        }
                     }
                 }
             });
             MessageBoxEx.Info(@"任务执行完成！");
+        }
+
+        private void ChkFile_CheckedChanged(object sender, EventArgs e)
+        {
+            if(chkFile.Checked)
+            {
+                OpenFileDialog dlg = new OpenFileDialog {Filter = @"文本文件|*.txt;"};
+                if(DialogResult.OK == dlg.ShowDialog())
+                {
+                    txtFile.Text = dlg.FileName;
+                }
+                else
+                {
+                    chkFile.Checked = false;
+                }
+            }
+            else
+            {
+                txtFile.Clear();
+            }
         }
 
         private void FrmMain_Load(object sender, EventArgs e)
@@ -170,6 +247,33 @@ namespace KCSpy.View
             cmbServer.DataSource = Servers;
             cmbServer.DisplayMember = @"Name";
             cmbServer.ValueMember = @"IP";
+        }
+        private string Post(string IP, byte[] data)
+        {
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(string.Format($@"http://{IP}/kcsapi/api_req_member/get_practice_enemyinfo"));
+            request.Method = "POST";
+            request.Accept = @"*/*";
+            request.Headers.Add("Accept-Encoding", @"gzip, deflate");
+            request.Headers.Add("Accept-Language", @"zh-CN,zh;q=0.9,ja;q=0.8,en;q=0.7,zh-TW;q=0.6");
+            request.ContentLength = data.Length;
+            request.ContentType = "application/x-www-form-urlencoded";
+            request.Host = IP;
+            request.Headers.Add("Origin", string.Format($@"http://{IP}"));
+            SetHeaderValue(request.Headers, @"Proxy-Connection", @"keep-alive");
+            request.Referer = txtReferer.Text;
+            request.UserAgent = "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36";
+            request.Headers.Add("X-Requested-With", @"ShockwaveFlash/27.0.0.187");
+
+            Stream newStream = request.GetRequestStream();
+
+            // Send the data.  
+            newStream.Write(data, 0, data.Length);
+            newStream.Close();
+
+            // Get response  
+            HttpWebResponse myResponse = (HttpWebResponse)request.GetResponse();
+            StreamReader reader = new StreamReader(myResponse.GetResponseStream(), Encoding.UTF8);
+            return reader.ReadToEnd();
         }
     }
 }
