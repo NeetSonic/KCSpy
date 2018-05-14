@@ -293,6 +293,7 @@ namespace KCSpy.View
             StreamReader reader = new StreamReader(myResponse.GetResponseStream(), Encoding.UTF8);
             return reader.ReadToEnd();
         }
+
         private void UpdateLabelAsync(Label lbl, string content) => BeginInvoke(new MethodInvoker(() => lbl.Text = content));
     }
 }
