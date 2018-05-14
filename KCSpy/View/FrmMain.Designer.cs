@@ -33,6 +33,9 @@
             System.Windows.Forms.Label label3;
             System.Windows.Forms.Label label4;
             System.Windows.Forms.Label label5;
+            System.Windows.Forms.Label label6;
+            System.Windows.Forms.Label label7;
+            System.Windows.Forms.Label label8;
             this.btnTest = new System.Windows.Forms.Button();
             this.txtContent = new Neetsonic.Control.TextBox();
             this.btnSelectAll = new System.Windows.Forms.Button();
@@ -40,17 +43,24 @@
             this.txtReferer = new System.Windows.Forms.TextBox();
             this.txtBeginID = new System.Windows.Forms.TextBox();
             this.txtEndID = new System.Windows.Forms.TextBox();
-            this.btnClear = new System.Windows.Forms.Button();
+            this.btnSenka = new System.Windows.Forms.Button();
             this.btnStop = new System.Windows.Forms.Button();
             this.lblCurrCount = new System.Windows.Forms.Label();
             this.cmbServer = new System.Windows.Forms.ComboBox();
             this.chkFile = new System.Windows.Forms.CheckBox();
             this.txtFile = new System.Windows.Forms.TextBox();
+            this.txtMemberID = new System.Windows.Forms.TextBox();
+            this.txtPageStart = new System.Windows.Forms.TextBox();
+            this.txtSenka = new Neetsonic.Control.TextBox();
+            this.txtPageEnd = new System.Windows.Forms.TextBox();
             label1 = new System.Windows.Forms.Label();
             label2 = new System.Windows.Forms.Label();
             label3 = new System.Windows.Forms.Label();
             label4 = new System.Windows.Forms.Label();
             label5 = new System.Windows.Forms.Label();
+            label6 = new System.Windows.Forms.Label();
+            label7 = new System.Windows.Forms.Label();
+            label8 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // label1
@@ -115,12 +125,14 @@
             this.txtContent.MaxLength = 3276700;
             this.txtContent.Multiline = true;
             this.txtContent.Name = "txtContent";
+            this.txtContent.ScrollBars = System.Windows.Forms.ScrollBars.Both;
             this.txtContent.Size = new System.Drawing.Size(360, 160);
             this.txtContent.TabIndex = 1;
+            this.txtContent.WordWrap = false;
             // 
             // btnSelectAll
             // 
-            this.btnSelectAll.Location = new System.Drawing.Point(216, 200);
+            this.btnSelectAll.Location = new System.Drawing.Point(297, 200);
             this.btnSelectAll.Name = "btnSelectAll";
             this.btnSelectAll.Size = new System.Drawing.Size(75, 34);
             this.btnSelectAll.TabIndex = 2;
@@ -156,15 +168,15 @@
             this.txtEndID.Size = new System.Drawing.Size(94, 26);
             this.txtEndID.TabIndex = 10;
             // 
-            // btnClear
+            // btnSenka
             // 
-            this.btnClear.Location = new System.Drawing.Point(297, 200);
-            this.btnClear.Name = "btnClear";
-            this.btnClear.Size = new System.Drawing.Size(75, 34);
-            this.btnClear.TabIndex = 11;
-            this.btnClear.Text = "清空";
-            this.btnClear.UseVisualStyleBackColor = true;
-            this.btnClear.Click += new System.EventHandler(this.BtnClear_Click);
+            this.btnSenka.Location = new System.Drawing.Point(302, 445);
+            this.btnSenka.Name = "btnSenka";
+            this.btnSenka.Size = new System.Drawing.Size(70, 34);
+            this.btnSenka.TabIndex = 11;
+            this.btnSenka.Text = "战果";
+            this.btnSenka.UseVisualStyleBackColor = true;
+            this.btnSenka.Click += new System.EventHandler(this.BtnSenka_Click);
             // 
             // btnStop
             // 
@@ -213,18 +225,85 @@
             this.txtFile.Size = new System.Drawing.Size(236, 26);
             this.txtFile.TabIndex = 17;
             // 
+            // txtMemberID
+            // 
+            this.txtMemberID.Location = new System.Drawing.Point(95, 449);
+            this.txtMemberID.Name = "txtMemberID";
+            this.txtMemberID.Size = new System.Drawing.Size(89, 26);
+            this.txtMemberID.TabIndex = 19;
+            // 
+            // label6
+            // 
+            label6.AutoSize = true;
+            label6.Location = new System.Drawing.Point(8, 452);
+            label6.Name = "label6";
+            label6.Size = new System.Drawing.Size(81, 20);
+            label6.TabIndex = 18;
+            label6.Text = "MemberID";
+            // 
+            // txtPageStart
+            // 
+            this.txtPageStart.Location = new System.Drawing.Point(263, 416);
+            this.txtPageStart.Name = "txtPageStart";
+            this.txtPageStart.Size = new System.Drawing.Size(33, 26);
+            this.txtPageStart.TabIndex = 21;
+            // 
+            // label7
+            // 
+            label7.AutoSize = true;
+            label7.Location = new System.Drawing.Point(192, 419);
+            label7.Name = "label7";
+            label7.Size = new System.Drawing.Size(65, 20);
+            label7.TabIndex = 20;
+            label7.Text = "起始页码";
+            // 
+            // txtSenka
+            // 
+            this.txtSenka.AcceptsReturn = true;
+            this.txtSenka.Location = new System.Drawing.Point(12, 485);
+            this.txtSenka.MaxLength = 3276700;
+            this.txtSenka.Multiline = true;
+            this.txtSenka.Name = "txtSenka";
+            this.txtSenka.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+            this.txtSenka.Size = new System.Drawing.Size(360, 111);
+            this.txtSenka.TabIndex = 22;
+            this.txtSenka.WordWrap = false;
+            // 
+            // txtPageEnd
+            // 
+            this.txtPageEnd.Location = new System.Drawing.Point(263, 452);
+            this.txtPageEnd.Name = "txtPageEnd";
+            this.txtPageEnd.Size = new System.Drawing.Size(33, 26);
+            this.txtPageEnd.TabIndex = 24;
+            // 
+            // label8
+            // 
+            label8.AutoSize = true;
+            label8.Location = new System.Drawing.Point(192, 455);
+            label8.Name = "label8";
+            label8.Size = new System.Drawing.Size(65, 20);
+            label8.TabIndex = 23;
+            label8.Text = "终止页码";
+            // 
             // FrmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(384, 449);
+            this.ClientSize = new System.Drawing.Size(384, 608);
+            this.Controls.Add(this.txtPageEnd);
+            this.Controls.Add(label8);
+            this.Controls.Add(this.txtSenka);
+            this.Controls.Add(this.txtPageStart);
+            this.Controls.Add(label7);
+            this.Controls.Add(this.txtMemberID);
+            this.Controls.Add(label6);
             this.Controls.Add(this.txtFile);
             this.Controls.Add(this.chkFile);
             this.Controls.Add(this.cmbServer);
             this.Controls.Add(label5);
             this.Controls.Add(this.lblCurrCount);
             this.Controls.Add(this.btnStop);
-            this.Controls.Add(this.btnClear);
+            this.Controls.Add(this.btnSenka);
             this.Controls.Add(this.txtEndID);
             this.Controls.Add(label4);
             this.Controls.Add(this.txtBeginID);
@@ -258,11 +337,15 @@
         private System.Windows.Forms.TextBox txtReferer;
         private System.Windows.Forms.TextBox txtBeginID;
         private System.Windows.Forms.TextBox txtEndID;
-        private System.Windows.Forms.Button btnClear;
+        private System.Windows.Forms.Button btnSenka;
         private System.Windows.Forms.Button btnStop;
         private System.Windows.Forms.Label lblCurrCount;
         private System.Windows.Forms.ComboBox cmbServer;
         private System.Windows.Forms.CheckBox chkFile;
         private System.Windows.Forms.TextBox txtFile;
+        private System.Windows.Forms.TextBox txtMemberID;
+        private System.Windows.Forms.TextBox txtPageStart;
+        private Neetsonic.Control.TextBox txtSenka;
+        private System.Windows.Forms.TextBox txtPageEnd;
     }
 }

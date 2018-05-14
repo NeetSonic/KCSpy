@@ -11,6 +11,8 @@ using KCSpy.Model;
 using Neetsonic.Tool;
 using Neetsonic.Tool.Extensions;
 using Newtonsoft.Json;
+using SenkaGo.Util;
+using TextBox = Neetsonic.Control.TextBox;
 
 namespace KCSpy.View
 {
@@ -26,20 +28,20 @@ namespace KCSpy.View
 
         static FrmMain() => Servers = new List<Server>
         {
-                new Server {Name = @"大凑", IP = @"203.104.209.150"},
-                new Server {Name = @"特鲁克", IP = @"203.104.209.134"},
-                new Server {Name = @"林加", IP = @"203.104.209.167"},
-                new Server {Name = @"肖特兰", IP = @"125.6.189.7"},
-                new Server {Name = @"布因", IP = @"125.6.189.39"},
-                new Server {Name = @"塔威", IP = @"125.6.189.71"},
-                new Server {Name = @"帕劳", IP = @"125.6.189.103"},
-                new Server {Name = @"文莱", IP = @"125.6.189.135"},
-                new Server {Name = @"幌筵", IP = @"125.6.189.215"},
-                new Server {Name = @"宿毛湾", IP = @"125.6.189.247"},
-                new Server {Name = @"鹿屋", IP = @"203.104.209.23"},
-                new Server {Name = @"岩川", IP = @"203.104.209.39"},
-                new Server {Name = @"佐伯湾", IP = @"203.104.209.55"},
-                new Server {Name = @"柱島", IP = @"203.104.209.102"}
+            new Server {Name = @"大凑", IP = @"203.104.209.150"},
+            new Server {Name = @"特鲁克", IP = @"203.104.209.134"},
+            new Server {Name = @"林加", IP = @"203.104.209.167"},
+            new Server {Name = @"肖特兰", IP = @"125.6.189.7"},
+            new Server {Name = @"布因", IP = @"125.6.189.39"},
+            new Server {Name = @"塔威", IP = @"125.6.189.71"},
+            new Server {Name = @"帕劳", IP = @"125.6.189.103"},
+            new Server {Name = @"文莱", IP = @"125.6.189.135"},
+            new Server {Name = @"幌筵", IP = @"125.6.189.215"},
+            new Server {Name = @"宿毛湾", IP = @"125.6.189.247"},
+            new Server {Name = @"鹿屋", IP = @"203.104.209.23"},
+            new Server {Name = @"岩川", IP = @"203.104.209.39"},
+            new Server {Name = @"佐伯湾", IP = @"203.104.209.55"},
+            new Server {Name = @"柱島", IP = @"203.104.209.102"}
         };
 
         private static void SetHeaderValue(WebHeaderCollection header, string name, string value)
@@ -52,9 +54,32 @@ namespace KCSpy.View
             }
         }
 
-        private void BtnClear_Click(object sender, EventArgs e) => txtContent.Clear();
+        private void AppendLineAsnyc(TextBox txtCtrl, string content) => BeginInvoke(new MethodInvoker(() => txtCtrl.AppendLine(content)));
 
         private void BtnSelectAll_Click(object sender, EventArgs e) => txtContent.Highlight();
+
+        private async void BtnSenka_Click(object sender, EventArgs e)
+        {
+            string IP = cmbServer.SelectedValue.ToString();
+            await Task.Run(() =>
+            {
+                int startPage = int.Parse(txtPageStart.Text);
+                int endPage = int.Parse(txtPageEnd.Text);
+                for(int currPage = startPage; currPage <= endPage; currPage++)
+                {
+                    string postData = string.Format($@"api_pageno={currPage}&api_verno=1&api_token={txtToken.Text}&api_ranking={KeyGen.CreateSignature(int.Parse(txtMemberID.Text))}");
+                    byte[] data = Encoding.UTF8.GetBytes(postData);
+                    string ret = PostSenka(IP, data);
+                    List<SenkaItem> items = JsonConvert.DeserializeObject<SenkaCover>(ret.Substring(7)).api_data.api_list;
+                    foreach(SenkaItem item in items)
+                    {
+                        Dictionary<string, double> kit = KeyGen.DecodeRankAndMedal(int.Parse(txtMemberID.Text), item.api_mxltvkpyuklh, item.api_wuhnhojjxmke, item.api_itslcqtmrxtf);
+                        AppendLineAsnyc(txtSenka, string.Format($@"提督：{item.api_mtjmdcwtvhdr}  顺位：{item.api_mxltvkpyuklh}  战果值：{kit[@"rate"]}  甲章数：{kit[@"medal"]}"));
+                    }
+                }
+            });
+            MessageBoxEx.Info(@"任务执行完成！");
+        }
 
         private void BtnStop_Click(object sender, EventArgs e) => Stop = true;
 
@@ -76,10 +101,7 @@ namespace KCSpy.View
                         {
                             if(Stop)
                                 break;
-                            BeginInvoke(new MethodInvoker(() =>
-                            {
-                                lblCurrCount.Text = string.Format($@"当前 {int.Parse(id):D8}");
-                            }));
+                            UpdateLabelAsync(lblCurrCount, string.Format($@"当前 {int.Parse(id):D8}"));
                             string postData = string.Format($@"api_verno=1&api_token={txtToken.Text}&api_member_id={id}");
                             byte[] data = Encoding.UTF8.GetBytes(postData);
                             try
@@ -88,10 +110,7 @@ namespace KCSpy.View
                                 UserKit kit = JsonConvert.DeserializeObject<UserKitCover>(ret.Substring(7)).api_data;
                                 if(null != kit)
                                 {
-                                    BeginInvoke(new MethodInvoker(() =>
-                                    {
-                                        txtContent.AppendText(string.Format("{0}\t{1}\t{2:D8}{3}", kit.api_nickname, kit.api_experience[0], kit.api_member_id, Environment.NewLine));
-                                    }));
+                                    AppendLineAsnyc(txtContent, string.Format("{0}\t{1}\t{2:D8}", kit.api_nickname, kit.api_experience[0], kit.api_member_id));
                                 }
                                 else
                                 {
@@ -103,34 +122,22 @@ namespace KCSpy.View
                                                 continue;
                                             case 201:
                                             {
-                                                BeginInvoke(new MethodInvoker(() =>
-                                                {
-                                                    txtContent.AppendText(string.Format(@"猫了{0}", Environment.NewLine));
-                                                }));
+                                                AppendLineAsnyc(txtContent, string.Format(@"猫了{0}", Environment.NewLine));
                                                 break;
                                             }
                                             default:
                                             {
-                                                BeginInvoke(new MethodInvoker(() =>
-                                                {
-                                                    txtContent.AppendText(ret);
-                                                }));
+                                                AppendLineAsnyc(txtContent, ret);
                                                 break;
                                             }
                                         }
                                     else
-                                        BeginInvoke(new MethodInvoker(() =>
-                                        {
-                                            txtContent.AppendText(ret);
-                                        }));
+                                        AppendLineAsnyc(txtContent, ret);
                                 }
                             }
                             catch(Exception)
                             {
-                                BeginInvoke(new MethodInvoker(() =>
-                                {
-                                    txtContent.AppendText(ret);
-                                }));
+                                AppendLineAsnyc(txtContent, ret);
                                 const string errFile = @"error.txt";
                                 string dir = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
                                 string file = Path.Combine(dir, errFile);
@@ -150,10 +157,7 @@ namespace KCSpy.View
                     {
                         if(Stop)
                             break;
-                        BeginInvoke(new MethodInvoker(() =>
-                        {
-                            lblCurrCount.Text = string.Format($@"当前 {i:D8}");
-                        }));
+                        UpdateLabelAsync(lblCurrCount, string.Format($@"当前 {i:D8}"));
                         //data  
                         string postData = string.Format($@"api_verno=1&api_token={txtToken.Text}&api_member_id={i}");
                         byte[] data = Encoding.UTF8.GetBytes(postData);
@@ -163,10 +167,7 @@ namespace KCSpy.View
                             UserKit kit = JsonConvert.DeserializeObject<UserKitCover>(ret.Substring(7)).api_data;
                             if(null != kit)
                             {
-                                BeginInvoke(new MethodInvoker(() =>
-                                {
-                                    txtContent.AppendText(string.Format("{0}\t{1}\t{2:D8}{3}", kit.api_nickname, kit.api_experience[0], kit.api_member_id, Environment.NewLine));
-                                }));
+                                AppendLineAsnyc(txtContent, string.Format("{0}\t{1}\t{2:D8}", kit.api_nickname, kit.api_experience[0], kit.api_member_id));
                             }
                             else
                             {
@@ -178,34 +179,22 @@ namespace KCSpy.View
                                             continue;
                                         case 201:
                                         {
-                                            BeginInvoke(new MethodInvoker(() =>
-                                            {
-                                                txtContent.AppendText(string.Format(@"猫了{0}", Environment.NewLine));
-                                            }));
+                                            AppendLineAsnyc(txtContent, string.Format(@"猫了{0}", Environment.NewLine));
                                             break;
                                         }
                                         default:
                                         {
-                                            BeginInvoke(new MethodInvoker(() =>
-                                            {
-                                                txtContent.AppendText(ret);
-                                            }));
+                                            AppendLineAsnyc(txtContent, ret);
                                             break;
                                         }
                                     }
                                 else
-                                    BeginInvoke(new MethodInvoker(() =>
-                                    {
-                                        txtContent.AppendText(ret);
-                                    }));
+                                    AppendLineAsnyc(txtContent, ret);
                             }
                         }
                         catch(Exception)
                         {
-                            BeginInvoke(new MethodInvoker(() =>
-                            {
-                                txtContent.AppendText(ret);
-                            }));
+                            AppendLineAsnyc(txtContent, ret);
                             const string errFile = @"error.txt";
                             string dir = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
                             string file = Path.Combine(dir, errFile);
@@ -276,5 +265,34 @@ namespace KCSpy.View
             StreamReader reader = new StreamReader(myResponse.GetResponseStream(), Encoding.UTF8);
             return reader.ReadToEnd();
         }
+
+        private string PostSenka(string IP, byte[] data)
+        {
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(string.Format($@"http://{IP}/kcsapi/api_req_ranking/mxltvkpyuklh"));
+            request.Method = "POST";
+            request.Accept = @"*/*";
+            request.Headers.Add("Accept-Encoding", @"gzip, deflate");
+            request.Headers.Add("Accept-Language", @"zh-CN,zh;q=0.8,ja;q=0.6,en;q=0.4,zh-TW;q=0.2");
+            request.ContentLength = data.Length;
+            request.ContentType = "application/x-www-form-urlencoded";
+            request.Host = IP;
+            request.Headers.Add("Origin", string.Format($@"http://{IP}"));
+            SetHeaderValue(request.Headers, @"Proxy-Connection", @"keep-alive");
+            request.Referer = txtReferer.Text;
+            request.UserAgent = "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36";
+            request.Headers.Add("X-Requested-With", @"ShockwaveFlash/27.0.0.187");
+
+            Stream newStream = request.GetRequestStream();
+
+            // Send the data.  
+            newStream.Write(data, 0, data.Length);
+            newStream.Close();
+
+            // Get response  
+            HttpWebResponse myResponse = (HttpWebResponse)request.GetResponse();
+            StreamReader reader = new StreamReader(myResponse.GetResponseStream(), Encoding.UTF8);
+            return reader.ReadToEnd();
+        }
+        private void UpdateLabelAsync(Label lbl, string content) => BeginInvoke(new MethodInvoker(() => lbl.Text = content));
     }
 }
