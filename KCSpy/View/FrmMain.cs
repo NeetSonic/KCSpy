@@ -296,5 +296,10 @@ namespace KCSpy.View
         }
 
         private void UpdateLabelAsync(Label lbl, string content) => BeginInvoke(new MethodInvoker(() => lbl.Text = content));
+
+        private void ConfigToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            new FrmConfig().ShowDialog();
+        }
     }
 }
