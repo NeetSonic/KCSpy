@@ -108,6 +108,33 @@
             label5.TabIndex = 14;
             label5.Text = "服务器";
             // 
+            // label6
+            // 
+            label6.AutoSize = true;
+            label6.Location = new System.Drawing.Point(8, 452);
+            label6.Name = "label6";
+            label6.Size = new System.Drawing.Size(81, 20);
+            label6.TabIndex = 18;
+            label6.Text = "MemberID";
+            // 
+            // label7
+            // 
+            label7.AutoSize = true;
+            label7.Location = new System.Drawing.Point(192, 419);
+            label7.Name = "label7";
+            label7.Size = new System.Drawing.Size(65, 20);
+            label7.TabIndex = 20;
+            label7.Text = "起始页码";
+            // 
+            // label8
+            // 
+            label8.AutoSize = true;
+            label8.Location = new System.Drawing.Point(192, 455);
+            label8.Name = "label8";
+            label8.Size = new System.Drawing.Size(65, 20);
+            label8.TabIndex = 23;
+            label8.Text = "终止页码";
+            // 
             // btnTest
             // 
             this.btnTest.Location = new System.Drawing.Point(12, 200);
@@ -232,30 +259,12 @@
             this.txtMemberID.Size = new System.Drawing.Size(89, 26);
             this.txtMemberID.TabIndex = 19;
             // 
-            // label6
-            // 
-            label6.AutoSize = true;
-            label6.Location = new System.Drawing.Point(8, 452);
-            label6.Name = "label6";
-            label6.Size = new System.Drawing.Size(81, 20);
-            label6.TabIndex = 18;
-            label6.Text = "MemberID";
-            // 
             // txtPageStart
             // 
             this.txtPageStart.Location = new System.Drawing.Point(263, 416);
             this.txtPageStart.Name = "txtPageStart";
             this.txtPageStart.Size = new System.Drawing.Size(33, 26);
             this.txtPageStart.TabIndex = 21;
-            // 
-            // label7
-            // 
-            label7.AutoSize = true;
-            label7.Location = new System.Drawing.Point(192, 419);
-            label7.Name = "label7";
-            label7.Size = new System.Drawing.Size(65, 20);
-            label7.TabIndex = 20;
-            label7.Text = "起始页码";
             // 
             // txtSenka
             // 
@@ -275,15 +284,6 @@
             this.txtPageEnd.Name = "txtPageEnd";
             this.txtPageEnd.Size = new System.Drawing.Size(33, 26);
             this.txtPageEnd.TabIndex = 24;
-            // 
-            // label8
-            // 
-            label8.AutoSize = true;
-            label8.Location = new System.Drawing.Point(192, 455);
-            label8.Name = "label8";
-            label8.Size = new System.Drawing.Size(65, 20);
-            label8.TabIndex = 23;
-            label8.Text = "终止页码";
             // 
             // FrmMain
             // 

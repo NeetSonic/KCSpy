@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using KCSpy.Model;
 using Neetsonic.Tool;
+using Neetsonic.Tool.Database;
 using Neetsonic.Tool.Extensions;
 using Newtonsoft.Json;
 using SenkaGo.Util;
