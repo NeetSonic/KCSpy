@@ -56,6 +56,7 @@
             this.menuMain = new System.Windows.Forms.MenuStrip();
             this.设置ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiConfig = new System.Windows.Forms.ToolStripMenuItem();
+            this.chkSaveData = new System.Windows.Forms.CheckBox();
             label1 = new System.Windows.Forms.Label();
             label2 = new System.Windows.Forms.Label();
             label3 = new System.Windows.Forms.Label();
@@ -310,15 +311,26 @@
             // tsmiConfig
             // 
             this.tsmiConfig.Name = "tsmiConfig";
-            this.tsmiConfig.Size = new System.Drawing.Size(124, 22);
+            this.tsmiConfig.Size = new System.Drawing.Size(152, 22);
             this.tsmiConfig.Text = "修改配置";
             this.tsmiConfig.Click += new System.EventHandler(this.ConfigToolStripMenuItem_Click);
+            // 
+            // chkSaveData
+            // 
+            this.chkSaveData.AutoSize = true;
+            this.chkSaveData.Location = new System.Drawing.Point(393, 193);
+            this.chkSaveData.Name = "chkSaveData";
+            this.chkSaveData.Size = new System.Drawing.Size(84, 24);
+            this.chkSaveData.TabIndex = 26;
+            this.chkSaveData.Text = "保存数据";
+            this.chkSaveData.UseVisualStyleBackColor = true;
             // 
             // FrmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(796, 477);
+            this.Controls.Add(this.chkSaveData);
             this.Controls.Add(this.txtPageEnd);
             this.Controls.Add(label8);
             this.Controls.Add(this.txtSenka);
@@ -383,5 +395,6 @@
         private System.Windows.Forms.MenuStrip menuMain;
         private System.Windows.Forms.ToolStripMenuItem 设置ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem tsmiConfig;
+        private System.Windows.Forms.CheckBox chkSaveData;
     }
 }

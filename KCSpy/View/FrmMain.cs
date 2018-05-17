@@ -89,6 +89,7 @@ namespace KCSpy.View
             if(txtContent.Text.Length > 0 && DialogResult.OK == MessageBoxEx.Confirm(@"是否清空当前已有文本？")) txtContent.Clear();
             string IP = cmbServer.SelectedValue.ToString();
             bool fromFile = chkFile.Checked;
+            bool saveData = chkSaveData.Checked;
             await Task.Run(() =>
             {
                 Stop = false;
@@ -111,6 +112,10 @@ namespace KCSpy.View
                                 UserKit kit = JsonConvert.DeserializeObject<UserKitCover>(ret.Substring(7)).api_data;
                                 if(null != kit)
                                 {
+                                    if(saveData)
+                                    {
+                                        
+                                    }
                                     AppendLineAsnyc(txtContent, string.Format("{0}\t{1}\t{2:D8}", kit.api_nickname, kit.api_experience[0], kit.api_member_id));
                                 }
                                 else

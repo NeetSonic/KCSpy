@@ -10,6 +10,14 @@ namespace KCSpy.Model
         public string api_cmt { get; set; }
         public List<int> api_ship { get; set; }
         public int api_level { get; set; }
+
+        public Record ToRecord() => new Record
+        {
+            MemberID = api_member_id,
+            Exp = api_experience[0],
+            Name = api_nickname,
+            Comment = api_cmt
+        };
     }
 
     public sealed class UserKitCover
@@ -24,4 +32,5 @@ namespace KCSpy.Model
         public int api_result { get; set; }
         public string api_result_msg { get; set; }
     }
+
 }
