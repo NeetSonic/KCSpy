@@ -36,6 +36,7 @@
             System.Windows.Forms.Label label6;
             System.Windows.Forms.Label label7;
             System.Windows.Forms.Label label8;
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmMain));
             this.btnTest = new System.Windows.Forms.Button();
             this.txtContent = new Neetsonic.Control.TextBox();
             this.btnSelectAll = new System.Windows.Forms.Button();
@@ -57,6 +58,7 @@
             this.设置ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiConfig = new System.Windows.Forms.ToolStripMenuItem();
             this.chkSaveData = new System.Windows.Forms.CheckBox();
+            this.textBox1 = new Neetsonic.Control.TextBox();
             label1 = new System.Windows.Forms.Label();
             label2 = new System.Windows.Forms.Label();
             label3 = new System.Windows.Forms.Label();
@@ -311,7 +313,7 @@
             // tsmiConfig
             // 
             this.tsmiConfig.Name = "tsmiConfig";
-            this.tsmiConfig.Size = new System.Drawing.Size(152, 22);
+            this.tsmiConfig.Size = new System.Drawing.Size(124, 22);
             this.tsmiConfig.Text = "修改配置";
             this.tsmiConfig.Click += new System.EventHandler(this.ConfigToolStripMenuItem_Click);
             // 
@@ -325,11 +327,25 @@
             this.chkSaveData.Text = "保存数据";
             this.chkSaveData.UseVisualStyleBackColor = true;
             // 
+            // textBox1
+            // 
+            this.textBox1.AcceptsReturn = true;
+            this.textBox1.Location = new System.Drawing.Point(393, 73);
+            this.textBox1.MaxLength = 3276700;
+            this.textBox1.Multiline = true;
+            this.textBox1.Name = "textBox1";
+            this.textBox1.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+            this.textBox1.Size = new System.Drawing.Size(392, 107);
+            this.textBox1.TabIndex = 27;
+            this.textBox1.Text = resources.GetString("textBox1.Text");
+            this.textBox1.WordWrap = false;
+            // 
             // FrmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(796, 477);
+            this.Controls.Add(this.textBox1);
             this.Controls.Add(this.chkSaveData);
             this.Controls.Add(this.txtPageEnd);
             this.Controls.Add(label8);
@@ -396,5 +412,6 @@
         private System.Windows.Forms.ToolStripMenuItem 设置ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem tsmiConfig;
         private System.Windows.Forms.CheckBox chkSaveData;
+        private Neetsonic.Control.TextBox textBox1;
     }
 }
