@@ -8,6 +8,8 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Xml.XPath;
+using HtmlAgilityPack;
 using KCSpy.Model;
 using Neetsonic.Tool;
 using Neetsonic.Tool.Database;
@@ -15,6 +17,7 @@ using Neetsonic.Tool.Extensions;
 using Newtonsoft.Json;
 using SenkaGo.Util;
 using TextBox = Neetsonic.Control.TextBox;
+using HtmlDocument = HtmlAgilityPack.HtmlDocument;
 
 namespace KCSpy.View
 {
@@ -310,6 +313,18 @@ namespace KCSpy.View
 
         private void button1_Click(object sender, EventArgs e)
         {
+            HtmlWeb webClient = new HtmlWeb();
+            HtmlDocument doc = webClient.Load("https://www.pixiv.net/member_illust.php?id=4486129");
+            HtmlNodeCollection hrefList = doc.DocumentNode.SelectNodes("body");
+
+            if(hrefList != null)
+            {
+                foreach(HtmlNode href in hrefList)
+                {
+                    HtmlAttribute att = href.Attributes["href"];
+                }
+            }
+
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(@"https://i.pximg.net/img-original/img/2018/01/27/00/04/39/66979373_p0.png");
             request.Method = "GET";
             request.Accept = @"image/webp,image/apng,image/*,*/*;q=0.8";
@@ -317,7 +332,7 @@ namespace KCSpy.View
             request.Headers.Add("Accept-Language", @"zh-CN,zh;q=0.9,ja;q=0.8,en;q=0.7,zh-TW;q=0.6");
             request.Host = @"i.pximg.net";
             SetHeaderValue(request.Headers, @"Connection", @"keep-alive");
-            request.Referer = @"https://www.pixiv.net/member_illust.php?mode=medium&illust_id=66979373";
+            request.Referer = @"https://www.pixiv.net";
             request.UserAgent = "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36";
             request.Headers.Add("Upgrade-Insecure-Requests", @"1");
             WebProxy proxyObject = new WebProxy(@"127.0.0.1:8123", true);//str为IP地址 port为端口号 代理类  
