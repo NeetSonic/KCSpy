@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.IO;
+using System.IO.Compression;
 using System.Net;
 using System.Reflection;
 using System.Text;
@@ -305,6 +306,41 @@ namespace KCSpy.View
         private void ConfigToolStripMenuItem_Click(object sender, EventArgs e)
         {
             new FrmConfig().ShowDialog();
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(@"https://i.pximg.net/img-original/img/2018/01/27/00/04/39/66979373_p0.png");
+            request.Method = "GET";
+            request.Accept = @"image/webp,image/apng,image/*,*/*;q=0.8";
+            request.Headers.Add("Accept-Encoding", @"gzip, deflate, br");
+            request.Headers.Add("Accept-Language", @"zh-CN,zh;q=0.9,ja;q=0.8,en;q=0.7,zh-TW;q=0.6");
+            request.Host = @"i.pximg.net";
+            SetHeaderValue(request.Headers, @"Connection", @"keep-alive");
+            request.Referer = @"https://www.pixiv.net/member_illust.php?mode=medium&illust_id=66979373";
+            request.UserAgent = "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36";
+            request.Headers.Add("Upgrade-Insecure-Requests", @"1");
+            WebProxy proxyObject = new WebProxy(@"127.0.0.1:8123", true);//str为IP地址 port为端口号 代理类  
+            request.Proxy = proxyObject; //设置代理  
+
+            using(HttpWebResponse myResponse = (HttpWebResponse)request.GetResponse())
+            {
+                using(Stream reader = myResponse.GetResponseStream())
+                {
+                    using(FileStream writer = new FileStream("D://1.png", FileMode.OpenOrCreate, FileAccess.Write))
+                    {
+                        byte[] buff = new byte[512];
+                        int c; //实际读取的字节数  
+                        while((c = reader.Read(buff, 0, buff.Length)) > 0)
+                        {
+                            writer.Write(buff, 0, c);
+                        }
+                        writer.Close();
+                    }
+                    reader.Close();
+                }
+                myResponse.Close();
+            }
         }
     }
 }

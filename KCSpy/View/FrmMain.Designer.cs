@@ -59,6 +59,7 @@
             this.tsmiConfig = new System.Windows.Forms.ToolStripMenuItem();
             this.chkSaveData = new System.Windows.Forms.CheckBox();
             this.textBox1 = new Neetsonic.Control.TextBox();
+            this.button1 = new System.Windows.Forms.Button();
             label1 = new System.Windows.Forms.Label();
             label2 = new System.Windows.Forms.Label();
             label3 = new System.Windows.Forms.Label();
@@ -340,11 +341,22 @@
             this.textBox1.Text = resources.GetString("textBox1.Text");
             this.textBox1.WordWrap = false;
             // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(714, 230);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(70, 34);
+            this.button1.TabIndex = 28;
+            this.button1.Text = "战果";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
             // FrmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(796, 477);
+            this.Controls.Add(this.button1);
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.chkSaveData);
             this.Controls.Add(this.txtPageEnd);
@@ -413,5 +425,6 @@
         private System.Windows.Forms.ToolStripMenuItem tsmiConfig;
         private System.Windows.Forms.CheckBox chkSaveData;
         private Neetsonic.Control.TextBox textBox1;
+        private System.Windows.Forms.Button button1;
     }
 }
