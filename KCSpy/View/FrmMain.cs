@@ -323,7 +323,7 @@ namespace KCSpy.View
 
         private static string GetURL(string illust_id)
         {
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(string.Format(@"https://www.pixiv.net/member_illust.php?mode=medium&illust_id=68889552"));
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(string.Format($@"https://www.pixiv.net/member_illust.php?mode=medium&illust_id={illust_id}"));
             request.Method = "GET";
             request.Accept = @"text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8";
             request.Headers.Add("Accept-Encoding", @"gzip, deflate, br");
@@ -344,75 +344,96 @@ namespace KCSpy.View
                 doc.Load(new GZipStream(myResponse.GetResponseStream(), CompressionMode.Decompress), Encoding.UTF8);
                 myResponse.Close();
             }
-            return doc.DocumentNode.SelectSingleNode(@"//*[@id='root']/div[1]/div/article/div/div[1]/figure/div[1]/div/a").Attributes[@"href"].Value;
+            int begin = doc.ParsedText.IndexOf(@"original", StringComparison.Ordinal);
+            int end = doc.ParsedText.IndexOf(@"}", begin, StringComparison.Ordinal);
+            string raw = doc.ParsedText.Substring(begin, end-begin+1);
+            begin = raw.IndexOf(@"https", StringComparison.Ordinal);
+            end = raw.LastIndexOf('"');
+            string ret = raw.Substring(begin, end - begin);
+            ret = ret.Replace(@"\", string.Empty);
+            return ret;
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
+            WebProxy proxyObject = new WebProxy(@"127.0.0.1:8123", true); //str为IP地址 port为端口号 代理类  
             List<Illustration> illustrations = new List<Illustration>();
-
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(@"https://www.pixiv.net/member_illust.php?id=67388");
-            request.Method = "GET";
-            request.Accept = @"text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8";
-            request.Headers.Add("Accept-Encoding", @"gzip, deflate, br");
-            request.Headers.Add("Accept-Language", @"zh-CN,zh;q=0.9,ja;q=0.8,en;q=0.7,zh-TW;q=0.6");
-            request.Host = @"www.pixiv.net";
-            SetHeaderValue(request.Headers, @"Connection", @"keep-alive");
-            request.Referer = @"https://www.pixiv.net";
-            request.UserAgent = "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36";
-            request.Headers.Add("Upgrade-Insecure-Requests", @"1");
-            request.Headers.Add("Cookie", @"first_visit_datetime_pc=2018-06-08+13%3A48%3A14; p_ab_id=5; p_ab_id_2=2; yuid=GQYEZzA58; __utma=235335808.657713264.1528433295.1528433295.1528433295.1; __utmc=235335808; __utmz=235335808.1528433295.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none); __utmt=1; limited_ads=%7B%22header%22%3A%22%22%7D; _ga=GA1.2.657713264.1528433295; _gid=GA1.2.890661813.1528433319; login_bc=1; PHPSESSID=20722713_06d5f16685a8652a2e6827803858424d; device_token=246818d8418f7e288ecafab2d3f6ae48; privacy_policy_agreement=1; c_type=24; a_type=0; b_type=1; login_ever=yes; __utmv=235335808.|2=login%20ever=yes=1^3=plan=premium=1^5=gender=male=1^6=user_id=20722713=1^9=p_ab_id=5=1^10=p_ab_id_2=2=1^11=lang=zh=1; __utmb=235335808.2.10.1528433295");
-            WebProxy proxyObject = new WebProxy(@"127.0.0.1:8123", true);//str为IP地址 port为端口号 代理类  
-            request.Proxy = proxyObject; //设置代理  
-
-            HtmlDocument doc = new HtmlDocument();
-            using(HttpWebResponse myResponse = (HttpWebResponse)request.GetResponse())
+            int page = 0;
+            const string MenuURL = @"https://www.pixiv.net/member_illust.php?id=441987";
+            HtmlNode haveNext;
+            do
             {
-                doc.Load(new GZipStream(myResponse.GetResponseStream(), CompressionMode.Decompress), Encoding.UTF8);
-                myResponse.Close();
-            }
-            int count = doc.DocumentNode.SelectNodes(@"//*[@id='wrapper']/div[1]/div[1]/div/div[2]/ul/li").Count;
-            for(int i = 1; i <= count; i++)
-            {
-                HtmlNode nodeURL = doc.DocumentNode.SelectSingleNode(string.Format($@"//*[@id='wrapper']/div[1]/div[1]/div/div[2]/ul/li[{i}]/a[1]/div[1]/img"));
-                HtmlNode nodeName = doc.DocumentNode.SelectSingleNode(string.Format($@"//*[@id='wrapper']/div[1]/div[1]/div/div[2]/ul/li[{i}]/a[2]"));
-                string href = nodeName.Attributes[@"href"].Value;
-                string illust_id = href.Substring(href.LastIndexOf('=') + 1);
-                illustrations.Add(new Illustration
+                page++;
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(string.Format($@"{MenuURL}&type=all&p={page}"));
+                request.Method = "GET";
+                request.Accept = @"text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8";
+                request.Headers.Add("Accept-Encoding", @"gzip, deflate, br");
+                request.Headers.Add("Accept-Language", @"zh-CN,zh;q=0.9,ja;q=0.8,en;q=0.7,zh-TW;q=0.6");
+                request.Host = @"www.pixiv.net";
+                SetHeaderValue(request.Headers, @"Connection", @"keep-alive");
+                request.Referer = @"https://www.pixiv.net";
+                request.UserAgent = "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36";
+                request.Headers.Add("Upgrade-Insecure-Requests", @"1");
+                request.Headers.Add("Cookie", @"first_visit_datetime_pc=2018-06-08+13%3A48%3A14; p_ab_id=5; p_ab_id_2=2; yuid=GQYEZzA58; __utma=235335808.657713264.1528433295.1528433295.1528433295.1; __utmc=235335808; __utmz=235335808.1528433295.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none); __utmt=1; limited_ads=%7B%22header%22%3A%22%22%7D; _ga=GA1.2.657713264.1528433295; _gid=GA1.2.890661813.1528433319; login_bc=1; PHPSESSID=20722713_06d5f16685a8652a2e6827803858424d; device_token=246818d8418f7e288ecafab2d3f6ae48; privacy_policy_agreement=1; c_type=24; a_type=0; b_type=1; login_ever=yes; __utmv=235335808.|2=login%20ever=yes=1^3=plan=premium=1^5=gender=male=1^6=user_id=20722713=1^9=p_ab_id=5=1^10=p_ab_id_2=2=1^11=lang=zh=1; __utmb=235335808.2.10.1528433295");
+                request.Proxy = proxyObject; //设置代理  
+
+                HtmlDocument doc = new HtmlDocument();
+                using(HttpWebResponse myResponse = (HttpWebResponse)request.GetResponse())
                 {
-                    ID = href.Substring(href.LastIndexOf('=') + 1),
-                    Name = nodeName.ChildNodes[0].InnerText,
-                    URL= GetURL(illust_id)
-                });
-            }
-
+                    doc.Load(new GZipStream(myResponse.GetResponseStream(), CompressionMode.Decompress), Encoding.UTF8);
+                    myResponse.Close();
+                }
+                int count = doc.DocumentNode.SelectNodes(@"//*[@id='wrapper']/div[1]/div[1]/div/div[2]/ul/li").Count;
+                for(int i = 1; i <= count; i++)
+                {
+                    HtmlNode nodeURL = doc.DocumentNode.SelectSingleNode(string.Format($@"//*[@id='wrapper']/div[1]/div[1]/div/div[2]/ul/li[{i}]/a[1]/div[1]/img"));
+                    HtmlNode nodeName = doc.DocumentNode.SelectSingleNode(string.Format($@"//*[@id='wrapper']/div[1]/div[1]/div/div[2]/ul/li[{i}]/a[2]"));
+                    string href = nodeName.Attributes[@"href"].Value;
+                    string illust_id = href.Substring(href.LastIndexOf('=') + 1);
+                    illustrations.Add(new Illustration
+                    {
+                        ID = href.Substring(href.LastIndexOf('=') + 1),
+                        Name = nodeName.ChildNodes[0].InnerText,
+                        URL = GetURL(illust_id)
+                    });
+                }
+                haveNext = doc.DocumentNode.SelectSingleNode(@"//*[@id='wrapper']/div[1]/div[1]/div/ul[1]/div/span[2]/a");
+            } while(haveNext != null);
             foreach(Illustration illust in illustrations)
             {
-                HttpWebRequest webRequest = (HttpWebRequest)WebRequest.Create(illust.URL);
-                webRequest.Method = "GET";
-                webRequest.Referer = @"https://www.pixiv.net";
-                //webRequest.Accept = @"text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8";
-                //webRequest.Headers.Add("Accept-Encoding", @"gzip, deflate, br");
-                //webRequest.Headers.Add("Accept-Language", @"zh-CN,zh;q=0.9,ja;q=0.8,en;q=0.7,zh-TW;q=0.6");
-                //webRequest.Host = @"www.pixiv.net";
-                //SetHeaderValue(webRequest.Headers, @"Connection", @"keep-alive");
-                //webRequest.UserAgent = "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36";
-                //webRequest.Headers.Add("Upgrade-Insecure-Requests", @"1");
-                webRequest.Proxy = proxyObject; //设置代理  
-
-                using(FileStream writer = new FileStream(Path.Combine(@"D:\",string.Format($@"{illust.Name}_{illust.ID}{illust.FileFormat}")), FileMode.OpenOrCreate, FileAccess.Write))
+                int i = 0;
+                while(true)
                 {
-                    using(Stream reader = ((HttpWebResponse)webRequest.GetResponse()).GetResponseStream())
+                    try
                     {
-                        byte[] buff = new byte[512];
-                        int c; //实际读取的字节数  
-                        while(reader != null && (c = reader.Read(buff, 0, buff.Length)) > 0)
+                        if(i > 0)
                         {
-                            writer.Write(buff, 0, c);
+                            illust.URL = string.Format($@"{illust.URL.Substring(0, illust.URL.LastIndexOf(string.Format($@"p{i-1}"), StringComparison.Ordinal))}p{i}{illust.FileFormat}");
                         }
-                        reader?.Close();
+                        HttpWebRequest webRequest = (HttpWebRequest)WebRequest.Create(illust.URL);
+                        webRequest.Method = "GET";
+                        webRequest.Referer = @"https://www.pixiv.net/member_illust.php?mode=manga";
+                        webRequest.Proxy = proxyObject; //设置代理  
+                        using(Stream reader = ((HttpWebResponse)webRequest.GetResponse()).GetResponseStream())
+                        {
+                            using(FileStream writer = new FileStream(Path.Combine(@"D:\", string.Format($@"{illust.Name}_{illust.ID}_p{i}{illust.FileFormat}")), FileMode.OpenOrCreate, FileAccess.Write))
+                            {
+                                byte[] buff = new byte[512];
+                                int c; //实际读取的字节数  
+                                while(reader != null && (c = reader.Read(buff, 0, buff.Length)) > 0)
+                                {
+                                    writer.Write(buff, 0, c);
+                                }
+                                writer.Close();
+                            }
+                            reader?.Close();
+                        }
+                        i++;
                     }
-                    writer.Close();
+                    catch(Exception)
+                    {
+                        break;
+                    }
                 }
             }
 
