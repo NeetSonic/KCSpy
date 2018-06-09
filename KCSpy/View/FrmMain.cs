@@ -318,6 +318,7 @@ namespace KCSpy.View
             public string Name { get; set; }
             public string ID { get; set; }
             public string URL { get; set; }
+            public string Date {get; set;}
             public string FileFormat => URL.Substring(URL.LastIndexOf('.'));
         }
 
@@ -354,12 +355,19 @@ namespace KCSpy.View
             return ret;
         }
 
+        private static string GetDateByURL(string url)
+        {
+            string raw = url.Substring(url.LastIndexOf(@"img", StringComparison.Ordinal) + 4, 10);
+            return raw.Replace(@"/", string.Empty);
+        }
+
         private void button1_Click(object sender, EventArgs e)
         {
+            const string FileName = @"小林ちさと";
             WebProxy proxyObject = new WebProxy(@"127.0.0.1:8123", true); //str为IP地址 port为端口号 代理类  
             List<Illustration> illustrations = new List<Illustration>();
             int page = 0;
-            const string MenuURL = @"https://www.pixiv.net/member_illust.php?id=441987";
+            const string MenuURL = @"https://www.pixiv.net/member_illust.php?id=3016";
             HtmlNode haveNext;
             do
             {
@@ -390,11 +398,13 @@ namespace KCSpy.View
                     HtmlNode nodeName = doc.DocumentNode.SelectSingleNode(string.Format($@"//*[@id='wrapper']/div[1]/div[1]/div/div[2]/ul/li[{i}]/a[2]"));
                     string href = nodeName.Attributes[@"href"].Value;
                     string illust_id = href.Substring(href.LastIndexOf('=') + 1);
+                    string url = GetURL(illust_id);
                     illustrations.Add(new Illustration
                     {
-                        ID = href.Substring(href.LastIndexOf('=') + 1),
-                        Name = nodeName.ChildNodes[0].InnerText,
-                        URL = GetURL(illust_id)
+                            ID = href.Substring(href.LastIndexOf('=') + 1),
+                            Name = nodeName.ChildNodes[0].InnerText,
+                            URL = url,
+                            Date = GetDateByURL(url)
                     });
                 }
                 haveNext = doc.DocumentNode.SelectSingleNode(@"//*[@id='wrapper']/div[1]/div[1]/div/ul[1]/div/span[2]/a");
@@ -416,7 +426,7 @@ namespace KCSpy.View
                         webRequest.Proxy = proxyObject; //设置代理  
                         using(Stream reader = ((HttpWebResponse)webRequest.GetResponse()).GetResponseStream())
                         {
-                            using(FileStream writer = new FileStream(Path.Combine(@"D:\", string.Format($@"{illust.Name}_{illust.ID}_p{i}{illust.FileFormat}")), FileMode.OpenOrCreate, FileAccess.Write))
+                            using(FileStream writer = new FileStream(Path.Combine(@"D:\", FileName, string.Format($@"{illust.ID}_p{i}_{illust.Name}_{illust.Date}_{illust.FileFormat}")), FileMode.OpenOrCreate, FileAccess.Write))
                             {
                                 byte[] buff = new byte[512];
                                 int c; //实际读取的字节数  
