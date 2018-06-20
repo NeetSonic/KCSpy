@@ -31,6 +31,7 @@ namespace KCSpy.View
                 new Server {Name = @"大凑", IP = @"203.104.209.150"},
                 new Server {Name = @"特鲁克", IP = @"203.104.209.134"},
                 new Server {Name = @"林加", IP = @"203.104.209.167"},
+                new Server {Name = @"拉包尔", IP = @"203.104.248.135"},
                 new Server {Name = @"肖特兰", IP = @"125.6.189.7"},
                 new Server {Name = @"布因", IP = @"125.6.189.39"},
                 new Server {Name = @"塔威", IP = @"125.6.189.71"},
