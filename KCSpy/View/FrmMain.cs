@@ -28,22 +28,22 @@ namespace KCSpy.View
 
         static FrmMain() => Servers = new List<Server>
         {
-                new Server {Name = @"大凑", IP = @"203.104.209.150"},
-                new Server {Name = @"特鲁克", IP = @"203.104.209.134"},
-                new Server {Name = @"林加", IP = @"203.104.209.167"},
-                new Server {Name = @"拉包尔", IP = @"203.104.248.135"},
-                new Server {Name = @"肖特兰", IP = @"125.6.189.7"},
-                new Server {Name = @"布因", IP = @"125.6.189.39"},
-                new Server {Name = @"塔威", IP = @"125.6.189.71"},
-                new Server {Name = @"帕劳", IP = @"125.6.189.103"},
-                new Server {Name = @"文莱", IP = @"125.6.189.135"},
-                new Server {Name = @"单冠湾", IP = @"125.6.189.167"},
-                new Server {Name = @"幌筵", IP = @"125.6.189.215"},
-                new Server {Name = @"宿毛湾", IP = @"125.6.189.247"},
-                new Server {Name = @"鹿屋", IP = @"203.104.209.23"},
-                new Server {Name = @"岩川", IP = @"203.104.209.39"},
-                new Server {Name = @"佐伯湾", IP = @"203.104.209.55"},
-                new Server {Name = @"柱島", IP = @"203.104.209.102"}
+                new Server {Name = @"大凑", IP = @"203.104.209.150", Token = @"08b1c06a0ef50c378c45aa934542dbb91cb168b3"},
+                new Server {Name = @"特鲁克", IP = @"203.104.209.134",Token = @"b851a4506eb04c81a4964d8734efe312f4902b53"},
+                new Server {Name = @"林加", IP = @"203.104.209.167", Token = @"b22eac020acbda0feeb35e9cdd2d3a59febb0dfa"},
+                new Server {Name = @"拉包尔", IP = @"203.104.248.135", Token = @"7536f33270f6a27fe3f23f3eb3ee2a4193b00253"},
+                new Server {Name = @"肖特兰", IP = @"125.6.189.7", Token = @"2b77a433c6b9097b5057579db887cc1b08f0ae12"},
+                new Server {Name = @"布因", IP = @"125.6.189.39", Token = @"552a7337c8682d22497c7dd16c46f28ef3420a9f"},
+                new Server {Name = @"塔威", IP = @"125.6.189.71", Token = @"67b819daa43ca426811d73f39768944624accccd"},
+                new Server {Name = @"帕劳", IP = @"125.6.189.103", Token = @"a09a6d289c8b67f66bf376adf9a619d1918191ff"},
+                new Server {Name = @"文莱", IP = @"125.6.189.135", Token = @"1caf7b525cb734695a492164df908a4183ce9c9f"},
+                new Server {Name = @"单冠湾", IP = @"125.6.189.167", Token = @"72ce0498c052577a37260df7404bb0469e153feb"},
+                new Server {Name = @"幌筵", IP = @"125.6.189.215", Token = @"2cabb9b4735d85559bdd4e1437ae1d91c2fdf397"},
+                new Server {Name = @"宿毛湾", IP = @"125.6.189.247", Token = @"075a10f621670e394ef2b2d2075119c243d6ea97"},
+                new Server {Name = @"鹿屋", IP = @"203.104.209.23", Token = @"9650cff46860f6dc6c955b910b1d950383f28254"},
+                new Server {Name = @"岩川", IP = @"203.104.209.39", Token = @"3a238abbdfe1d66ab3d59807a82d04adc9370cd8"},
+                new Server {Name = @"佐伯湾", IP = @"203.104.209.55", Token = @"4895eb1d78a12b7fbd85417daf2634bf5fb2d8a1"},
+                new Server {Name = @"柱島", IP = @"203.104.209.102", Token = @"b508c17e7e4e2a912b22b9a888cf60b2ab869e00"}
         };
 
         private static void SetHeaderValue(WebHeaderCollection header, string name, string value)
@@ -302,5 +302,10 @@ namespace KCSpy.View
         }
 
         private void UpdateLabelAsync(Label lbl, string content) => BeginInvoke(new MethodInvoker(() => lbl.Text = content));
+
+        private void CmbServer_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            txtToken.Text = ((Server)cmbServer.SelectedItem)?.Token;
+        }
     }
 }

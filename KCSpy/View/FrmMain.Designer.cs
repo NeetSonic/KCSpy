@@ -239,6 +239,7 @@
             this.cmbServer.Name = "cmbServer";
             this.cmbServer.Size = new System.Drawing.Size(297, 28);
             this.cmbServer.TabIndex = 15;
+            this.cmbServer.SelectedIndexChanged += new System.EventHandler(this.CmbServer_SelectedIndexChanged);
             // 
             // chkFile
             // 
