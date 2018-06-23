@@ -226,6 +226,19 @@ namespace KCSpy.View
                     wbks.Close();
                     app.Quit();
                     Marshal.ReleaseComObject(app);
+
+                    string fileName = Path.GetFileName(filePath);
+                    if(null != fileName)
+                    {
+                        int start = fileName.LastIndexOf('(');
+                        if(start > 0)
+                        {
+                            int end = fileName.LastIndexOf(')');
+                            string oldDate = fileName.Substring(start + 1, end - start - 1);
+                            string newName = fileName.Replace(oldDate, string.Format($@"{DateTime.Now.Year}.{DateTime.Now.Month}.{DateTime.Now.Day}"));
+                            FileTool.Rename(filePath, newName);
+                        }
+                    }
                 }
                 else if(fromFile)
                 {
