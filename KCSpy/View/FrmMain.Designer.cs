@@ -36,9 +36,7 @@
             System.Windows.Forms.Label label6;
             System.Windows.Forms.Label label7;
             System.Windows.Forms.Label label8;
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmMain));
             this.btnTest = new System.Windows.Forms.Button();
-            this.txtContent = new Neetsonic.Control.TextBox();
             this.btnSelectAll = new System.Windows.Forms.Button();
             this.txtToken = new System.Windows.Forms.TextBox();
             this.txtReferer = new System.Windows.Forms.TextBox();
@@ -52,13 +50,19 @@
             this.txtFile = new System.Windows.Forms.TextBox();
             this.txtMemberID = new System.Windows.Forms.TextBox();
             this.txtPageStart = new System.Windows.Forms.TextBox();
-            this.txtSenka = new Neetsonic.Control.TextBox();
             this.txtPageEnd = new System.Windows.Forms.TextBox();
             this.menuMain = new System.Windows.Forms.MenuStrip();
             this.设置ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiConfig = new System.Windows.Forms.ToolStripMenuItem();
             this.chkSaveData = new System.Windows.Forms.CheckBox();
-            this.textBox1 = new Neetsonic.Control.TextBox();
+            this.chkAutoServer = new System.Windows.Forms.CheckBox();
+            this.groupBox1 = new Neetsonic.Control.GroupBox();
+            this.btnLoadServerFile = new System.Windows.Forms.Button();
+            this.btnOpenServerFile = new System.Windows.Forms.Button();
+            this.txtSenka = new Neetsonic.Control.TextBox();
+            this.txtContent = new Neetsonic.Control.TextBox();
+            this.txtExcelFile = new System.Windows.Forms.TextBox();
+            this.chkExcel = new System.Windows.Forms.CheckBox();
             label1 = new System.Windows.Forms.Label();
             label2 = new System.Windows.Forms.Label();
             label3 = new System.Windows.Forms.Label();
@@ -68,6 +72,7 @@
             label7 = new System.Windows.Forms.Label();
             label8 = new System.Windows.Forms.Label();
             this.menuMain.SuspendLayout();
+            this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // label1
@@ -152,18 +157,6 @@
             this.btnTest.UseVisualStyleBackColor = true;
             this.btnTest.Click += new System.EventHandler(this.BtnTest_ClickAsync);
             // 
-            // txtContent
-            // 
-            this.txtContent.AcceptsReturn = true;
-            this.txtContent.Location = new System.Drawing.Point(12, 277);
-            this.txtContent.MaxLength = 3276700;
-            this.txtContent.Multiline = true;
-            this.txtContent.Name = "txtContent";
-            this.txtContent.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.txtContent.Size = new System.Drawing.Size(360, 160);
-            this.txtContent.TabIndex = 1;
-            this.txtContent.WordWrap = false;
-            // 
             // btnSelectAll
             // 
             this.btnSelectAll.Location = new System.Drawing.Point(297, 230);
@@ -204,7 +197,7 @@
             // 
             // btnSenka
             // 
-            this.btnSenka.Location = new System.Drawing.Point(393, 230);
+            this.btnSenka.Location = new System.Drawing.Point(714, 82);
             this.btnSenka.Name = "btnSenka";
             this.btnSenka.Size = new System.Drawing.Size(70, 34);
             this.btnSenka.TabIndex = 11;
@@ -274,18 +267,6 @@
             this.txtPageStart.Size = new System.Drawing.Size(33, 26);
             this.txtPageStart.TabIndex = 21;
             // 
-            // txtSenka
-            // 
-            this.txtSenka.AcceptsReturn = true;
-            this.txtSenka.Location = new System.Drawing.Point(393, 277);
-            this.txtSenka.MaxLength = 3276700;
-            this.txtSenka.Multiline = true;
-            this.txtSenka.Name = "txtSenka";
-            this.txtSenka.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.txtSenka.Size = new System.Drawing.Size(392, 160);
-            this.txtSenka.TabIndex = 22;
-            this.txtSenka.WordWrap = false;
-            // 
             // txtPageEnd
             // 
             this.txtPageEnd.Location = new System.Drawing.Point(752, 36);
@@ -321,32 +302,106 @@
             // chkSaveData
             // 
             this.chkSaveData.AutoSize = true;
-            this.chkSaveData.Location = new System.Drawing.Point(393, 193);
+            this.chkSaveData.Location = new System.Drawing.Point(624, 88);
             this.chkSaveData.Name = "chkSaveData";
             this.chkSaveData.Size = new System.Drawing.Size(84, 24);
             this.chkSaveData.TabIndex = 26;
             this.chkSaveData.Text = "保存数据";
             this.chkSaveData.UseVisualStyleBackColor = true;
             // 
-            // textBox1
+            // chkAutoServer
             // 
-            this.textBox1.AcceptsReturn = true;
-            this.textBox1.Location = new System.Drawing.Point(393, 73);
-            this.textBox1.MaxLength = 3276700;
-            this.textBox1.Multiline = true;
-            this.textBox1.Name = "textBox1";
-            this.textBox1.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.textBox1.Size = new System.Drawing.Size(392, 107);
-            this.textBox1.TabIndex = 27;
-            this.textBox1.Text = resources.GetString("textBox1.Text");
-            this.textBox1.WordWrap = false;
+            this.chkAutoServer.AutoSize = true;
+            this.chkAutoServer.Location = new System.Drawing.Point(393, 193);
+            this.chkAutoServer.Name = "chkAutoServer";
+            this.chkAutoServer.Size = new System.Drawing.Size(126, 24);
+            this.chkAutoServer.TabIndex = 31;
+            this.chkAutoServer.Text = "自动判断服务器";
+            this.chkAutoServer.UseVisualStyleBackColor = true;
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.btnLoadServerFile);
+            this.groupBox1.Controls.Add(this.btnOpenServerFile);
+            this.groupBox1.Location = new System.Drawing.Point(393, 82);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(152, 70);
+            this.groupBox1.TabIndex = 30;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "服务器配置文件";
+            // 
+            // btnLoadServerFile
+            // 
+            this.btnLoadServerFile.Location = new System.Drawing.Point(63, 25);
+            this.btnLoadServerFile.Name = "btnLoadServerFile";
+            this.btnLoadServerFile.Size = new System.Drawing.Size(80, 34);
+            this.btnLoadServerFile.TabIndex = 30;
+            this.btnLoadServerFile.Text = "重新载入";
+            this.btnLoadServerFile.UseVisualStyleBackColor = true;
+            this.btnLoadServerFile.Click += new System.EventHandler(this.BtnLoadServerFile_Click);
+            // 
+            // btnOpenServerFile
+            // 
+            this.btnOpenServerFile.Location = new System.Drawing.Point(6, 25);
+            this.btnOpenServerFile.Name = "btnOpenServerFile";
+            this.btnOpenServerFile.Size = new System.Drawing.Size(51, 34);
+            this.btnOpenServerFile.TabIndex = 29;
+            this.btnOpenServerFile.Text = "打开";
+            this.btnOpenServerFile.UseVisualStyleBackColor = true;
+            this.btnOpenServerFile.Click += new System.EventHandler(this.BtnOpenServerFile_Click);
+            // 
+            // txtSenka
+            // 
+            this.txtSenka.AcceptsReturn = true;
+            this.txtSenka.Location = new System.Drawing.Point(393, 277);
+            this.txtSenka.MaxLength = 3276700;
+            this.txtSenka.Multiline = true;
+            this.txtSenka.Name = "txtSenka";
+            this.txtSenka.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+            this.txtSenka.Size = new System.Drawing.Size(392, 160);
+            this.txtSenka.TabIndex = 22;
+            this.txtSenka.WordWrap = false;
+            // 
+            // txtContent
+            // 
+            this.txtContent.AcceptsReturn = true;
+            this.txtContent.Location = new System.Drawing.Point(12, 277);
+            this.txtContent.MaxLength = 3276700;
+            this.txtContent.Multiline = true;
+            this.txtContent.Name = "txtContent";
+            this.txtContent.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+            this.txtContent.Size = new System.Drawing.Size(360, 160);
+            this.txtContent.TabIndex = 1;
+            this.txtContent.WordWrap = false;
+            // 
+            // txtExcelFile
+            // 
+            this.txtExcelFile.Location = new System.Drawing.Point(517, 228);
+            this.txtExcelFile.Name = "txtExcelFile";
+            this.txtExcelFile.ReadOnly = true;
+            this.txtExcelFile.Size = new System.Drawing.Size(236, 26);
+            this.txtExcelFile.TabIndex = 33;
+            // 
+            // chkExcel
+            // 
+            this.chkExcel.AutoSize = true;
+            this.chkExcel.Location = new System.Drawing.Point(393, 230);
+            this.chkExcel.Name = "chkExcel";
+            this.chkExcel.Size = new System.Drawing.Size(118, 24);
+            this.chkExcel.TabIndex = 32;
+            this.chkExcel.Text = "更新Excel文件";
+            this.chkExcel.UseVisualStyleBackColor = true;
+            this.chkExcel.CheckedChanged += new System.EventHandler(this.ChkExcel_CheckedChanged);
             // 
             // FrmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(796, 477);
-            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.txtExcelFile);
+            this.Controls.Add(this.chkExcel);
+            this.Controls.Add(this.chkAutoServer);
+            this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.chkSaveData);
             this.Controls.Add(this.txtPageEnd);
             this.Controls.Add(label8);
@@ -385,6 +440,7 @@
             this.Load += new System.EventHandler(this.FrmMain_Load);
             this.menuMain.ResumeLayout(false);
             this.menuMain.PerformLayout();
+            this.groupBox1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -413,6 +469,11 @@
         private System.Windows.Forms.ToolStripMenuItem 设置ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem tsmiConfig;
         private System.Windows.Forms.CheckBox chkSaveData;
-        private Neetsonic.Control.TextBox textBox1;
+        private System.Windows.Forms.Button btnOpenServerFile;
+        private Neetsonic.Control.GroupBox groupBox1;
+        private System.Windows.Forms.Button btnLoadServerFile;
+        private System.Windows.Forms.CheckBox chkAutoServer;
+        private System.Windows.Forms.TextBox txtExcelFile;
+        private System.Windows.Forms.CheckBox chkExcel;
     }
 }
