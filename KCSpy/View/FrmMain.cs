@@ -41,7 +41,7 @@ namespace KCSpy.View
                 new Server {Name = @"幌筵", IP = @"125.6.189.215", Token = @"2cabb9b4735d85559bdd4e1437ae1d91c2fdf397"},
                 new Server {Name = @"宿毛湾", IP = @"125.6.189.247", Token = @"075a10f621670e394ef2b2d2075119c243d6ea97"},
                 new Server {Name = @"鹿屋", IP = @"203.104.209.23", Token = @"9650cff46860f6dc6c955b910b1d950383f28254"},
-                new Server {Name = @"岩川", IP = @"203.104.209.39", Token = @"3a238abbdfe1d66ab3d59807a82d04adc9370cd8"},
+                new Server {Name = @"岩川", IP = @"203.104.209.39", Token = @"682289b443bc984a5425b9bee5c234d16acfb823"},
                 new Server {Name = @"佐伯湾", IP = @"203.104.209.55", Token = @"4895eb1d78a12b7fbd85417daf2634bf5fb2d8a1"},
                 new Server {Name = @"柱島", IP = @"203.104.209.102", Token = @"b508c17e7e4e2a912b22b9a888cf60b2ab869e00"}
         };
