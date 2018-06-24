@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Diagnostics;
 using System.IO;
 using System.Net;
 using System.Reflection;
@@ -110,6 +111,10 @@ namespace KCSpy.View
                 ReadServerFile();
                 SetServer();
             }
+        }
+        private void BtnOpenExcel_Click(object sender, EventArgs e)
+        {
+            if(!string.IsNullOrWhiteSpace(txtExcelFile.Text)) Process.Start(txtExcelFile.Text);
         }
         private void BtnOpenServerFile_Click(object sender, EventArgs e) => FileTool.OpenTextFile(ServerFilePath);
         private void BtnSelectAll_Click(object sender, EventArgs e) => txtContent.Highlight();
@@ -226,7 +231,6 @@ namespace KCSpy.View
                     wbks.Close();
                     app.Quit();
                     Marshal.ReleaseComObject(app);
-
                     string fileName = Path.GetFileName(filePath);
                     if(null != fileName)
                     {
@@ -236,7 +240,7 @@ namespace KCSpy.View
                             int end = fileName.LastIndexOf(')');
                             string oldDate = fileName.Substring(start + 1, end - start - 1);
                             string newName = fileName.Replace(oldDate, string.Format($@"{DateTime.Now.Year}.{DateTime.Now.Month}.{DateTime.Now.Day}"));
-                            FileTool.Rename(filePath, newName);
+                            BeginInvoke(new MethodInvoker(() => txtExcelFile.Text = FileTool.Rename(filePath, newName)));
                         }
                     }
                 }

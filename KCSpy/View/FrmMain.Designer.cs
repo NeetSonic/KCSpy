@@ -63,6 +63,7 @@
             this.txtContent = new Neetsonic.Control.TextBox();
             this.txtExcelFile = new System.Windows.Forms.TextBox();
             this.chkExcel = new System.Windows.Forms.CheckBox();
+            this.btnOpenExcel = new System.Windows.Forms.Button();
             label1 = new System.Windows.Forms.Label();
             label2 = new System.Windows.Forms.Label();
             label3 = new System.Windows.Forms.Label();
@@ -379,7 +380,7 @@
             this.txtExcelFile.Location = new System.Drawing.Point(517, 228);
             this.txtExcelFile.Name = "txtExcelFile";
             this.txtExcelFile.ReadOnly = true;
-            this.txtExcelFile.Size = new System.Drawing.Size(236, 26);
+            this.txtExcelFile.Size = new System.Drawing.Size(204, 26);
             this.txtExcelFile.TabIndex = 33;
             // 
             // chkExcel
@@ -393,11 +394,22 @@
             this.chkExcel.UseVisualStyleBackColor = true;
             this.chkExcel.CheckedChanged += new System.EventHandler(this.ChkExcel_CheckedChanged);
             // 
+            // btnOpenExcel
+            // 
+            this.btnOpenExcel.Location = new System.Drawing.Point(727, 226);
+            this.btnOpenExcel.Name = "btnOpenExcel";
+            this.btnOpenExcel.Size = new System.Drawing.Size(57, 28);
+            this.btnOpenExcel.TabIndex = 34;
+            this.btnOpenExcel.Text = "打开";
+            this.btnOpenExcel.UseVisualStyleBackColor = true;
+            this.btnOpenExcel.Click += new System.EventHandler(this.BtnOpenExcel_Click);
+            // 
             // FrmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(796, 477);
+            this.Controls.Add(this.btnOpenExcel);
             this.Controls.Add(this.txtExcelFile);
             this.Controls.Add(this.chkExcel);
             this.Controls.Add(this.chkAutoServer);
@@ -475,5 +487,6 @@
         private System.Windows.Forms.CheckBox chkAutoServer;
         private System.Windows.Forms.TextBox txtExcelFile;
         private System.Windows.Forms.CheckBox chkExcel;
+        private System.Windows.Forms.Button btnOpenExcel;
     }
 }
