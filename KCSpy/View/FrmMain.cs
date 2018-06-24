@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Net;
 using System.Reflection;
@@ -163,6 +164,9 @@ namespace KCSpy.View
                     _Worksheet wsh = (_Worksheet)shs.Item[1];
                     const int ExpCol = 2;
                     const int IdCol = 3;
+                    const int DateCol = 4;
+                    const int IncCol = 5;
+                    const int LastDateCol = 6;
                     for(int row = 2; row < wsh.Rows.Count; row++)
                     {
                         Range range = wsh.Cells[row, IdCol];
@@ -187,7 +191,11 @@ namespace KCSpy.View
                             if(null != kit)
                             {
                                 AppendLineAsnyc(txtContent, string.Format("{0}\t{1}\t{2:D8}", kit.api_nickname, kit.api_experience[0], kit.api_member_id));
+                                int lastExp = Convert.ToInt32(((Range)wsh.Cells[row, ExpCol]).Value);
                                 ((Range)wsh.Cells[row, ExpCol]).Value = kit.api_experience[0];
+                                ((Range)wsh.Cells[row, LastDateCol]).Value = ((Range)wsh.Cells[row, DateCol]).Value;
+                                ((Range)wsh.Cells[row, DateCol]).Value = DateTime.Now.ToString(CultureInfo.CurrentCulture);
+                                ((Range)wsh.Cells[row, IncCol]).Value = kit.api_experience[0] - lastExp;
                             }
                             else
                             {
@@ -212,9 +220,10 @@ namespace KCSpy.View
                                     AppendLineAsnyc(txtContent, ret);
                             }
                         }
-                        catch(Exception)
+                        catch(Exception ex)
                         {
                             AppendLineAsnyc(txtContent, ret);
+                            AppendLineAsnyc(txtContent, ex.Message);
                             const string errFile = @"error.txt";
                             string dir = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
                             string file = Path.Combine(dir, errFile);
