@@ -26,6 +26,8 @@ namespace KCSpy.View
 {
     public partial class FrmMain : Form
     {
+        private readonly string[] _args;
+        private bool _firstFromCmd;
         private static readonly string ServerFilePath = Path.Combine(Application.StartupPath, @"server.xml");
         private static bool Stop;
         private static List<Server> Servers = new List<Server>
@@ -48,8 +50,9 @@ namespace KCSpy.View
                 new Server {Name = @"柱島", IP = @"203.104.209.102", Token = @"b508c17e7e4e2a912b22b9a888cf60b2ab869e00"}
         };
 
-        public FrmMain()
+        public FrmMain(string[] args)
         {
+            _args = args;
             InitializeComponent();
         }
         private static Server AutoServer(string id)
@@ -381,6 +384,11 @@ namespace KCSpy.View
         }
         private void ChkExcel_CheckedChanged(object sender, EventArgs e)
         {
+            if(_firstFromCmd)
+            {
+                _firstFromCmd = false;
+                return;
+            }
             if(chkExcel.Checked)
             {
                 OpenFileDialog dlg = new OpenFileDialog {Filter = @"Excel文件|*.xlsx;"};
@@ -430,6 +438,11 @@ namespace KCSpy.View
             if(File.Exists(ServerFilePath)) ReadServerFile();
             else GenerateServerFile();
             SetServer();
+            if(_args.Length > 0)
+            {
+                chkExcel.Checked = _firstFromCmd = true;
+                txtExcelFile.Text = _args[0];
+            }
         }
         private string Post(string IP, byte[] data)
         {
