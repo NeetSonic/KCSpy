@@ -58,27 +58,16 @@ namespace KCSpy.View
         private static Server AutoServer(string id)
         {
             int ID = int.Parse(id);
-            if(ID < 500000) return Servers[0];
-            if(ID < 600000) return Servers[1];
-            if(ID < 700000) return Servers[2];
-            if(ID < 800000) return Servers[3];
-            if(ID < 900000) return Servers[4];
-            if(ID < 6000000) return Servers[0];
-            if(ID < 7000000) return Servers[1];
-            if(ID < 8000000) return Servers[2];
-            if(ID < 9000000) return Servers[3];
-            if(ID < 10000000) return Servers[4];
-            if(ID < 11000000) return Servers[5];
-            if(ID < 12000000) return Servers[6];
-            if(ID < 13000000) return Servers[7];
-            if(ID < 14000000) return Servers[8];
-            if(ID < 15000000) return Servers[9];
-            if(ID < 16000000) return Servers[10];
-            if(ID < 17000000) return Servers[11];
-            if(ID < 18000000) return Servers[12];
-            if(ID < 19000000) return Servers[13];
-            if(ID < 20000000) return Servers[14];
-            return ID < 21000000 ? Servers[15] : null;
+            switch(ID)
+            {
+                case 91397 : return Servers[4];  //aoi
+                case 91602: return Servers[4];  //えこぱわ
+                case 158405 : return Servers[4];  //ぐらうぃ
+                case 167609 : return Servers[4];  //神北クドリャフカ
+                case 374572 : return Servers[4];  //IwaPenguin
+                default: break;
+            }
+            return (ID < 1000000) ? Servers[ID / 100000] : Servers[(ID / 1000000) - 1];
         }
         private static void GenerateServerFile()
         {
@@ -207,7 +196,10 @@ namespace KCSpy.View
                                     switch(err.api_result)
                                     {
                                         case 100:
-                                            continue;
+                                        {
+                                            AppendLineAsnyc(txtSenka, string.Format($@"{int.Parse(id):D8}"));
+                                                continue;
+                                        }
                                         case 201:
                                         {
                                             AppendLineAsnyc(txtContent, string.Format(@"猫了{0}", Environment.NewLine));
@@ -291,7 +283,10 @@ namespace KCSpy.View
                                         switch(err.api_result)
                                         {
                                             case 100:
+                                            {
+                                                txtSenka.AppendLine(string.Format($@"{int.Parse(id):D8}"));
                                                 continue;
+                                            }
                                             case 201:
                                             {
                                                 AppendLineAsnyc(txtContent, string.Format(@"猫了{0}", Environment.NewLine));
@@ -348,7 +343,10 @@ namespace KCSpy.View
                                     switch(err.api_result)
                                     {
                                         case 100:
+                                        {
+                                            txtSenka.AppendLine(string.Format($@"{i:D8}"));
                                             continue;
+                                        }
                                         case 201:
                                         {
                                             AppendLineAsnyc(txtContent, string.Format(@"猫了{0}", Environment.NewLine));
