@@ -13,11 +13,11 @@ using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Serialization;
 using KCSpy.Model;
+using KCSpy.Util;
 using Microsoft.Office.Interop.Excel;
 using Neetsonic.Tool;
 using Neetsonic.Tool.Extensions;
 using Newtonsoft.Json;
-using SenkaGo.Util;
 using Application = System.Windows.Forms.Application;
 using Label = System.Windows.Forms.Label;
 using TextBox = Neetsonic.Control.TextBox;
@@ -91,7 +91,6 @@ namespace KCSpy.View
             using(TextWriter writer = new StreamWriter(ServerFilePath))
             {
                 serializer.Serialize(writer, Servers);
-                writer.Close();
             }
         }
         private static void ReadServerFile()
@@ -100,7 +99,6 @@ namespace KCSpy.View
             using(XmlReader reader = XmlReader.Create(ServerFilePath))
             {
                 Servers = (List<Server>)serializer.Deserialize(reader);
-                reader.Close();
             }
         }
         private static void SetHeaderValue(WebHeaderCollection header, string name, string value)
