@@ -26,8 +26,6 @@ namespace KCSpy.View
 {
     public partial class FrmMain : Form
     {
-        private readonly string[] _cmdArgs;
-        private bool _firstFromCmd;
         private static readonly string ServerFilePath = Path.Combine(Application.StartupPath, @"server.xml");
         private static bool Stop;
         private static List<Server> Servers = new List<Server>
@@ -55,19 +53,37 @@ namespace KCSpy.View
             _cmdArgs = cmdArgs;
             InitializeComponent();
         }
+        private readonly string[] _cmdArgs;
+        private bool _firstFromCmd;
         private static Server AutoServer(string id)
         {
             int ID = int.Parse(id);
             switch(ID)
             {
-                case 91397 : return Servers[4];  //aoi
-                case 91602: return Servers[4];  //えこぱわ
-                case 158405 : return Servers[4];  //ぐらうぃ
-                case 167609 : return Servers[4];  //神北クドリャフカ
-                case 374572 : return Servers[4];  //IwaPenguin
+                case 91397:
+                case 91602:
+                case 158405:
+                case 167609:
+                case 374572:
+                case 165877:
+                case 91174:
+                case 157257:
+                case 165551:
+                case 168387:
+                case 164597:
+                case 150721:
+                case 87779:
+                case 93602:
+                case 374133:
+                case 158774:
+                case 378740:
+                case 149714:
+                case 95026:
+                case 167534:
+                    return Servers[4];
                 default: break;
             }
-            return (ID < 1000000) ? Servers[ID / 100000] : Servers[(ID / 1000000) - 1];
+            return ID < 1000000 ? Servers[ID / 100000] : Servers[ID / 1000000 - 1];
         }
         private static void GenerateServerFile()
         {
@@ -120,7 +136,7 @@ namespace KCSpy.View
                 int endPage = int.Parse(txtPageEnd.Text);
                 for(int currPage = startPage; currPage <= endPage; currPage++)
                 {
-                    string postData = string.Format($@"api_pageno={currPage}&api_verno=1&api_token={txtToken.Text}&api_ranking={KeyGen.CreateSignature(int.Parse(txtMemberID.Text))}");
+                    string postData = string.Format($@"api_pageno={currPage}&api_verno=1&api_token={txtToken.Text}&api_ranking={KeyGen.CreateKey(int.Parse(txtMemberID.Text))}");
                     byte[] data = Encoding.UTF8.GetBytes(postData);
                     string ret = PostSenka(IP, data);
                     List<SenkaItem> items = JsonConvert.DeserializeObject<SenkaCover>(ret.Substring(7)).api_data.api_list;
@@ -138,6 +154,7 @@ namespace KCSpy.View
         {
             if(txtContent.Text.Length > 0 && DialogResult.OK == MessageBoxEx.Confirm(@"是否清空当前已有文本？")) txtContent.Clear();
             string IP = cmbServer.SelectedValue.ToString();
+            string serverName = (cmbServer.SelectedItem as Server)?.Name;
             bool fromFile = chkFile.Checked;
             bool fromExcel = chkExcel.Checked;
             bool saveData = chkSaveData.Checked;
@@ -159,6 +176,7 @@ namespace KCSpy.View
                     const int DateCol = 4;
                     const int IncCol = 5;
                     const int LastDateCol = 6;
+                    const int ServerCol = 7;
                     for(int row = 2; row < wsh.Rows.Count; row++)
                     {
                         Range range = wsh.Cells[row, IdCol];
@@ -172,6 +190,7 @@ namespace KCSpy.View
                             Server server = AutoServer(id);
                             IP = server.IP;
                             token = server.Token;
+                            serverName = server.Name;
                         }
                         UpdateLabelAsync(lblCurrCount, string.Format($@"当前 {int.Parse(id):D8}"));
                         string postData = string.Format($@"api_verno=1&api_token={token}&api_member_id={id}");
@@ -188,6 +207,7 @@ namespace KCSpy.View
                                 ((Range)wsh.Cells[row, LastDateCol]).Value = ((Range)wsh.Cells[row, DateCol]).Value;
                                 ((Range)wsh.Cells[row, DateCol]).Value = DateTime.Now.ToString(CultureInfo.CurrentCulture);
                                 ((Range)wsh.Cells[row, IncCol]).Value = kit.api_experience[0] - lastExp;
+                                ((Range)wsh.Cells[row, ServerCol]).Value = serverName;
                             }
                             else
                             {
@@ -198,7 +218,7 @@ namespace KCSpy.View
                                         case 100:
                                         {
                                             AppendLineAsnyc(txtSenka, string.Format($@"{int.Parse(id):D8}"));
-                                                continue;
+                                            continue;
                                         }
                                         case 201:
                                         {

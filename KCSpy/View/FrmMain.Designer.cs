@@ -260,6 +260,7 @@
             this.txtMemberID.Name = "txtMemberID";
             this.txtMemberID.Size = new System.Drawing.Size(89, 26);
             this.txtMemberID.TabIndex = 19;
+            this.txtMemberID.Text = "4002191";
             // 
             // txtPageStart
             // 
