@@ -1,13 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using Neetsonic.Tool.Extensions;
 
 namespace KCSpy.Util
 {
     public static class KeyGen
     {
-        private static readonly int[] PORT_API_SEED = {4427, 6755, 3264, 7474, 2823, 6304, 6225, 8447, 3219, 4527};
-        private static readonly int[] I = {8931, 1201, 1156, 5061, 4569, 4732, 3779, 4568, 5695, 4619, 4912, 5669, 6586};
+        private static List<int> PORT_API_SEED = new List<int> {4427, 6755, 3264, 7474, 2823, 6304, 6225, 8447, 3219, 4527};
+        private static List<int> SENKA_API_SEED = new List<int> { 8931, 1201, 1156, 5061, 4569, 4732, 3779, 4568, 5695, 4619, 4912, 5669, 6586};
 
         public static int _getPortSeed(int t)
         {
@@ -48,7 +50,7 @@ namespace KCSpy.Util
         public static Dictionary<string, double> DecodeRankAndMedal(int memberId, int rankNo, long obfuscatedRate, long obfuscatedMedal)
         {
             Dictionary<string, double> rateAndMedal = new Dictionary<string, double>();
-            int n = I[rankNo % 13];
+            int n = SENKA_API_SEED[rankNo % 13];
             long api_medals = obfuscatedMedal / (n + 1853) - 157;
             long r = obfuscatedRate;
             int _ = _getPortSeed(memberId);
@@ -56,6 +58,15 @@ namespace KCSpy.Util
             rateAndMedal["rate"] = r;
             rateAndMedal["medal"] = api_medals;
             return rateAndMedal;
+        }
+
+        public static void LoadKeySeed(string filePath)
+        {
+            using(TextReader reader = new StreamReader(filePath))
+            {
+                PORT_API_SEED = reader.ReadLine()?.Split(',').Select(int.Parse).ToList();
+                SENKA_API_SEED = reader.ReadLine()?.Split(',').Select(int.Parse).ToList();
+            }
         }
     }
 }

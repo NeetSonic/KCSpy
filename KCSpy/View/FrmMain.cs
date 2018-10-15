@@ -27,6 +27,8 @@ namespace KCSpy.View
     public partial class FrmMain : Form
     {
         private static readonly string ServerFilePath = Path.Combine(Application.StartupPath, @"server.xml");
+        private static readonly string SeedFilePath = Path.Combine(Application.StartupPath, @"KeySeed.txt");
+        private const string SeedDownloadURL = @"http://203.104.209.183/kcs2/js/main.js";
         private static bool Stop;
         private static List<Server> Servers = new List<Server>
         {
@@ -93,7 +95,11 @@ namespace KCSpy.View
                 serializer.Serialize(writer, Servers);
             }
         }
-        private static void ReadServerFile()
+        private static void LoadSeedFile()
+        {
+            if(File.Exists(SeedFilePath)) KeyGen.LoadKeySeed(SeedFilePath);
+        }
+        private static void LoadServerFile()
         {
             XmlSerializer serializer = new XmlSerializer(Servers.GetType());
             using(XmlReader reader = XmlReader.Create(ServerFilePath))
@@ -111,11 +117,32 @@ namespace KCSpy.View
             }
         }
         private void AppendLineAsnyc(TextBox txtCtrl, string content) => BeginInvoke(new MethodInvoker(() => txtCtrl.AppendLine(content)));
+        private void BtnAutoSeedFile_Click(object sender, EventArgs e)
+        {
+            StringBuilder keys = new StringBuilder();
+            WebClient web = new WebClient();
+            string jsFilePath = Path.Combine(Application.LocalUserAppDataPath, @"main.js");
+            web.DownloadFile(SeedDownloadURL, jsFilePath);
+            string textAll = FileTool.OpenAndReadAllText(jsFilePath);
+            int start = textAll.IndexOf(@"PORT_API_SEED", StringComparison.Ordinal);
+            start = textAll.IndexOf('[', start);
+            int end = textAll.IndexOf(']', start);
+            keys.AppendLine(textAll.Substring(start + 1, end - start - 1));
+            start = textAll.IndexOf(@"e.prototype.__drawRanking", StringComparison.Ordinal);
+            start = textAll.IndexOf(@"var i=", start, StringComparison.Ordinal);
+            start = textAll.IndexOf('[', start);
+            end = textAll.IndexOf(']', start);
+            keys.Append(textAll.Substring(start + 1, end - start - 1));
+            FileTool.CreateAndWriteText(SeedFilePath, keys.ToString());
+            LoadSeedFile();
+            MessageBoxEx.Info(@"更新完毕，已重新载入！");
+        }
+        private void BtnLoadSeedFile_Click(object sender, EventArgs e) => LoadSeedFile();
         private void BtnLoadServerFile_Click(object sender, EventArgs e)
         {
             if(File.Exists(ServerFilePath))
             {
-                ReadServerFile();
+                LoadServerFile();
                 SetServer();
             }
         }
@@ -123,6 +150,7 @@ namespace KCSpy.View
         {
             if(!string.IsNullOrWhiteSpace(txtExcelFile.Text)) Process.Start(txtExcelFile.Text);
         }
+        private void BtnOpenSeedFile_Click(object sender, EventArgs e) => FileTool.OpenTextFile(SeedFilePath);
         private void BtnOpenServerFile_Click(object sender, EventArgs e) => FileTool.OpenTextFile(ServerFilePath);
         private void BtnSelectAll_Click(object sender, EventArgs e) => txtContent.Highlight();
         private async void BtnSenka_Click(object sender, EventArgs e)
@@ -141,7 +169,7 @@ namespace KCSpy.View
                     foreach(SenkaItem item in items)
                     {
                         Dictionary<string, double> kit = KeyGen.DecodeRankAndMedal(int.Parse(txtMemberID.Text), item.api_mxltvkpyuklh, item.api_wuhnhojjxmke, item.api_itslcqtmrxtf);
-                        AppendLineAsnyc(txtSenka, string.Format($@"提督：{item.api_mtjmdcwtvhdr}  顺位：{item.api_mxltvkpyuklh}  战果值：{kit[@"rate"]}  甲章数：{kit[@"medal"]}"));
+                        AppendLineAsnyc(txtLog, string.Format($@"提督：{item.api_mtjmdcwtvhdr}  顺位：{item.api_mxltvkpyuklh}  战果值：{kit[@"rate"]}  甲章数：{kit[@"medal"]}"));
                     }
                 }
             });
@@ -215,7 +243,7 @@ namespace KCSpy.View
                                     {
                                         case 100:
                                         {
-                                            AppendLineAsnyc(txtSenka, string.Format($@"{int.Parse(id):D8}"));
+                                            AppendLineAsnyc(txtLog, string.Format($@"{int.Parse(id):D8}"));
                                             continue;
                                         }
                                         case 201:
@@ -302,7 +330,7 @@ namespace KCSpy.View
                                         {
                                             case 100:
                                             {
-                                                txtSenka.AppendLine(string.Format($@"{int.Parse(id):D8}"));
+                                                txtLog.AppendLine(string.Format($@"{int.Parse(id):D8}"));
                                                 continue;
                                             }
                                             case 201:
@@ -362,7 +390,7 @@ namespace KCSpy.View
                                     {
                                         case 100:
                                         {
-                                            txtSenka.AppendLine(string.Format($@"{i:D8}"));
+                                            txtLog.AppendLine(string.Format($@"{i:D8}"));
                                             continue;
                                         }
                                         case 201:
@@ -451,9 +479,10 @@ namespace KCSpy.View
         }
         private void FrmMain_Load(object sender, EventArgs e)
         {
-            if(File.Exists(ServerFilePath)) ReadServerFile();
+            if(File.Exists(ServerFilePath)) LoadServerFile();
             else GenerateServerFile();
             SetServer();
+            LoadSeedFile();
             if(_cmdArgs.Length > 0)
             {
                 chkExcel.Checked = _firstFromCmd = true;

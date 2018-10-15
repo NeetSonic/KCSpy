@@ -59,11 +59,15 @@
             this.groupBox1 = new Neetsonic.Control.GroupBox();
             this.btnLoadServerFile = new System.Windows.Forms.Button();
             this.btnOpenServerFile = new System.Windows.Forms.Button();
-            this.txtSenka = new Neetsonic.Control.TextBox();
+            this.txtLog = new Neetsonic.Control.TextBox();
             this.txtContent = new Neetsonic.Control.TextBox();
             this.txtExcelFile = new System.Windows.Forms.TextBox();
             this.chkExcel = new System.Windows.Forms.CheckBox();
             this.btnOpenExcel = new System.Windows.Forms.Button();
+            this.groupBox2 = new Neetsonic.Control.GroupBox();
+            this.btnAutoSeedFile = new System.Windows.Forms.Button();
+            this.btnLoadSeedFile = new System.Windows.Forms.Button();
+            this.btnOpenSeedFile = new System.Windows.Forms.Button();
             label1 = new System.Windows.Forms.Label();
             label2 = new System.Windows.Forms.Label();
             label3 = new System.Windows.Forms.Label();
@@ -74,6 +78,7 @@
             label8 = new System.Windows.Forms.Label();
             this.menuMain.SuspendLayout();
             this.groupBox1.SuspendLayout();
+            this.groupBox2.SuspendLayout();
             this.SuspendLayout();
             // 
             // label1
@@ -352,17 +357,17 @@
             this.btnOpenServerFile.UseVisualStyleBackColor = true;
             this.btnOpenServerFile.Click += new System.EventHandler(this.BtnOpenServerFile_Click);
             // 
-            // txtSenka
+            // txtLog
             // 
-            this.txtSenka.AcceptsReturn = true;
-            this.txtSenka.Location = new System.Drawing.Point(393, 277);
-            this.txtSenka.MaxLength = 3276700;
-            this.txtSenka.Multiline = true;
-            this.txtSenka.Name = "txtSenka";
-            this.txtSenka.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.txtSenka.Size = new System.Drawing.Size(392, 160);
-            this.txtSenka.TabIndex = 22;
-            this.txtSenka.WordWrap = false;
+            this.txtLog.AcceptsReturn = true;
+            this.txtLog.Location = new System.Drawing.Point(393, 277);
+            this.txtLog.MaxLength = 3276700;
+            this.txtLog.Multiline = true;
+            this.txtLog.Name = "txtLog";
+            this.txtLog.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+            this.txtLog.Size = new System.Drawing.Size(392, 160);
+            this.txtLog.TabIndex = 22;
+            this.txtLog.WordWrap = false;
             // 
             // txtContent
             // 
@@ -405,11 +410,54 @@
             this.btnOpenExcel.UseVisualStyleBackColor = true;
             this.btnOpenExcel.Click += new System.EventHandler(this.BtnOpenExcel_Click);
             // 
+            // groupBox2
+            // 
+            this.groupBox2.Controls.Add(this.btnAutoSeedFile);
+            this.groupBox2.Controls.Add(this.btnLoadSeedFile);
+            this.groupBox2.Controls.Add(this.btnOpenSeedFile);
+            this.groupBox2.Location = new System.Drawing.Point(551, 137);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(233, 70);
+            this.groupBox2.TabIndex = 31;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "API种子文件";
+            // 
+            // btnAutoSeedFile
+            // 
+            this.btnAutoSeedFile.Location = new System.Drawing.Point(147, 25);
+            this.btnAutoSeedFile.Name = "btnAutoSeedFile";
+            this.btnAutoSeedFile.Size = new System.Drawing.Size(80, 34);
+            this.btnAutoSeedFile.TabIndex = 31;
+            this.btnAutoSeedFile.Text = "自动获取";
+            this.btnAutoSeedFile.UseVisualStyleBackColor = true;
+            this.btnAutoSeedFile.Click += new System.EventHandler(this.BtnAutoSeedFile_Click);
+            // 
+            // btnLoadSeedFile
+            // 
+            this.btnLoadSeedFile.Location = new System.Drawing.Point(63, 25);
+            this.btnLoadSeedFile.Name = "btnLoadSeedFile";
+            this.btnLoadSeedFile.Size = new System.Drawing.Size(80, 34);
+            this.btnLoadSeedFile.TabIndex = 30;
+            this.btnLoadSeedFile.Text = "重新载入";
+            this.btnLoadSeedFile.UseVisualStyleBackColor = true;
+            this.btnLoadSeedFile.Click += new System.EventHandler(this.BtnLoadSeedFile_Click);
+            // 
+            // btnOpenSeedFile
+            // 
+            this.btnOpenSeedFile.Location = new System.Drawing.Point(6, 25);
+            this.btnOpenSeedFile.Name = "btnOpenSeedFile";
+            this.btnOpenSeedFile.Size = new System.Drawing.Size(51, 34);
+            this.btnOpenSeedFile.TabIndex = 29;
+            this.btnOpenSeedFile.Text = "打开";
+            this.btnOpenSeedFile.UseVisualStyleBackColor = true;
+            this.btnOpenSeedFile.Click += new System.EventHandler(this.BtnOpenSeedFile_Click);
+            // 
             // FrmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(796, 477);
+            this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.btnOpenExcel);
             this.Controls.Add(this.txtExcelFile);
             this.Controls.Add(this.chkExcel);
@@ -418,7 +466,7 @@
             this.Controls.Add(this.chkSaveData);
             this.Controls.Add(this.txtPageEnd);
             this.Controls.Add(label8);
-            this.Controls.Add(this.txtSenka);
+            this.Controls.Add(this.txtLog);
             this.Controls.Add(this.txtPageStart);
             this.Controls.Add(label7);
             this.Controls.Add(this.txtMemberID);
@@ -454,6 +502,7 @@
             this.menuMain.ResumeLayout(false);
             this.menuMain.PerformLayout();
             this.groupBox1.ResumeLayout(false);
+            this.groupBox2.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -476,7 +525,7 @@
         private System.Windows.Forms.TextBox txtFile;
         private System.Windows.Forms.TextBox txtMemberID;
         private System.Windows.Forms.TextBox txtPageStart;
-        private Neetsonic.Control.TextBox txtSenka;
+        private Neetsonic.Control.TextBox txtLog;
         private System.Windows.Forms.TextBox txtPageEnd;
         private System.Windows.Forms.MenuStrip menuMain;
         private System.Windows.Forms.ToolStripMenuItem 设置ToolStripMenuItem;
@@ -489,5 +538,9 @@
         private System.Windows.Forms.TextBox txtExcelFile;
         private System.Windows.Forms.CheckBox chkExcel;
         private System.Windows.Forms.Button btnOpenExcel;
+        private Neetsonic.Control.GroupBox groupBox2;
+        private System.Windows.Forms.Button btnAutoSeedFile;
+        private System.Windows.Forms.Button btnLoadSeedFile;
+        private System.Windows.Forms.Button btnOpenSeedFile;
     }
 }
