@@ -472,6 +472,7 @@ namespace KCSpy.View
         private void CmbServer_SelectedIndexChanged(object sender, EventArgs e)
         {
             txtToken.Text = ((Server)cmbServer.SelectedItem)?.Token;
+            txtMemberID.Text = ((Server)cmbServer.SelectedItem)?.MemberID;
         }
         private void ConfigToolStripMenuItem_Click(object sender, EventArgs e)
         {
