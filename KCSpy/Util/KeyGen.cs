@@ -9,14 +9,7 @@ namespace KCSpy.Util
     public static class KeyGen
     {
         private static List<int> PORT_API_SEED = new List<int> {4427, 6755, 3264, 7474, 2823, 6304, 6225, 8447, 3219, 4527};
-        private static List<int> SENKA_API_SEED = new List<int> { 8931, 1201, 1156, 5061, 4569, 4732, 3779, 4568, 5695, 4619, 4912, 5669, 6586};
-
-        public static int _getPortSeed(int t)
-        {
-            int e = PORT_API_SEED[t % 10];
-            return (e - e % 100) / 100;
-        }
-
+        private static List<int> SENKA_API_SEED = new List<int> {8931, 1201, 1156, 5061, 4569, 4732, 3779, 4568, 5695, 4619, 4912, 5669, 6586};
         public static string CreateKey(int memberID)
         {
             Random ran = new Random();
@@ -35,18 +28,6 @@ namespace KCSpy.Util
             string ret = (p6 + p3.ToString() + p12 + p4).Insert(8, p7.ToString()).Insert(18, p8.ToString()) + p5;
             return ret;
         }
-
-        /// <summary>
-        /// A custom decoder for De-obfuscated ranking rate and medal number
-        /// Source: 
-        /// http://ch.nicovideo.jp/arisu_yaya/blomaga/ar941858
-        /// https://github.com/yukixz/kctools/blob/master/rank.py
-        /// </summary>
-        /// <param name="memberId">Teitoku's member ID</param>
-        /// <param name="rankNo">Actual ranking number from 1 to 990</param>
-        /// <param name="obfuscatedRate">Obfuscated ranking rate from Kancolle server</param>
-        /// <param name="obfuscatedMedal">Pbfuscated ranking medal number from Kancolle server</param>
-        /// <returns></returns>
         public static Dictionary<string, double> DecodeRankAndMedal(int memberId, int rankNo, long obfuscatedRate, long obfuscatedMedal)
         {
             Dictionary<string, double> rateAndMedal = new Dictionary<string, double>();
@@ -59,7 +40,6 @@ namespace KCSpy.Util
             rateAndMedal["medal"] = api_medals;
             return rateAndMedal;
         }
-
         public static void LoadKeySeed(string filePath)
         {
             using(TextReader reader = new StreamReader(filePath))
@@ -67,6 +47,11 @@ namespace KCSpy.Util
                 PORT_API_SEED = reader.ReadLine()?.Split(',').Select(int.Parse).ToList();
                 SENKA_API_SEED = reader.ReadLine()?.Split(',').Select(int.Parse).ToList();
             }
+        }
+        private static int _getPortSeed(int t)
+        {
+            int e = PORT_API_SEED[t % 10];
+            return (e - e % 100) / 100;
         }
     }
 }

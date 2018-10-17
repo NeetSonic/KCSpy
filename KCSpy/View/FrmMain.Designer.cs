@@ -36,6 +36,8 @@
             System.Windows.Forms.Label label6;
             System.Windows.Forms.Label label7;
             System.Windows.Forms.Label label8;
+            System.Windows.Forms.Label label10;
+            System.Windows.Forms.Label label9;
             this.btnTest = new System.Windows.Forms.Button();
             this.btnSelectAll = new System.Windows.Forms.Button();
             this.txtToken = new System.Windows.Forms.TextBox();
@@ -56,18 +58,27 @@
             this.tsmiConfig = new System.Windows.Forms.ToolStripMenuItem();
             this.chkSaveData = new System.Windows.Forms.CheckBox();
             this.chkAutoServer = new System.Windows.Forms.CheckBox();
-            this.groupBox1 = new Neetsonic.Control.GroupBox();
-            this.btnLoadServerFile = new System.Windows.Forms.Button();
-            this.btnOpenServerFile = new System.Windows.Forms.Button();
-            this.txtLog = new Neetsonic.Control.TextBox();
-            this.txtContent = new Neetsonic.Control.TextBox();
             this.txtExcelFile = new System.Windows.Forms.TextBox();
             this.chkExcel = new System.Windows.Forms.CheckBox();
             this.btnOpenExcel = new System.Windows.Forms.Button();
+            this.tabMain = new System.Windows.Forms.TabControl();
+            this.tabSniff = new System.Windows.Forms.TabPage();
+            this.tabSenka = new System.Windows.Forms.TabPage();
             this.groupBox2 = new Neetsonic.Control.GroupBox();
             this.btnAutoSeedFile = new System.Windows.Forms.Button();
             this.btnLoadSeedFile = new System.Windows.Forms.Button();
             this.btnOpenSeedFile = new System.Windows.Forms.Button();
+            this.txtContent = new Neetsonic.Control.TextBox();
+            this.txtLog = new Neetsonic.Control.TextBox();
+            this.groupBox3 = new Neetsonic.Control.GroupBox();
+            this.dateStart = new System.Windows.Forms.DateTimePicker();
+            this.dateEnd = new System.Windows.Forms.DateTimePicker();
+            this.txtSenka = new Neetsonic.Control.TextBox();
+            this.groupBox1 = new Neetsonic.Control.GroupBox();
+            this.btnLoadServerFile = new System.Windows.Forms.Button();
+            this.btnOpenServerFile = new System.Windows.Forms.Button();
+            this.btnDownloadAll = new System.Windows.Forms.Button();
+            this.btnDownload = new System.Windows.Forms.Button();
             label1 = new System.Windows.Forms.Label();
             label2 = new System.Windows.Forms.Label();
             label3 = new System.Windows.Forms.Label();
@@ -76,15 +87,21 @@
             label6 = new System.Windows.Forms.Label();
             label7 = new System.Windows.Forms.Label();
             label8 = new System.Windows.Forms.Label();
+            label10 = new System.Windows.Forms.Label();
+            label9 = new System.Windows.Forms.Label();
             this.menuMain.SuspendLayout();
-            this.groupBox1.SuspendLayout();
+            this.tabMain.SuspendLayout();
+            this.tabSniff.SuspendLayout();
+            this.tabSenka.SuspendLayout();
             this.groupBox2.SuspendLayout();
+            this.groupBox3.SuspendLayout();
+            this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new System.Drawing.Point(12, 73);
+            label1.Location = new System.Drawing.Point(12, 79);
             label1.Name = "label1";
             label1.Size = new System.Drawing.Size(51, 20);
             label1.TabIndex = 3;
@@ -93,7 +110,7 @@
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new System.Drawing.Point(12, 110);
+            label2.Location = new System.Drawing.Point(12, 116);
             label2.Name = "label2";
             label2.Size = new System.Drawing.Size(57, 20);
             label2.TabIndex = 5;
@@ -102,7 +119,7 @@
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new System.Drawing.Point(12, 155);
+            label3.Location = new System.Drawing.Point(9, 14);
             label3.Name = "label3";
             label3.Size = new System.Drawing.Size(52, 20);
             label3.TabIndex = 7;
@@ -111,7 +128,7 @@
             // label4
             // 
             label4.AutoSize = true;
-            label4.Location = new System.Drawing.Point(186, 155);
+            label4.Location = new System.Drawing.Point(183, 14);
             label4.Name = "label4";
             label4.Size = new System.Drawing.Size(52, 20);
             label4.TabIndex = 9;
@@ -129,7 +146,7 @@
             // label6
             // 
             label6.AutoSize = true;
-            label6.Location = new System.Drawing.Point(389, 39);
+            label6.Location = new System.Drawing.Point(204, 116);
             label6.Name = "label6";
             label6.Size = new System.Drawing.Size(81, 20);
             label6.TabIndex = 18;
@@ -138,7 +155,7 @@
             // label7
             // 
             label7.AutoSize = true;
-            label7.Location = new System.Drawing.Point(571, 39);
+            label7.Location = new System.Drawing.Point(9, 19);
             label7.Name = "label7";
             label7.Size = new System.Drawing.Size(65, 20);
             label7.TabIndex = 20;
@@ -147,7 +164,7 @@
             // label8
             // 
             label8.AutoSize = true;
-            label8.Location = new System.Drawing.Point(681, 39);
+            label8.Location = new System.Drawing.Point(119, 19);
             label8.Name = "label8";
             label8.Size = new System.Drawing.Size(65, 20);
             label8.TabIndex = 23;
@@ -155,7 +172,7 @@
             // 
             // btnTest
             // 
-            this.btnTest.Location = new System.Drawing.Point(12, 230);
+            this.btnTest.Location = new System.Drawing.Point(14, 127);
             this.btnTest.Name = "btnTest";
             this.btnTest.Size = new System.Drawing.Size(75, 34);
             this.btnTest.TabIndex = 0;
@@ -165,7 +182,7 @@
             // 
             // btnSelectAll
             // 
-            this.btnSelectAll.Location = new System.Drawing.Point(297, 230);
+            this.btnSelectAll.Location = new System.Drawing.Point(299, 127);
             this.btnSelectAll.Name = "btnSelectAll";
             this.btnSelectAll.Size = new System.Drawing.Size(75, 34);
             this.btnSelectAll.TabIndex = 2;
@@ -175,35 +192,35 @@
             // 
             // txtToken
             // 
-            this.txtToken.Location = new System.Drawing.Point(75, 70);
+            this.txtToken.Location = new System.Drawing.Point(75, 76);
             this.txtToken.Name = "txtToken";
             this.txtToken.Size = new System.Drawing.Size(297, 26);
             this.txtToken.TabIndex = 4;
             // 
             // txtReferer
             // 
-            this.txtReferer.Location = new System.Drawing.Point(75, 107);
+            this.txtReferer.Location = new System.Drawing.Point(75, 113);
             this.txtReferer.Name = "txtReferer";
-            this.txtReferer.Size = new System.Drawing.Size(297, 26);
+            this.txtReferer.Size = new System.Drawing.Size(114, 26);
             this.txtReferer.TabIndex = 6;
             // 
             // txtBeginID
             // 
-            this.txtBeginID.Location = new System.Drawing.Point(75, 152);
+            this.txtBeginID.Location = new System.Drawing.Point(72, 11);
             this.txtBeginID.Name = "txtBeginID";
             this.txtBeginID.Size = new System.Drawing.Size(94, 26);
             this.txtBeginID.TabIndex = 8;
             // 
             // txtEndID
             // 
-            this.txtEndID.Location = new System.Drawing.Point(249, 152);
+            this.txtEndID.Location = new System.Drawing.Point(246, 11);
             this.txtEndID.Name = "txtEndID";
             this.txtEndID.Size = new System.Drawing.Size(94, 26);
             this.txtEndID.TabIndex = 10;
             // 
             // btnSenka
             // 
-            this.btnSenka.Location = new System.Drawing.Point(714, 82);
+            this.btnSenka.Location = new System.Drawing.Point(350, 10);
             this.btnSenka.Name = "btnSenka";
             this.btnSenka.Size = new System.Drawing.Size(70, 34);
             this.btnSenka.TabIndex = 11;
@@ -213,7 +230,7 @@
             // 
             // btnStop
             // 
-            this.btnStop.Location = new System.Drawing.Point(109, 230);
+            this.btnStop.Location = new System.Drawing.Point(111, 127);
             this.btnStop.Name = "btnStop";
             this.btnStop.Size = new System.Drawing.Size(75, 34);
             this.btnStop.TabIndex = 12;
@@ -224,7 +241,7 @@
             // lblCurrCount
             // 
             this.lblCurrCount.AutoSize = true;
-            this.lblCurrCount.Location = new System.Drawing.Point(8, 449);
+            this.lblCurrCount.Location = new System.Drawing.Point(10, 398);
             this.lblCurrCount.Name = "lblCurrCount";
             this.lblCurrCount.Size = new System.Drawing.Size(37, 20);
             this.lblCurrCount.TabIndex = 13;
@@ -243,7 +260,7 @@
             // chkFile
             // 
             this.chkFile.AutoSize = true;
-            this.chkFile.Location = new System.Drawing.Point(17, 193);
+            this.chkFile.Location = new System.Drawing.Point(363, 14);
             this.chkFile.Name = "chkFile";
             this.chkFile.Size = new System.Drawing.Size(113, 24);
             this.chkFile.TabIndex = 16;
@@ -253,30 +270,30 @@
             // 
             // txtFile
             // 
-            this.txtFile.Location = new System.Drawing.Point(136, 191);
+            this.txtFile.Location = new System.Drawing.Point(482, 12);
             this.txtFile.Name = "txtFile";
             this.txtFile.ReadOnly = true;
-            this.txtFile.Size = new System.Drawing.Size(236, 26);
+            this.txtFile.Size = new System.Drawing.Size(280, 26);
             this.txtFile.TabIndex = 17;
             // 
             // txtMemberID
             // 
-            this.txtMemberID.Location = new System.Drawing.Point(476, 36);
+            this.txtMemberID.Location = new System.Drawing.Point(291, 113);
             this.txtMemberID.Name = "txtMemberID";
-            this.txtMemberID.Size = new System.Drawing.Size(89, 26);
+            this.txtMemberID.Size = new System.Drawing.Size(81, 26);
             this.txtMemberID.TabIndex = 19;
             this.txtMemberID.Text = "4002191";
             // 
             // txtPageStart
             // 
-            this.txtPageStart.Location = new System.Drawing.Point(642, 36);
+            this.txtPageStart.Location = new System.Drawing.Point(80, 16);
             this.txtPageStart.Name = "txtPageStart";
             this.txtPageStart.Size = new System.Drawing.Size(33, 26);
             this.txtPageStart.TabIndex = 21;
             // 
             // txtPageEnd
             // 
-            this.txtPageEnd.Location = new System.Drawing.Point(752, 36);
+            this.txtPageEnd.Location = new System.Drawing.Point(190, 16);
             this.txtPageEnd.Name = "txtPageEnd";
             this.txtPageEnd.Size = new System.Drawing.Size(33, 26);
             this.txtPageEnd.TabIndex = 24;
@@ -287,7 +304,7 @@
             this.设置ToolStripMenuItem});
             this.menuMain.Location = new System.Drawing.Point(0, 0);
             this.menuMain.Name = "menuMain";
-            this.menuMain.Size = new System.Drawing.Size(796, 25);
+            this.menuMain.Size = new System.Drawing.Size(788, 25);
             this.menuMain.TabIndex = 25;
             this.menuMain.Text = "menuStrip1";
             // 
@@ -309,7 +326,7 @@
             // chkSaveData
             // 
             this.chkSaveData.AutoSize = true;
-            this.chkSaveData.Location = new System.Drawing.Point(624, 88);
+            this.chkSaveData.Location = new System.Drawing.Point(260, 16);
             this.chkSaveData.Name = "chkSaveData";
             this.chkSaveData.Size = new System.Drawing.Size(84, 24);
             this.chkSaveData.TabIndex = 26;
@@ -319,80 +336,25 @@
             // chkAutoServer
             // 
             this.chkAutoServer.AutoSize = true;
-            this.chkAutoServer.Location = new System.Drawing.Point(393, 193);
+            this.chkAutoServer.Location = new System.Drawing.Point(12, 52);
             this.chkAutoServer.Name = "chkAutoServer";
             this.chkAutoServer.Size = new System.Drawing.Size(126, 24);
             this.chkAutoServer.TabIndex = 31;
             this.chkAutoServer.Text = "自动判断服务器";
             this.chkAutoServer.UseVisualStyleBackColor = true;
             // 
-            // groupBox1
-            // 
-            this.groupBox1.Controls.Add(this.btnLoadServerFile);
-            this.groupBox1.Controls.Add(this.btnOpenServerFile);
-            this.groupBox1.Location = new System.Drawing.Point(393, 82);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(152, 70);
-            this.groupBox1.TabIndex = 30;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "服务器配置文件";
-            // 
-            // btnLoadServerFile
-            // 
-            this.btnLoadServerFile.Location = new System.Drawing.Point(63, 25);
-            this.btnLoadServerFile.Name = "btnLoadServerFile";
-            this.btnLoadServerFile.Size = new System.Drawing.Size(80, 34);
-            this.btnLoadServerFile.TabIndex = 30;
-            this.btnLoadServerFile.Text = "重新载入";
-            this.btnLoadServerFile.UseVisualStyleBackColor = true;
-            this.btnLoadServerFile.Click += new System.EventHandler(this.BtnLoadServerFile_Click);
-            // 
-            // btnOpenServerFile
-            // 
-            this.btnOpenServerFile.Location = new System.Drawing.Point(6, 25);
-            this.btnOpenServerFile.Name = "btnOpenServerFile";
-            this.btnOpenServerFile.Size = new System.Drawing.Size(51, 34);
-            this.btnOpenServerFile.TabIndex = 29;
-            this.btnOpenServerFile.Text = "打开";
-            this.btnOpenServerFile.UseVisualStyleBackColor = true;
-            this.btnOpenServerFile.Click += new System.EventHandler(this.BtnOpenServerFile_Click);
-            // 
-            // txtLog
-            // 
-            this.txtLog.AcceptsReturn = true;
-            this.txtLog.Location = new System.Drawing.Point(393, 277);
-            this.txtLog.MaxLength = 3276700;
-            this.txtLog.Multiline = true;
-            this.txtLog.Name = "txtLog";
-            this.txtLog.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.txtLog.Size = new System.Drawing.Size(392, 160);
-            this.txtLog.TabIndex = 22;
-            this.txtLog.WordWrap = false;
-            // 
-            // txtContent
-            // 
-            this.txtContent.AcceptsReturn = true;
-            this.txtContent.Location = new System.Drawing.Point(12, 277);
-            this.txtContent.MaxLength = 3276700;
-            this.txtContent.Multiline = true;
-            this.txtContent.Name = "txtContent";
-            this.txtContent.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.txtContent.Size = new System.Drawing.Size(360, 160);
-            this.txtContent.TabIndex = 1;
-            this.txtContent.WordWrap = false;
-            // 
             // txtExcelFile
             // 
-            this.txtExcelFile.Location = new System.Drawing.Point(517, 228);
+            this.txtExcelFile.Location = new System.Drawing.Point(136, 84);
             this.txtExcelFile.Name = "txtExcelFile";
             this.txtExcelFile.ReadOnly = true;
-            this.txtExcelFile.Size = new System.Drawing.Size(204, 26);
+            this.txtExcelFile.Size = new System.Drawing.Size(171, 26);
             this.txtExcelFile.TabIndex = 33;
             // 
             // chkExcel
             // 
             this.chkExcel.AutoSize = true;
-            this.chkExcel.Location = new System.Drawing.Point(393, 230);
+            this.chkExcel.Location = new System.Drawing.Point(12, 86);
             this.chkExcel.Name = "chkExcel";
             this.chkExcel.Size = new System.Drawing.Size(118, 24);
             this.chkExcel.TabIndex = 32;
@@ -402,7 +364,7 @@
             // 
             // btnOpenExcel
             // 
-            this.btnOpenExcel.Location = new System.Drawing.Point(727, 226);
+            this.btnOpenExcel.Location = new System.Drawing.Point(317, 82);
             this.btnOpenExcel.Name = "btnOpenExcel";
             this.btnOpenExcel.Size = new System.Drawing.Size(57, 28);
             this.btnOpenExcel.TabIndex = 34;
@@ -410,12 +372,68 @@
             this.btnOpenExcel.UseVisualStyleBackColor = true;
             this.btnOpenExcel.Click += new System.EventHandler(this.BtnOpenExcel_Click);
             // 
+            // tabMain
+            // 
+            this.tabMain.Alignment = System.Windows.Forms.TabAlignment.Bottom;
+            this.tabMain.Controls.Add(this.tabSniff);
+            this.tabMain.Controls.Add(this.tabSenka);
+            this.tabMain.Location = new System.Drawing.Point(0, 156);
+            this.tabMain.Multiline = true;
+            this.tabMain.Name = "tabMain";
+            this.tabMain.SelectedIndex = 0;
+            this.tabMain.Size = new System.Drawing.Size(776, 369);
+            this.tabMain.TabIndex = 35;
+            // 
+            // tabSniff
+            // 
+            this.tabSniff.BackColor = System.Drawing.SystemColors.Control;
+            this.tabSniff.Controls.Add(this.btnTest);
+            this.tabSniff.Controls.Add(this.btnOpenExcel);
+            this.tabSniff.Controls.Add(this.txtContent);
+            this.tabSniff.Controls.Add(this.txtExcelFile);
+            this.tabSniff.Controls.Add(this.btnSelectAll);
+            this.tabSniff.Controls.Add(this.chkExcel);
+            this.tabSniff.Controls.Add(this.chkAutoServer);
+            this.tabSniff.Controls.Add(label3);
+            this.tabSniff.Controls.Add(this.txtBeginID);
+            this.tabSniff.Controls.Add(label4);
+            this.tabSniff.Controls.Add(this.txtLog);
+            this.tabSniff.Controls.Add(this.txtEndID);
+            this.tabSniff.Controls.Add(this.btnStop);
+            this.tabSniff.Controls.Add(this.lblCurrCount);
+            this.tabSniff.Controls.Add(this.chkFile);
+            this.tabSniff.Controls.Add(this.txtFile);
+            this.tabSniff.Location = new System.Drawing.Point(4, 4);
+            this.tabSniff.Name = "tabSniff";
+            this.tabSniff.Padding = new System.Windows.Forms.Padding(3);
+            this.tabSniff.Size = new System.Drawing.Size(768, 336);
+            this.tabSniff.TabIndex = 0;
+            this.tabSniff.Text = "嗅探";
+            // 
+            // tabSenka
+            // 
+            this.tabSenka.BackColor = System.Drawing.SystemColors.Control;
+            this.tabSenka.Controls.Add(this.groupBox3);
+            this.tabSenka.Controls.Add(this.txtSenka);
+            this.tabSenka.Controls.Add(label7);
+            this.tabSenka.Controls.Add(this.txtPageStart);
+            this.tabSenka.Controls.Add(label8);
+            this.tabSenka.Controls.Add(this.txtPageEnd);
+            this.tabSenka.Controls.Add(this.chkSaveData);
+            this.tabSenka.Controls.Add(this.btnSenka);
+            this.tabSenka.Location = new System.Drawing.Point(4, 4);
+            this.tabSenka.Name = "tabSenka";
+            this.tabSenka.Padding = new System.Windows.Forms.Padding(3);
+            this.tabSenka.Size = new System.Drawing.Size(768, 336);
+            this.tabSenka.TabIndex = 1;
+            this.tabSenka.Text = "战果";
+            // 
             // groupBox2
             // 
             this.groupBox2.Controls.Add(this.btnAutoSeedFile);
             this.groupBox2.Controls.Add(this.btnLoadSeedFile);
             this.groupBox2.Controls.Add(this.btnOpenSeedFile);
-            this.groupBox2.Location = new System.Drawing.Point(551, 137);
+            this.groupBox2.Location = new System.Drawing.Point(543, 53);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(233, 70);
             this.groupBox2.TabIndex = 31;
@@ -452,44 +470,163 @@
             this.btnOpenSeedFile.UseVisualStyleBackColor = true;
             this.btnOpenSeedFile.Click += new System.EventHandler(this.BtnOpenSeedFile_Click);
             // 
+            // txtContent
+            // 
+            this.txtContent.AcceptsReturn = true;
+            this.txtContent.Location = new System.Drawing.Point(387, 52);
+            this.txtContent.MaxLength = 3276700;
+            this.txtContent.Multiline = true;
+            this.txtContent.Name = "txtContent";
+            this.txtContent.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+            this.txtContent.Size = new System.Drawing.Size(375, 275);
+            this.txtContent.TabIndex = 1;
+            this.txtContent.WordWrap = false;
+            // 
+            // txtLog
+            // 
+            this.txtLog.AcceptsReturn = true;
+            this.txtLog.Location = new System.Drawing.Point(12, 167);
+            this.txtLog.MaxLength = 3276700;
+            this.txtLog.Multiline = true;
+            this.txtLog.Name = "txtLog";
+            this.txtLog.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+            this.txtLog.Size = new System.Drawing.Size(367, 160);
+            this.txtLog.TabIndex = 22;
+            this.txtLog.WordWrap = false;
+            // 
+            // groupBox3
+            // 
+            this.groupBox3.Controls.Add(this.btnDownloadAll);
+            this.groupBox3.Controls.Add(label10);
+            this.groupBox3.Controls.Add(this.btnDownload);
+            this.groupBox3.Controls.Add(label9);
+            this.groupBox3.Controls.Add(this.dateStart);
+            this.groupBox3.Controls.Add(this.dateEnd);
+            this.groupBox3.Location = new System.Drawing.Point(444, 10);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size(186, 138);
+            this.groupBox3.TabIndex = 32;
+            this.groupBox3.TabStop = false;
+            this.groupBox3.Text = "人事表下载";
+            // 
+            // label10
+            // 
+            label10.AutoSize = true;
+            label10.Location = new System.Drawing.Point(7, 22);
+            label10.Name = "label10";
+            label10.Size = new System.Drawing.Size(65, 20);
+            label10.TabIndex = 29;
+            label10.Text = "起始时间";
+            // 
+            // label9
+            // 
+            label9.AutoSize = true;
+            label9.Location = new System.Drawing.Point(7, 57);
+            label9.Name = "label9";
+            label9.Size = new System.Drawing.Size(65, 20);
+            label9.TabIndex = 31;
+            label9.Text = "结束时间";
+            // 
+            // dateStart
+            // 
+            this.dateStart.CustomFormat = "yyyy/MM";
+            this.dateStart.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.dateStart.Location = new System.Drawing.Point(78, 19);
+            this.dateStart.Name = "dateStart";
+            this.dateStart.Size = new System.Drawing.Size(96, 26);
+            this.dateStart.TabIndex = 28;
+            this.dateStart.Value = new System.DateTime(2013, 7, 1, 15, 47, 0, 0);
+            // 
+            // dateEnd
+            // 
+            this.dateEnd.Checked = false;
+            this.dateEnd.CustomFormat = "yyyy/MM";
+            this.dateEnd.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.dateEnd.Location = new System.Drawing.Point(78, 54);
+            this.dateEnd.Name = "dateEnd";
+            this.dateEnd.Size = new System.Drawing.Size(96, 26);
+            this.dateEnd.TabIndex = 30;
+            // 
+            // txtSenka
+            // 
+            this.txtSenka.AcceptsReturn = true;
+            this.txtSenka.Location = new System.Drawing.Point(13, 60);
+            this.txtSenka.MaxLength = 3276700;
+            this.txtSenka.Multiline = true;
+            this.txtSenka.Name = "txtSenka";
+            this.txtSenka.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+            this.txtSenka.Size = new System.Drawing.Size(407, 270);
+            this.txtSenka.TabIndex = 27;
+            this.txtSenka.WordWrap = false;
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.btnLoadServerFile);
+            this.groupBox1.Controls.Add(this.btnOpenServerFile);
+            this.groupBox1.Location = new System.Drawing.Point(385, 53);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(152, 70);
+            this.groupBox1.TabIndex = 30;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "服务器配置文件";
+            // 
+            // btnLoadServerFile
+            // 
+            this.btnLoadServerFile.Location = new System.Drawing.Point(63, 25);
+            this.btnLoadServerFile.Name = "btnLoadServerFile";
+            this.btnLoadServerFile.Size = new System.Drawing.Size(80, 34);
+            this.btnLoadServerFile.TabIndex = 30;
+            this.btnLoadServerFile.Text = "重新载入";
+            this.btnLoadServerFile.UseVisualStyleBackColor = true;
+            this.btnLoadServerFile.Click += new System.EventHandler(this.BtnLoadServerFile_Click);
+            // 
+            // btnOpenServerFile
+            // 
+            this.btnOpenServerFile.Location = new System.Drawing.Point(6, 25);
+            this.btnOpenServerFile.Name = "btnOpenServerFile";
+            this.btnOpenServerFile.Size = new System.Drawing.Size(51, 34);
+            this.btnOpenServerFile.TabIndex = 29;
+            this.btnOpenServerFile.Text = "打开";
+            this.btnOpenServerFile.UseVisualStyleBackColor = true;
+            this.btnOpenServerFile.Click += new System.EventHandler(this.BtnOpenServerFile_Click);
+            // 
+            // btnDownloadAll
+            // 
+            this.btnDownloadAll.Location = new System.Drawing.Point(82, 96);
+            this.btnDownloadAll.Name = "btnDownloadAll";
+            this.btnDownloadAll.Size = new System.Drawing.Size(92, 31);
+            this.btnDownloadAll.TabIndex = 34;
+            this.btnDownloadAll.Text = "下载全部";
+            this.btnDownloadAll.UseVisualStyleBackColor = true;
+            this.btnDownloadAll.Click += new System.EventHandler(this.BtnDownloadAll_Click);
+            // 
+            // btnDownload
+            // 
+            this.btnDownload.Location = new System.Drawing.Point(11, 96);
+            this.btnDownload.Name = "btnDownload";
+            this.btnDownload.Size = new System.Drawing.Size(65, 31);
+            this.btnDownload.TabIndex = 33;
+            this.btnDownload.Text = "下载";
+            this.btnDownload.UseVisualStyleBackColor = true;
+            this.btnDownload.Click += new System.EventHandler(this.BtnDownload_Click);
+            // 
             // FrmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(796, 477);
+            this.ClientSize = new System.Drawing.Size(788, 533);
             this.Controls.Add(this.groupBox2);
-            this.Controls.Add(this.btnOpenExcel);
-            this.Controls.Add(this.txtExcelFile);
-            this.Controls.Add(this.chkExcel);
-            this.Controls.Add(this.chkAutoServer);
-            this.Controls.Add(this.groupBox1);
-            this.Controls.Add(this.chkSaveData);
-            this.Controls.Add(this.txtPageEnd);
-            this.Controls.Add(label8);
-            this.Controls.Add(this.txtLog);
-            this.Controls.Add(this.txtPageStart);
-            this.Controls.Add(label7);
+            this.Controls.Add(this.txtToken);
+            this.Controls.Add(this.tabMain);
             this.Controls.Add(this.txtMemberID);
             this.Controls.Add(label6);
-            this.Controls.Add(this.txtFile);
-            this.Controls.Add(this.chkFile);
+            this.Controls.Add(this.groupBox1);
+            this.Controls.Add(label1);
             this.Controls.Add(this.cmbServer);
             this.Controls.Add(label5);
-            this.Controls.Add(this.lblCurrCount);
-            this.Controls.Add(this.btnStop);
-            this.Controls.Add(this.btnSenka);
-            this.Controls.Add(this.txtEndID);
-            this.Controls.Add(label4);
-            this.Controls.Add(this.txtBeginID);
-            this.Controls.Add(label3);
-            this.Controls.Add(this.txtReferer);
             this.Controls.Add(label2);
-            this.Controls.Add(this.txtToken);
-            this.Controls.Add(label1);
-            this.Controls.Add(this.btnSelectAll);
-            this.Controls.Add(this.txtContent);
-            this.Controls.Add(this.btnTest);
             this.Controls.Add(this.menuMain);
+            this.Controls.Add(this.txtReferer);
             this.Font = new System.Drawing.Font("微软雅黑", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MainMenuStrip = this.menuMain;
@@ -501,8 +638,15 @@
             this.Load += new System.EventHandler(this.FrmMain_Load);
             this.menuMain.ResumeLayout(false);
             this.menuMain.PerformLayout();
-            this.groupBox1.ResumeLayout(false);
+            this.tabMain.ResumeLayout(false);
+            this.tabSniff.ResumeLayout(false);
+            this.tabSniff.PerformLayout();
+            this.tabSenka.ResumeLayout(false);
+            this.tabSenka.PerformLayout();
             this.groupBox2.ResumeLayout(false);
+            this.groupBox3.ResumeLayout(false);
+            this.groupBox3.PerformLayout();
+            this.groupBox1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -542,5 +686,14 @@
         private System.Windows.Forms.Button btnAutoSeedFile;
         private System.Windows.Forms.Button btnLoadSeedFile;
         private System.Windows.Forms.Button btnOpenSeedFile;
+        private System.Windows.Forms.TabControl tabMain;
+        private System.Windows.Forms.TabPage tabSniff;
+        private System.Windows.Forms.TabPage tabSenka;
+        private Neetsonic.Control.TextBox txtSenka;
+        private Neetsonic.Control.GroupBox groupBox3;
+        private System.Windows.Forms.DateTimePicker dateStart;
+        private System.Windows.Forms.DateTimePicker dateEnd;
+        private System.Windows.Forms.Button btnDownloadAll;
+        private System.Windows.Forms.Button btnDownload;
     }
 }

@@ -4,6 +4,7 @@ using System.Collections.Specialized;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Reflection;
 using System.Runtime.InteropServices;
@@ -28,7 +29,9 @@ namespace KCSpy.View
     {
         private static readonly string ServerFilePath = Path.Combine(Application.StartupPath, @"server.xml");
         private static readonly string SeedFilePath = Path.Combine(Application.StartupPath, @"KeySeed.txt");
+        private static readonly string SenkaPicDownloadPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), @"战果人事表");
         private const string SeedDownloadURL = @"http://203.104.209.183/kcs2/js/main.js";
+        private const string SenkaPicDownloadURL = "http://203.104.209.7/kcscontents/information/image/rank";
         private static bool Stop;
         private static List<Server> Servers = new List<Server>
         {
@@ -137,6 +140,17 @@ namespace KCSpy.View
             LoadSeedFile();
             MessageBoxEx.Info(@"更新完毕，已重新载入！");
         }
+        private async void BtnDownload_Click(object sender, EventArgs e)
+        {
+            Server server = cmbServer.SelectedItem as Server;
+            await Task.Run(() => DownloadSenkaPic(server));
+            MessageBoxEx.Info(@"任务执行完成！");
+        }
+        private async void BtnDownloadAll_Click(object sender, EventArgs e)
+        {
+            await Task.WhenAll(Servers.Select(s => Task.Run(() => DownloadSenkaPic(s))));
+            MessageBoxEx.Info(@"任务执行完成！");
+        }
         private void BtnLoadSeedFile_Click(object sender, EventArgs e) => LoadSeedFile();
         private void BtnLoadServerFile_Click(object sender, EventArgs e)
         {
@@ -169,7 +183,7 @@ namespace KCSpy.View
                     foreach(SenkaItem item in items)
                     {
                         Dictionary<string, double> kit = KeyGen.DecodeRankAndMedal(int.Parse(txtMemberID.Text), item.api_mxltvkpyuklh, item.api_wuhnhojjxmke, item.api_itslcqtmrxtf);
-                        AppendLineAsnyc(txtLog, string.Format($@"提督：{item.api_mtjmdcwtvhdr}  顺位：{item.api_mxltvkpyuklh}  战果值：{kit[@"rate"]}  甲章数：{kit[@"medal"]}"));
+                        AppendLineAsnyc(txtSenka, string.Format($@"提督：{item.api_mtjmdcwtvhdr}    顺位：{item.api_mxltvkpyuklh}    战果值：{kit[@"rate"]}    甲章数：{kit[@"medal"]}"));
                     }
                 }
             });
@@ -224,7 +238,7 @@ namespace KCSpy.View
                         try
                         {
                             ret = Post(IP, data);
-                            UserKit kit = JsonConvert.DeserializeObject<UserKitCover>(ret.Substring(7)).api_data;
+                            API_EnemyInfo kit = JsonConvert.DeserializeObject<API_Practice>(ret.Substring(7)).api_data;
                             if(null != kit)
                             {
                                 AppendLineAsnyc(txtContent, string.Format("{0}\t{1}\t{2:D8}", kit.api_nickname, kit.api_experience[0], kit.api_member_id));
@@ -237,7 +251,7 @@ namespace KCSpy.View
                             }
                             else
                             {
-                                ErrorKit err = JsonConvert.DeserializeObject<ErrorKit>(ret.Substring(7));
+                                API_Error err = JsonConvert.DeserializeObject<API_Error>(ret.Substring(7));
                                 if(null != err)
                                     switch(err.api_result)
                                     {
@@ -316,7 +330,7 @@ namespace KCSpy.View
                             try
                             {
                                 ret = Post(IP, data);
-                                UserKit kit = JsonConvert.DeserializeObject<UserKitCover>(ret.Substring(7)).api_data;
+                                API_EnemyInfo kit = JsonConvert.DeserializeObject<API_Practice>(ret.Substring(7)).api_data;
                                 if(null != kit)
                                 {
                                     if(saveData) { }
@@ -324,7 +338,7 @@ namespace KCSpy.View
                                 }
                                 else
                                 {
-                                    ErrorKit err = JsonConvert.DeserializeObject<ErrorKit>(ret.Substring(7));
+                                    API_Error err = JsonConvert.DeserializeObject<API_Error>(ret.Substring(7));
                                     if(null != err)
                                         switch(err.api_result)
                                         {
@@ -377,14 +391,14 @@ namespace KCSpy.View
                         try
                         {
                             ret = Post(IP, data);
-                            UserKit kit = JsonConvert.DeserializeObject<UserKitCover>(ret.Substring(7)).api_data;
+                            API_EnemyInfo kit = JsonConvert.DeserializeObject<API_Practice>(ret.Substring(7)).api_data;
                             if(null != kit)
                             {
                                 AppendLineAsnyc(txtContent, string.Format("{0}\t{1}\t{2:D8}", kit.api_nickname, kit.api_experience[0], kit.api_member_id));
                             }
                             else
                             {
-                                ErrorKit err = JsonConvert.DeserializeObject<ErrorKit>(ret.Substring(7));
+                                API_Error err = JsonConvert.DeserializeObject<API_Error>(ret.Substring(7));
                                 if(null != err)
                                     switch(err.api_result)
                                     {
@@ -477,6 +491,26 @@ namespace KCSpy.View
         private void ConfigToolStripMenuItem_Click(object sender, EventArgs e)
         {
             new FrmConfig().ShowDialog();
+        }
+        private void DownloadSenkaPic(Server server)
+        {
+            DateTime currDate = new DateTime(dateStart.Value.Year, dateStart.Value.Month, 1);
+            DateTime endDate = new DateTime(dateEnd.Value.Year, dateEnd.Value.Month, 1);
+            string dir = Path.Combine(SenkaPicDownloadPath, server.Name);
+            if(!Directory.Exists(dir)) Directory.CreateDirectory(dir);
+            WebClient myWebClient = new WebClient();
+            while(currDate <= endDate)
+            {
+                try
+                {
+                    string filename = string.Format($@"{currDate.Year}{currDate.Month:00}{server.ServerID:00}.jpg").Substring(2);
+                    string url = string.Concat(SenkaPicDownloadURL, filename);
+                    string filePath = Path.Combine(dir, filename);
+                    myWebClient.DownloadFile(url, filePath);
+                }
+                catch { }
+                currDate = currDate.AddMonths(1);
+            }
         }
         private void FrmMain_Load(object sender, EventArgs e)
         {
