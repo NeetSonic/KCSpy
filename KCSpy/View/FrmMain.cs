@@ -4,6 +4,7 @@ using System.Collections.Specialized;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Net;
 using System.Reflection;
@@ -573,8 +574,11 @@ namespace KCSpy.View
 
             // Get response  
             HttpWebResponse myResponse = (HttpWebResponse)request.GetResponse();
-            StreamReader reader = new StreamReader(myResponse.GetResponseStream(), Encoding.UTF8);
-            return reader.ReadToEnd();
+            using(StreamReader reader = new StreamReader(new GZipStream(myResponse.GetResponseStream(), CompressionMode.Decompress), Encoding.UTF8))
+            {
+                string ret = reader.ReadToEnd();
+                return ret;
+            }
         }
         private void SetServer()
         {
