@@ -121,24 +121,27 @@ namespace KCSpy.View
             }
         }
         private void AppendLineAsnyc(TextBox txtCtrl, string content) => BeginInvoke(new MethodInvoker(() => txtCtrl.AppendLine(content)));
-        private void BtnAutoSeedFile_Click(object sender, EventArgs e)
+        private async void BtnAutoSeedFile_Click(object sender, EventArgs e)
         {
-            StringBuilder keys = new StringBuilder();
-            WebClient web = new WebClient();
-            string jsFilePath = Path.Combine(Application.LocalUserAppDataPath, @"main.js");
-            web.DownloadFile(SeedDownloadURL, jsFilePath);
-            string textAll = FileTool.OpenAndReadAllText(jsFilePath);
-            int start = textAll.IndexOf(@"PORT_API_SEED", StringComparison.Ordinal);
-            start = textAll.IndexOf('[', start);
-            int end = textAll.IndexOf(']', start);
-            keys.AppendLine(textAll.Substring(start + 1, end - start - 1));
-            start = textAll.IndexOf(@"e.prototype.__drawRanking", StringComparison.Ordinal);
-            start = textAll.IndexOf(@"var i=", start, StringComparison.Ordinal);
-            start = textAll.IndexOf('[', start);
-            end = textAll.IndexOf(']', start);
-            keys.Append(textAll.Substring(start + 1, end - start - 1));
-            FileTool.CreateAndWriteText(SeedFilePath, keys.ToString());
-            LoadSeedFile();
+            await Task.Run(() =>
+            {
+                StringBuilder keys = new StringBuilder();
+                WebClient web = new WebClient();
+                string jsFilePath = Path.Combine(Application.LocalUserAppDataPath, @"main.js");
+                web.DownloadFile(SeedDownloadURL, jsFilePath);
+                string textAll = FileTool.OpenAndReadAllText(jsFilePath);
+                int start = textAll.IndexOf(@"PORT_API_SEED", StringComparison.Ordinal);
+                start = textAll.IndexOf('[', start);
+                int end = textAll.IndexOf(']', start);
+                keys.AppendLine(textAll.Substring(start + 1, end - start - 1));
+                start = textAll.IndexOf(@"e.prototype.__drawRanking", StringComparison.Ordinal);
+                start = textAll.IndexOf(@"var i=", start, StringComparison.Ordinal);
+                start = textAll.IndexOf('[', start);
+                end = textAll.IndexOf(']', start);
+                keys.Append(textAll.Substring(start + 1, end - start - 1));
+                FileTool.CreateAndWriteText(SeedFilePath, keys.ToString());
+                LoadSeedFile();
+            });
             MessageBoxEx.Info(@"更新完毕，已重新载入！");
         }
         private async void BtnDownload_Click(object sender, EventArgs e)
@@ -180,11 +183,11 @@ namespace KCSpy.View
                     string postData = string.Format($@"api_pageno={currPage}&api_verno=1&api_token={txtToken.Text}&api_ranking={KeyGen.CreateKey(int.Parse(txtMemberID.Text))}");
                     byte[] data = Encoding.UTF8.GetBytes(postData);
                     string ret = PostSenka(IP, data);
-                    List<SenkaItem> items = JsonConvert.DeserializeObject<SenkaCover>(ret.Substring(7)).api_data.api_list;
-                    foreach(SenkaItem item in items)
+                    List<API_SenkaPlayer> players = JsonConvert.DeserializeObject<API_Senka>(ret.Substring(7)).api_data.api_list;
+                    foreach(API_SenkaPlayer player in players)
                     {
-                        Dictionary<string, double> kit = KeyGen.DecodeRankAndMedal(int.Parse(txtMemberID.Text), item.api_mxltvkpyuklh, item.api_wuhnhojjxmke, item.api_itslcqtmrxtf);
-                        AppendLineAsnyc(txtSenka, string.Format($@"提督：{item.api_mtjmdcwtvhdr}    顺位：{item.api_mxltvkpyuklh}    战果值：{kit[@"rate"]}    甲章数：{kit[@"medal"]}"));
+                        Dictionary<string, double> kit = KeyGen.DecodeRankAndMedal(int.Parse(txtMemberID.Text), player.RankNo, player.Senka, player.Medal);
+                        AppendLineAsnyc(txtSenka, string.Format($@"提督：{player.PlayerName}    顺位：{player.RankNo}    战果值：{kit[@"rate"]}    甲章数：{kit[@"medal"]}"));
                     }
                 }
             });

@@ -68,7 +68,6 @@
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Model\KCSpyConfig.cs" />
     <Compile Include="Model\Record.cs" />
-    <Compile Include="Model\Senka.cs" />
     <Compile Include="Model\Server.cs" />
     <Compile Include="Model\API.cs" />
     <Compile Include="Program.cs" />
