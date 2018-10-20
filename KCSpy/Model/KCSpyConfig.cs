@@ -9,17 +9,17 @@ namespace KCSpy.Model
 {
     public sealed class KCSpyConfig
     {
-        private const string XmlElementStorePath = @"StorePath";
+        private const string XmlElementSenkaPicStorePath = @"SenkaPicPath";
         private readonly XmlConfigTool config = new XmlConfigTool(Path.Combine(Application.StartupPath, @"config.xml"));
 
         [Browsable(false)]
-        public string DBPath => config.ReadConfig(XmlElementStorePath, Application.UserAppDataPath);
+        public string SenkaPicPath => config.ReadConfig(XmlElementSenkaPicStorePath, Application.UserAppDataPath);
 
-        [EditorBrowsable(EditorBrowsableState.Never), Category("路径"), Description("数据库文件的存储路径"), Editor(typeof(PropertyGridFileItem), typeof(UITypeEditor))]
-        public string 数据库文件路径
+        [EditorBrowsable(EditorBrowsableState.Never), Category("路径"), Description("战果人事表的存储路径"), Editor(typeof(PropertyGridDirectoryItem), typeof(UITypeEditor))]
+        public string 战果人事表存储路径
         {
-            get => DBPath;
-            set => config.SaveConfig(XmlElementStorePath, value);
+            get => SenkaPicPath;
+            set => config.SaveConfig(XmlElementSenkaPicStorePath, value);
         }
     }
 }

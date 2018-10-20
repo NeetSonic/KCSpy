@@ -4,80 +4,26 @@ namespace KCSpy.Model
 {
     public sealed class API_Senka
     {
-        /// <summary>
-        /// 
-        /// </summary>
         public int api_result{ get; set; }
-
-        /// <summary>
-        /// 
-        /// </summary>
         public string api_result_msg{ get; set; }
-
-        /// <summary>
-        /// 
-        /// </summary>
         public API_SenkaData api_data { get; set; }
     }
     public sealed class API_SenkaData
     {
-        /// <summary>
-        /// 
-        /// </summary>
         public int api_count{ get; set; }
-
-        /// <summary>
-        /// 
-        /// </summary>
         public int api_page_count{ get; set; }
-
-        /// <summary>
-        /// 
-        /// </summary>
         public int api_disp_page{ get; set; }
-
-        /// <summary>
-        /// 
-        /// </summary>
         public List<API_SenkaPlayer> api_list{ get; set; }
     }
     public sealed class API_SenkaPlayer
     {
-        /// <summary>
-        /// 顺位
-        /// </summary>
         public int api_mxltvkpyuklh{ get; set; }
-
-        /// <summary>
-        /// 提督名
-        /// </summary>
         public string api_mtjmdcwtvhdr{ get; set; }
-
-        /// <summary>
-        /// 
-        /// </summary>
         public int api_pbgkfylkbjuy{ get; set; }
-
-        /// <summary>
-        /// 
-        /// </summary>
         public int api_pcumlrymlujh{ get; set; }
-
-        /// <summary>
-        /// 签名
-        /// </summary>
         public string api_itbrdpdbkynm{ get; set; }
-
-        /// <summary>
-        /// 甲章数（加密）
-        /// </summary>
         public long api_itslcqtmrxtf{ get; set; }
-
-        /// <summary>
-        /// 战果值（加密）
-        /// </summary>
         public long api_wuhnhojjxmke{ get; set; }
-
         public int RankNo => api_mxltvkpyuklh;
         public string PlayerName => api_mtjmdcwtvhdr;
         public string Comment => api_itbrdpdbkynm;
