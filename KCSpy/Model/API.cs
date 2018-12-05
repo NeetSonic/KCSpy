@@ -77,4 +77,22 @@ namespace KCSpy.Model
         public int api_result { get; set; }
         public string api_result_msg { get; set; }
     }
+    public sealed class API_ServerInfo
+    {
+        public int api_id { get; set; }
+        public string api_name { get; set; }
+        public int api_rate { get; set; }
+        public bool api_entry { get; set; }
+        public bool api_enabled { get; set; }
+    }
+    public sealed class API_ServerData
+    {
+        public List<API_ServerInfo> api_world_info { get; set; }
+    }
+    public sealed class API_Server
+    {
+        public int api_result { get; set; }
+        public string api_result_msg { get; set; }
+        public API_ServerData api_data { get; set; }
+    }
 }

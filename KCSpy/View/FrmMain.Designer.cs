@@ -61,9 +61,11 @@
             this.btnOpenExcel = new System.Windows.Forms.Button();
             this.tabMain = new System.Windows.Forms.TabControl();
             this.tabSniff = new System.Windows.Forms.TabPage();
+            this.chkMultiThreads = new System.Windows.Forms.CheckBox();
             this.txtSniff = new Neetsonic.Control.TextBox();
             this.txtLog = new Neetsonic.Control.TextBox();
             this.tabSenka = new System.Windows.Forms.TabPage();
+            this.btnServerAvailable = new System.Windows.Forms.Button();
             this.groupBox3 = new Neetsonic.Control.GroupBox();
             this.btnDownloadAll = new System.Windows.Forms.Button();
             this.btnDownload = new System.Windows.Forms.Button();
@@ -257,7 +259,7 @@
             // lblCurrCount
             // 
             this.lblCurrCount.AutoSize = true;
-            this.lblCurrCount.Location = new System.Drawing.Point(383, 11);
+            this.lblCurrCount.Location = new System.Drawing.Point(464, 14);
             this.lblCurrCount.Name = "lblCurrCount";
             this.lblCurrCount.Size = new System.Drawing.Size(37, 20);
             this.lblCurrCount.TabIndex = 13;
@@ -279,7 +281,6 @@
             this.txtMemberID.Name = "txtMemberID";
             this.txtMemberID.Size = new System.Drawing.Size(81, 26);
             this.txtMemberID.TabIndex = 19;
-            this.txtMemberID.Text = "4002191";
             // 
             // txtPageStart
             // 
@@ -384,6 +385,7 @@
             // tabSniff
             // 
             this.tabSniff.BackColor = System.Drawing.SystemColors.Control;
+            this.tabSniff.Controls.Add(this.chkMultiThreads);
             this.tabSniff.Controls.Add(this.btnTest);
             this.tabSniff.Controls.Add(this.btnOpenExcel);
             this.tabSniff.Controls.Add(this.txtSniff);
@@ -404,6 +406,16 @@
             this.tabSniff.Size = new System.Drawing.Size(768, 336);
             this.tabSniff.TabIndex = 0;
             this.tabSniff.Text = "嗅探";
+            // 
+            // chkMultiThreads
+            // 
+            this.chkMultiThreads.AutoSize = true;
+            this.chkMultiThreads.Location = new System.Drawing.Point(358, 13);
+            this.chkMultiThreads.Name = "chkMultiThreads";
+            this.chkMultiThreads.Size = new System.Drawing.Size(70, 24);
+            this.chkMultiThreads.TabIndex = 35;
+            this.chkMultiThreads.Text = "多线程";
+            this.chkMultiThreads.UseVisualStyleBackColor = true;
             // 
             // txtSniff
             // 
@@ -432,20 +444,31 @@
             // tabSenka
             // 
             this.tabSenka.BackColor = System.Drawing.SystemColors.Control;
-            this.tabSenka.Controls.Add(this.groupBox3);
-            this.tabSenka.Controls.Add(this.txtSenka);
+            this.tabSenka.Controls.Add(this.btnServerAvailable);
             this.tabSenka.Controls.Add(label7);
             this.tabSenka.Controls.Add(this.txtPageStart);
             this.tabSenka.Controls.Add(label8);
             this.tabSenka.Controls.Add(this.txtPageEnd);
             this.tabSenka.Controls.Add(this.chkSaveData);
             this.tabSenka.Controls.Add(this.btnSenka);
+            this.tabSenka.Controls.Add(this.groupBox3);
+            this.tabSenka.Controls.Add(this.txtSenka);
             this.tabSenka.Location = new System.Drawing.Point(4, 4);
             this.tabSenka.Name = "tabSenka";
             this.tabSenka.Padding = new System.Windows.Forms.Padding(3);
             this.tabSenka.Size = new System.Drawing.Size(768, 336);
             this.tabSenka.TabIndex = 1;
             this.tabSenka.Text = "战果";
+            // 
+            // btnServerAvailable
+            // 
+            this.btnServerAvailable.Location = new System.Drawing.Point(444, 176);
+            this.btnServerAvailable.Name = "btnServerAvailable";
+            this.btnServerAvailable.Size = new System.Drawing.Size(118, 34);
+            this.btnServerAvailable.TabIndex = 33;
+            this.btnServerAvailable.Text = "可注册服务器";
+            this.btnServerAvailable.UseVisualStyleBackColor = true;
+            this.btnServerAvailable.Click += new System.EventHandler(this.BtnServerAvelable_Click);
             // 
             // groupBox3
             // 
@@ -670,5 +693,7 @@
         private System.Windows.Forms.DateTimePicker dateEnd;
         private System.Windows.Forms.Button btnDownloadAll;
         private System.Windows.Forms.Button btnDownload;
+        private System.Windows.Forms.CheckBox chkMultiThreads;
+        private System.Windows.Forms.Button btnServerAvailable;
     }
 }

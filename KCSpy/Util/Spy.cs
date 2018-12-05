@@ -157,7 +157,7 @@ namespace KCSpy.Util
                                     }
                                     case 201:
                                     {
-                                        reportError?.Invoke(@"猫了");
+                                        reportError?.Invoke(string.Format($@"Token[{server.Token}] 猫了"));
                                         break;
                                     }
                                     default:
@@ -216,6 +216,43 @@ namespace KCSpy.Util
                 }
             });
         }
+        public static async Task RequestServerAvailable(Action<string> report)
+        {
+            await Task.Run(() =>
+            {
+                byte[] data = Encoding.UTF8.GetBytes(@"api_verno=1&api_dmmuser_id=33737340");
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(@"http://203.104.209.7/kcsapi/api_world/get_worldinfo");
+                request.Method = "POST";
+                request.Accept = @"*/*";
+                request.Headers.Add("Accept-Encoding", @"gzip, deflate");
+                request.Headers.Add("Accept-Language", @"zh-CN,zh;q=0.9,ja;q=0.8,en;q=0.7,zh-TW;q=0.6");
+                request.ContentLength = data.Length;
+                request.ContentType = "application/x-www-form-urlencoded";
+                request.Host = @"203.104.209.7";
+                request.Headers.Add("Origin", @"http://203.104.209.7");
+                request.Headers.SetHeaderValue(@"Proxy-Connection", @"keep-alive");
+                request.Referer = string.Empty;
+                request.UserAgent = "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36";
+                request.Headers.Add("X-Requested-With", @"ShockwaveFlash/27.0.0.187");
+                request.Proxy = ProxyACGPower;
+                Stream newStream = request.GetRequestStream();
+                newStream.Write(data, 0, data.Length);
+                newStream.Close();
+                string ret;
+                using(HttpWebResponse myResponse = (HttpWebResponse)request.GetResponse())
+                {
+                    using(StreamReader reader = new StreamReader(myResponse.GetResponseStream(), Encoding.UTF8))
+                    {
+                        ret = reader.ReadToEnd();
+                    }
+                }
+                List<API_ServerInfo> servers = JsonConvert.DeserializeObject<API_Server>(ret.Substring(7)).api_data.api_world_info;
+                foreach(API_ServerInfo server in servers.Where(s=>s.api_enabled&&s.api_entry))
+                {
+                   report?.Invoke(string.Format($@"{server.api_name}：可注册"));
+                }
+            });
+        }
         public static void StopRequest() => _stopRequest = true;
         private static int _getPortSeed(int t)
         {
@@ -250,6 +287,8 @@ namespace KCSpy.Util
                 case 151906:
 
                     return Servers[4];
+                case 86803:
+                    return Servers[2];
             }
             return ID < 1000000 ? Servers[ID / 100000] : Servers[ID / 1000000 - 1];
         }

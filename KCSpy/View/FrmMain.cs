@@ -1,6 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
+using System.Net;
+using System.Net.Sockets;
+using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using KCSpy.Model;
@@ -65,7 +70,7 @@ namespace KCSpy.View
             bool fromExcel = chkExcel.Checked;
             bool autoServer = chkAutoServer.Checked;
             string filePath = txtExcelFile.Text;
-            Server server = cmbServer.SelectedItem as Server;
+            Server server = (Server)cmbServer.SelectedItem;
             if(fromExcel)
             {
                 if(autoServer)
@@ -93,8 +98,22 @@ namespace KCSpy.View
             }
             else
             {
-                int startID = int.Parse(txtBeginID.Text), endID = int.Parse(txtEndID.Text);
-                await Spy.RequestPlayerInfo(server, startID, endID, SniffCurr, SniffReport, SniffLog);
+                if(chkMultiThreads.Checked)
+                {
+                    int startID = int.Parse(txtBeginID.Text), endID = int.Parse(txtEndID.Text), step = (int)Math.Ceiling((endID - startID + 1) / (double)server.Tokens.Count());
+                    List<Task> tasks = new List<Task>();
+                    foreach(string token in server.Tokens)
+                    {
+                        tasks.Add(Spy.RequestPlayerInfo(server, startID, startID + step - 1, SniffCurr, SniffReport, SniffLog));
+                        startID += step;
+                    }
+                    await Task.WhenAll(tasks);
+                }
+                else
+                {
+                    int startID = int.Parse(txtBeginID.Text), endID = int.Parse(txtEndID.Text);
+                    await Spy.RequestPlayerInfo(server, startID, endID, SniffCurr, SniffReport, SniffLog);
+                }
             }
             MessageBoxEx.Info(@"任务执行完成！");
         }
@@ -115,8 +134,11 @@ namespace KCSpy.View
         }
         private void CmbServer_SelectedIndexChanged(object sender, EventArgs e)
         {
-            txtToken.Text = ((Server)cmbServer.SelectedItem)?.Token;
-            txtMemberID.Text = ((Server)cmbServer.SelectedItem)?.MemberID;
+            Server server = cmbServer.SelectedItem as Server;
+            txtToken.Text = server?.Token;
+            txtMemberID.Text = server?.MemberID;
+            chkMultiThreads.Enabled = null != server?.TokenString && server.Tokens.Any();
+            if(!chkMultiThreads.Enabled) { chkMultiThreads.Checked = false; }
         }
         private void ConfigToolStripMenuItem_Click(object sender, EventArgs e) => new FrmConfig().ShowDialog();
         private void FrmMain_Load(object sender, EventArgs e)
@@ -138,5 +160,10 @@ namespace KCSpy.View
         private void SniffCurr(string content) => BeginInvoke(new MethodInvoker(() => lblCurrCount.Text = content));
         private void SniffLog(string txt) => BeginInvoke(new MethodInvoker(() => txtLog.AppendLine(txt)));
         private void SniffReport(string txt) => BeginInvoke(new MethodInvoker(() => txtSniff.AppendLine(txt)));
+        private async void BtnServerAvelable_Click(object sender, EventArgs e)
+        {
+            await Spy.RequestServerAvailable(SenkaReport);
+            MessageBoxEx.Info(@"任务执行完成！");
+        }
     }
 }
