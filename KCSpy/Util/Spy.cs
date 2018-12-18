@@ -21,6 +21,14 @@ namespace KCSpy.Util
 {
     public static class Spy
     {
+        private const int NameCol = 1;
+        private const int ExpCol = 2;
+        private const int IdCol = 3;
+        private const int FurnitureCol = 4;
+        private const int DateCol = 5;
+        private const int IncCol = 6;
+        private const int LastDateCol = 7;
+        private const int ServerCol = 8;
         private static bool _stopRequest;
         private static readonly WebProxy ProxyACGPower = new WebProxy(@"127.0.0.1:8123", true);
         private static readonly string ServerFilePath = Path.Combine(Application.StartupPath, @"server.xml");
@@ -97,6 +105,35 @@ namespace KCSpy.Util
                 }
             });
         }
+        public static async Task ExportClipboardToExcel()
+        {
+            await Task.Run(() =>
+            {
+                string dstFilePath = Path.Combine(Global.Config.ExcelPath, string.Format($@"{DateTime.Now:yyyyMMddhhmmss}.xlsx"));
+                File.Copy(Global.Config.ExcelTemplatePath, dstFilePath);
+                Microsoft.Office.Interop.Excel.Application app = new Microsoft.Office.Interop.Excel.Application {DisplayAlerts = false};
+                Workbooks wbks = app.Workbooks;
+                _Workbook wbk = wbks.Add(dstFilePath);
+                Sheets shs = wbk.Sheets;
+                _Worksheet wsh = (_Worksheet)shs.Item[1];
+                Range range = wsh.Cells[2, NameCol];
+                range.Select();
+                range.PasteSpecial();
+                try
+                {
+                    wbk.SaveAs(dstFilePath, Missing.Value, Missing.Value, Missing.Value, Missing.Value, Missing.Value, XlSaveAsAccessMode.xlNoChange, Missing.Value, Missing.Value, Missing.Value, Missing.Value, Missing.Value);
+                }
+                catch(Exception) { }
+                finally
+                {
+                    wbk.Close();
+                    wbks.Close();
+                    app.Quit();
+                    Marshal.ReleaseComObject(app);
+                }
+                FileTool.OpenDirectory(Global.Config.ExcelPath);
+            });
+        }
         public static void LoadKeySeed()
         {
             if(File.Exists(SeedFilePath))
@@ -141,7 +178,7 @@ namespace KCSpy.Util
                         API_EnemyInfo kit = JsonConvert.DeserializeObject<API_Practice>(ret.Substring(7)).api_data;
                         if(null != kit)
                         {
-                            reportResult?.Invoke(string.Format("{0}\t{1}\t{2:D8}", kit.api_nickname, kit.api_experience[0], kit.api_member_id));
+                            reportResult?.Invoke(string.Format("{0}\t{1}\t{2:D8}\t{3}", kit.api_nickname.FormatName(), kit.api_experience[0], kit.api_member_id, kit.api_furniture));
                         }
                         else
                         {
@@ -247,9 +284,9 @@ namespace KCSpy.Util
                     }
                 }
                 List<API_ServerInfo> servers = JsonConvert.DeserializeObject<API_Server>(ret.Substring(7)).api_data.api_world_info;
-                foreach(API_ServerInfo server in servers.Where(s=>s.api_enabled&&s.api_entry))
+                foreach(API_ServerInfo server in servers.Where(s => s.api_enabled && s.api_entry))
                 {
-                   report?.Invoke(string.Format($@"{server.api_name}：可注册"));
+                    report?.Invoke(string.Format($@"{server.api_name}：可注册"));
                 }
             });
         }
@@ -285,7 +322,6 @@ namespace KCSpy.Util
                 case 95026:
                 case 167534:
                 case 151906:
-
                     return Servers[4];
                 case 86803:
                     return Servers[2];
@@ -366,12 +402,6 @@ namespace KCSpy.Util
                 _Workbook wbk = wbks.Add(excelFilePath);
                 Sheets shs = wbk.Sheets;
                 _Worksheet wsh = (_Worksheet)shs.Item[1];
-                const int ExpCol = 2;
-                const int IdCol = 3;
-                const int DateCol = 4;
-                const int IncCol = 5;
-                const int LastDateCol = 6;
-                const int ServerCol = 7;
                 for(int row = 2; row < wsh.Rows.Count; row++)
                 {
                     if(_stopRequest) { break; }
@@ -397,9 +427,10 @@ namespace KCSpy.Util
                         API_EnemyInfo kit = JsonConvert.DeserializeObject<API_Practice>(ret.Substring(7)).api_data;
                         if(null != kit)
                         {
-                            reportResult?.Invoke(string.Format("{0}\t{1}\t{2:D8}", kit.api_nickname, kit.api_experience[0], kit.api_member_id));
+                            reportResult?.Invoke(string.Format("{0}\t{1}\t{2:D8}\t{3}", kit.api_nickname, kit.api_experience[0], kit.api_member_id, kit.api_furniture));
                             int lastExp = Convert.ToInt32(((Range)wsh.Cells[row, ExpCol]).Value);
                             ((Range)wsh.Cells[row, ExpCol]).Value = kit.api_experience[0];
+                            ((Range)wsh.Cells[row, FurnitureCol]).Value = kit.api_furniture;
                             ((Range)wsh.Cells[row, LastDateCol]).Value = ((Range)wsh.Cells[row, DateCol]).Value;
                             ((Range)wsh.Cells[row, DateCol]).Value = DateTime.Now.ToString(CultureInfo.CurrentCulture);
                             ((Range)wsh.Cells[row, IncCol]).Value = kit.api_experience[0] - lastExp;
@@ -441,11 +472,18 @@ namespace KCSpy.Util
                         Marshal.ReleaseComObject(app);
                     }
                 }
-                wbk.SaveAs(excelFilePath, Missing.Value, Missing.Value, Missing.Value, Missing.Value, Missing.Value, XlSaveAsAccessMode.xlNoChange, Missing.Value, Missing.Value, Missing.Value, Missing.Value, Missing.Value);
-                wbk.Close();
-                wbks.Close();
-                app.Quit();
-                Marshal.ReleaseComObject(app);
+                try
+                {
+                    wbk.SaveAs(excelFilePath, Missing.Value, Missing.Value, Missing.Value, Missing.Value, Missing.Value, XlSaveAsAccessMode.xlNoChange, Missing.Value, Missing.Value, Missing.Value, Missing.Value, Missing.Value);
+                }
+                catch(Exception) { }
+                finally
+                {
+                    wbk.Close();
+                    wbks.Close();
+                    app.Quit();
+                    Marshal.ReleaseComObject(app);
+                }
             });
         }
 
@@ -454,5 +492,10 @@ namespace KCSpy.Util
             public long Senka { get; set; }
             public long Medal { get; set; }
         }
+    }
+
+    public static class NameEx
+    {
+        public static string FormatName(this string name) => name.Replace("\t", string.Empty).Replace("\r", string.Empty).Replace("\n", string.Empty);
     }
 }

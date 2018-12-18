@@ -62,23 +62,24 @@
             this.tabMain = new System.Windows.Forms.TabControl();
             this.tabSniff = new System.Windows.Forms.TabPage();
             this.chkMultiThreads = new System.Windows.Forms.CheckBox();
-            this.txtSniff = new Neetsonic.Control.TextBox();
-            this.txtLog = new Neetsonic.Control.TextBox();
             this.tabSenka = new System.Windows.Forms.TabPage();
             this.btnServerAvailable = new System.Windows.Forms.Button();
+            this.groupBox2 = new Neetsonic.Control.GroupBox();
+            this.btnAutoSeedFile = new System.Windows.Forms.Button();
+            this.btnLoadSeedFile = new System.Windows.Forms.Button();
+            this.btnOpenSeedFile = new System.Windows.Forms.Button();
+            this.txtSniff = new Neetsonic.Control.TextBox();
+            this.txtLog = new Neetsonic.Control.TextBox();
             this.groupBox3 = new Neetsonic.Control.GroupBox();
             this.btnDownloadAll = new System.Windows.Forms.Button();
             this.btnDownload = new System.Windows.Forms.Button();
             this.dateStart = new System.Windows.Forms.DateTimePicker();
             this.dateEnd = new System.Windows.Forms.DateTimePicker();
             this.txtSenka = new Neetsonic.Control.TextBox();
-            this.groupBox2 = new Neetsonic.Control.GroupBox();
-            this.btnAutoSeedFile = new System.Windows.Forms.Button();
-            this.btnLoadSeedFile = new System.Windows.Forms.Button();
-            this.btnOpenSeedFile = new System.Windows.Forms.Button();
             this.groupBox1 = new Neetsonic.Control.GroupBox();
             this.btnLoadServerFile = new System.Windows.Forms.Button();
             this.btnOpenServerFile = new System.Windows.Forms.Button();
+            this.btnExport = new System.Windows.Forms.Button();
             label1 = new System.Windows.Forms.Label();
             label2 = new System.Windows.Forms.Label();
             label3 = new System.Windows.Forms.Label();
@@ -93,8 +94,8 @@
             this.tabMain.SuspendLayout();
             this.tabSniff.SuspendLayout();
             this.tabSenka.SuspendLayout();
-            this.groupBox3.SuspendLayout();
             this.groupBox2.SuspendLayout();
+            this.groupBox3.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -169,24 +170,6 @@
             label8.Size = new System.Drawing.Size(65, 20);
             label8.TabIndex = 23;
             label8.Text = "终止页码";
-            // 
-            // label10
-            // 
-            label10.AutoSize = true;
-            label10.Location = new System.Drawing.Point(7, 22);
-            label10.Name = "label10";
-            label10.Size = new System.Drawing.Size(65, 20);
-            label10.TabIndex = 29;
-            label10.Text = "起始时间";
-            // 
-            // label9
-            // 
-            label9.AutoSize = true;
-            label9.Location = new System.Drawing.Point(7, 57);
-            label9.Name = "label9";
-            label9.Size = new System.Drawing.Size(65, 20);
-            label9.TabIndex = 31;
-            label9.Text = "结束时间";
             // 
             // btnTest
             // 
@@ -317,7 +300,7 @@
             // tsmiConfig
             // 
             this.tsmiConfig.Name = "tsmiConfig";
-            this.tsmiConfig.Size = new System.Drawing.Size(124, 22);
+            this.tsmiConfig.Size = new System.Drawing.Size(152, 22);
             this.tsmiConfig.Text = "修改配置";
             this.tsmiConfig.Click += new System.EventHandler(this.ConfigToolStripMenuItem_Click);
             // 
@@ -385,6 +368,7 @@
             // tabSniff
             // 
             this.tabSniff.BackColor = System.Drawing.SystemColors.Control;
+            this.tabSniff.Controls.Add(this.btnExport);
             this.tabSniff.Controls.Add(this.chkMultiThreads);
             this.tabSniff.Controls.Add(this.btnTest);
             this.tabSniff.Controls.Add(this.btnOpenExcel);
@@ -417,30 +401,6 @@
             this.chkMultiThreads.Text = "多线程";
             this.chkMultiThreads.UseVisualStyleBackColor = true;
             // 
-            // txtSniff
-            // 
-            this.txtSniff.AcceptsReturn = true;
-            this.txtSniff.Location = new System.Drawing.Point(387, 38);
-            this.txtSniff.MaxLength = 3276700;
-            this.txtSniff.Multiline = true;
-            this.txtSniff.Name = "txtSniff";
-            this.txtSniff.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.txtSniff.Size = new System.Drawing.Size(375, 289);
-            this.txtSniff.TabIndex = 1;
-            this.txtSniff.WordWrap = false;
-            // 
-            // txtLog
-            // 
-            this.txtLog.AcceptsReturn = true;
-            this.txtLog.Location = new System.Drawing.Point(12, 167);
-            this.txtLog.MaxLength = 3276700;
-            this.txtLog.Multiline = true;
-            this.txtLog.Name = "txtLog";
-            this.txtLog.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.txtLog.Size = new System.Drawing.Size(367, 160);
-            this.txtLog.TabIndex = 22;
-            this.txtLog.WordWrap = false;
-            // 
             // tabSenka
             // 
             this.tabSenka.BackColor = System.Drawing.SystemColors.Control;
@@ -469,73 +429,6 @@
             this.btnServerAvailable.Text = "可注册服务器";
             this.btnServerAvailable.UseVisualStyleBackColor = true;
             this.btnServerAvailable.Click += new System.EventHandler(this.BtnServerAvelable_Click);
-            // 
-            // groupBox3
-            // 
-            this.groupBox3.Controls.Add(this.btnDownloadAll);
-            this.groupBox3.Controls.Add(label10);
-            this.groupBox3.Controls.Add(this.btnDownload);
-            this.groupBox3.Controls.Add(label9);
-            this.groupBox3.Controls.Add(this.dateStart);
-            this.groupBox3.Controls.Add(this.dateEnd);
-            this.groupBox3.Location = new System.Drawing.Point(444, 10);
-            this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(186, 138);
-            this.groupBox3.TabIndex = 32;
-            this.groupBox3.TabStop = false;
-            this.groupBox3.Text = "人事表下载";
-            // 
-            // btnDownloadAll
-            // 
-            this.btnDownloadAll.Location = new System.Drawing.Point(82, 96);
-            this.btnDownloadAll.Name = "btnDownloadAll";
-            this.btnDownloadAll.Size = new System.Drawing.Size(92, 31);
-            this.btnDownloadAll.TabIndex = 34;
-            this.btnDownloadAll.Text = "下载全部";
-            this.btnDownloadAll.UseVisualStyleBackColor = true;
-            this.btnDownloadAll.Click += new System.EventHandler(this.BtnDownloadAll_Click);
-            // 
-            // btnDownload
-            // 
-            this.btnDownload.Location = new System.Drawing.Point(11, 96);
-            this.btnDownload.Name = "btnDownload";
-            this.btnDownload.Size = new System.Drawing.Size(65, 31);
-            this.btnDownload.TabIndex = 33;
-            this.btnDownload.Text = "下载";
-            this.btnDownload.UseVisualStyleBackColor = true;
-            this.btnDownload.Click += new System.EventHandler(this.BtnDownload_Click);
-            // 
-            // dateStart
-            // 
-            this.dateStart.CustomFormat = "yyyy/MM";
-            this.dateStart.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.dateStart.Location = new System.Drawing.Point(78, 19);
-            this.dateStart.Name = "dateStart";
-            this.dateStart.Size = new System.Drawing.Size(96, 26);
-            this.dateStart.TabIndex = 28;
-            this.dateStart.Value = new System.DateTime(2013, 7, 1, 15, 47, 0, 0);
-            // 
-            // dateEnd
-            // 
-            this.dateEnd.Checked = false;
-            this.dateEnd.CustomFormat = "yyyy/MM";
-            this.dateEnd.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.dateEnd.Location = new System.Drawing.Point(78, 54);
-            this.dateEnd.Name = "dateEnd";
-            this.dateEnd.Size = new System.Drawing.Size(96, 26);
-            this.dateEnd.TabIndex = 30;
-            // 
-            // txtSenka
-            // 
-            this.txtSenka.AcceptsReturn = true;
-            this.txtSenka.Location = new System.Drawing.Point(13, 60);
-            this.txtSenka.MaxLength = 3276700;
-            this.txtSenka.Multiline = true;
-            this.txtSenka.Name = "txtSenka";
-            this.txtSenka.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.txtSenka.Size = new System.Drawing.Size(407, 270);
-            this.txtSenka.TabIndex = 27;
-            this.txtSenka.WordWrap = false;
             // 
             // groupBox2
             // 
@@ -579,6 +472,115 @@
             this.btnOpenSeedFile.UseVisualStyleBackColor = true;
             this.btnOpenSeedFile.Click += new System.EventHandler(this.BtnOpenSeedFile_Click);
             // 
+            // txtSniff
+            // 
+            this.txtSniff.AcceptsReturn = true;
+            this.txtSniff.Location = new System.Drawing.Point(387, 38);
+            this.txtSniff.MaxLength = 3276700;
+            this.txtSniff.Multiline = true;
+            this.txtSniff.Name = "txtSniff";
+            this.txtSniff.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+            this.txtSniff.Size = new System.Drawing.Size(375, 289);
+            this.txtSniff.TabIndex = 1;
+            this.txtSniff.WordWrap = false;
+            // 
+            // txtLog
+            // 
+            this.txtLog.AcceptsReturn = true;
+            this.txtLog.Location = new System.Drawing.Point(12, 167);
+            this.txtLog.MaxLength = 3276700;
+            this.txtLog.Multiline = true;
+            this.txtLog.Name = "txtLog";
+            this.txtLog.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+            this.txtLog.Size = new System.Drawing.Size(367, 160);
+            this.txtLog.TabIndex = 22;
+            this.txtLog.WordWrap = false;
+            // 
+            // groupBox3
+            // 
+            this.groupBox3.Controls.Add(this.btnDownloadAll);
+            this.groupBox3.Controls.Add(label10);
+            this.groupBox3.Controls.Add(this.btnDownload);
+            this.groupBox3.Controls.Add(label9);
+            this.groupBox3.Controls.Add(this.dateStart);
+            this.groupBox3.Controls.Add(this.dateEnd);
+            this.groupBox3.Location = new System.Drawing.Point(444, 10);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size(186, 138);
+            this.groupBox3.TabIndex = 32;
+            this.groupBox3.TabStop = false;
+            this.groupBox3.Text = "人事表下载";
+            // 
+            // btnDownloadAll
+            // 
+            this.btnDownloadAll.Location = new System.Drawing.Point(82, 96);
+            this.btnDownloadAll.Name = "btnDownloadAll";
+            this.btnDownloadAll.Size = new System.Drawing.Size(92, 31);
+            this.btnDownloadAll.TabIndex = 34;
+            this.btnDownloadAll.Text = "下载全部";
+            this.btnDownloadAll.UseVisualStyleBackColor = true;
+            this.btnDownloadAll.Click += new System.EventHandler(this.BtnDownloadAll_Click);
+            // 
+            // label10
+            // 
+            label10.AutoSize = true;
+            label10.Location = new System.Drawing.Point(7, 22);
+            label10.Name = "label10";
+            label10.Size = new System.Drawing.Size(65, 20);
+            label10.TabIndex = 29;
+            label10.Text = "起始时间";
+            // 
+            // btnDownload
+            // 
+            this.btnDownload.Location = new System.Drawing.Point(11, 96);
+            this.btnDownload.Name = "btnDownload";
+            this.btnDownload.Size = new System.Drawing.Size(65, 31);
+            this.btnDownload.TabIndex = 33;
+            this.btnDownload.Text = "下载";
+            this.btnDownload.UseVisualStyleBackColor = true;
+            this.btnDownload.Click += new System.EventHandler(this.BtnDownload_Click);
+            // 
+            // label9
+            // 
+            label9.AutoSize = true;
+            label9.Location = new System.Drawing.Point(7, 57);
+            label9.Name = "label9";
+            label9.Size = new System.Drawing.Size(65, 20);
+            label9.TabIndex = 31;
+            label9.Text = "结束时间";
+            // 
+            // dateStart
+            // 
+            this.dateStart.CustomFormat = "yyyy/MM";
+            this.dateStart.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.dateStart.Location = new System.Drawing.Point(78, 19);
+            this.dateStart.Name = "dateStart";
+            this.dateStart.Size = new System.Drawing.Size(96, 26);
+            this.dateStart.TabIndex = 28;
+            this.dateStart.Value = new System.DateTime(2013, 7, 1, 15, 47, 0, 0);
+            // 
+            // dateEnd
+            // 
+            this.dateEnd.Checked = false;
+            this.dateEnd.CustomFormat = "yyyy/MM";
+            this.dateEnd.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.dateEnd.Location = new System.Drawing.Point(78, 54);
+            this.dateEnd.Name = "dateEnd";
+            this.dateEnd.Size = new System.Drawing.Size(96, 26);
+            this.dateEnd.TabIndex = 30;
+            // 
+            // txtSenka
+            // 
+            this.txtSenka.AcceptsReturn = true;
+            this.txtSenka.Location = new System.Drawing.Point(13, 60);
+            this.txtSenka.MaxLength = 3276700;
+            this.txtSenka.Multiline = true;
+            this.txtSenka.Name = "txtSenka";
+            this.txtSenka.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+            this.txtSenka.Size = new System.Drawing.Size(407, 270);
+            this.txtSenka.TabIndex = 27;
+            this.txtSenka.WordWrap = false;
+            // 
             // groupBox1
             // 
             this.groupBox1.Controls.Add(this.btnLoadServerFile);
@@ -609,6 +611,16 @@
             this.btnOpenServerFile.Text = "打开";
             this.btnOpenServerFile.UseVisualStyleBackColor = true;
             this.btnOpenServerFile.Click += new System.EventHandler(this.BtnOpenServerFile_Click);
+            // 
+            // btnExport
+            // 
+            this.btnExport.Location = new System.Drawing.Point(206, 127);
+            this.btnExport.Name = "btnExport";
+            this.btnExport.Size = new System.Drawing.Size(75, 34);
+            this.btnExport.TabIndex = 36;
+            this.btnExport.Text = "导出到表";
+            this.btnExport.UseVisualStyleBackColor = true;
+            this.btnExport.Click += new System.EventHandler(this.BtnExport_Click);
             // 
             // FrmMain
             // 
@@ -643,9 +655,9 @@
             this.tabSniff.PerformLayout();
             this.tabSenka.ResumeLayout(false);
             this.tabSenka.PerformLayout();
+            this.groupBox2.ResumeLayout(false);
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
-            this.groupBox2.ResumeLayout(false);
             this.groupBox1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -695,5 +707,6 @@
         private System.Windows.Forms.Button btnDownload;
         private System.Windows.Forms.CheckBox chkMultiThreads;
         private System.Windows.Forms.Button btnServerAvailable;
+        private System.Windows.Forms.Button btnExport;
     }
 }

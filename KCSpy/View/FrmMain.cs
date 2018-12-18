@@ -3,9 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Net;
-using System.Net.Sockets;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using KCSpy.Model;
@@ -45,6 +42,13 @@ namespace KCSpy.View
             await Spy.DownloadAllSenkaPic(currDate, endDate);
             MessageBoxEx.Info(@"任务执行完成！");
         }
+        private async void BtnExport_Click(object sender, EventArgs e)
+        {
+            Clipboard.SetData(DataFormats.Text, txtSniff.Text);
+            await Spy.ExportClipboardToExcel();
+            Clipboard.Clear();
+            MessageBoxEx.Info(@"任务执行完成！");
+        }
         private void BtnLoadSeedFile_Click(object sender, EventArgs e) => Spy.LoadKeySeed();
         private void BtnLoadServerFile_Click(object sender, EventArgs e)
         {
@@ -61,6 +65,11 @@ namespace KCSpy.View
         private async void BtnSenka_Click(object sender, EventArgs e)
         {
             await Spy.RequestSenka(cmbServer.SelectedItem as Server, int.Parse(txtPageStart.Text), int.Parse(txtPageEnd.Text), SenkaReport);
+            MessageBoxEx.Info(@"任务执行完成！");
+        }
+        private async void BtnServerAvelable_Click(object sender, EventArgs e)
+        {
+            await Spy.RequestServerAvailable(SenkaReport);
             MessageBoxEx.Info(@"任务执行完成！");
         }
         private void BtnStop_Click(object sender, EventArgs e) => Spy.StopRequest();
@@ -160,10 +169,5 @@ namespace KCSpy.View
         private void SniffCurr(string content) => BeginInvoke(new MethodInvoker(() => lblCurrCount.Text = content));
         private void SniffLog(string txt) => BeginInvoke(new MethodInvoker(() => txtLog.AppendLine(txt)));
         private void SniffReport(string txt) => BeginInvoke(new MethodInvoker(() => txtSniff.AppendLine(txt)));
-        private async void BtnServerAvelable_Click(object sender, EventArgs e)
-        {
-            await Spy.RequestServerAvailable(SenkaReport);
-            MessageBoxEx.Info(@"任务执行完成！");
-        }
     }
 }
