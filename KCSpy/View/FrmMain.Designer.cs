@@ -29,19 +29,20 @@
         private void InitializeComponent()
         {
             System.Windows.Forms.Label label1;
-            System.Windows.Forms.Label label2;
             System.Windows.Forms.Label label3;
             System.Windows.Forms.Label label4;
             System.Windows.Forms.Label label5;
             System.Windows.Forms.Label label6;
             System.Windows.Forms.Label label7;
             System.Windows.Forms.Label label8;
+            System.Windows.Forms.Label label2;
+            System.Windows.Forms.Label label11;
             System.Windows.Forms.Label label10;
             System.Windows.Forms.Label label9;
+            System.Windows.Forms.Label label12;
             this.btnTest = new System.Windows.Forms.Button();
             this.btnSelectAll = new System.Windows.Forms.Button();
             this.txtToken = new System.Windows.Forms.TextBox();
-            this.txtReferer = new System.Windows.Forms.TextBox();
             this.txtBeginID = new System.Windows.Forms.TextBox();
             this.txtEndID = new System.Windows.Forms.TextBox();
             this.btnSenka = new System.Windows.Forms.Button();
@@ -55,47 +56,52 @@
             this.设置ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiConfig = new System.Windows.Forms.ToolStripMenuItem();
             this.chkSaveData = new System.Windows.Forms.CheckBox();
-            this.chkAutoServer = new System.Windows.Forms.CheckBox();
-            this.txtExcelFile = new System.Windows.Forms.TextBox();
-            this.chkExcel = new System.Windows.Forms.CheckBox();
-            this.btnOpenExcel = new System.Windows.Forms.Button();
             this.tabMain = new System.Windows.Forms.TabControl();
             this.tabSniff = new System.Windows.Forms.TabPage();
-            this.chkMultiThreads = new System.Windows.Forms.CheckBox();
-            this.tabSenka = new System.Windows.Forms.TabPage();
-            this.btnServerAvailable = new System.Windows.Forms.Button();
-            this.groupBox2 = new Neetsonic.Control.GroupBox();
-            this.btnAutoSeedFile = new System.Windows.Forms.Button();
-            this.btnLoadSeedFile = new System.Windows.Forms.Button();
-            this.btnOpenSeedFile = new System.Windows.Forms.Button();
+            this.lblTokens = new System.Windows.Forms.Label();
+            this.numTimes = new System.Windows.Forms.NumericUpDown();
+            this.txtTextFile = new System.Windows.Forms.TextBox();
+            this.chkTextFile = new System.Windows.Forms.CheckBox();
+            this.btnExport = new System.Windows.Forms.Button();
             this.txtSniff = new Neetsonic.Control.TextBox();
             this.txtLog = new Neetsonic.Control.TextBox();
+            this.tabSenka = new System.Windows.Forms.TabPage();
+            this.btnServerAvailable = new System.Windows.Forms.Button();
             this.groupBox3 = new Neetsonic.Control.GroupBox();
             this.btnDownloadAll = new System.Windows.Forms.Button();
             this.btnDownload = new System.Windows.Forms.Button();
             this.dateStart = new System.Windows.Forms.DateTimePicker();
             this.dateEnd = new System.Windows.Forms.DateTimePicker();
             this.txtSenka = new Neetsonic.Control.TextBox();
+            this.txtReferer = new System.Windows.Forms.TextBox();
+            this.groupBox2 = new Neetsonic.Control.GroupBox();
+            this.btnAutoSeedFile = new System.Windows.Forms.Button();
+            this.btnLoadSeedFile = new System.Windows.Forms.Button();
+            this.btnOpenSeedFile = new System.Windows.Forms.Button();
             this.groupBox1 = new Neetsonic.Control.GroupBox();
             this.btnLoadServerFile = new System.Windows.Forms.Button();
             this.btnOpenServerFile = new System.Windows.Forms.Button();
-            this.btnExport = new System.Windows.Forms.Button();
+            this.rbtnNormal = new System.Windows.Forms.RadioButton();
+            this.rbtnRank = new System.Windows.Forms.RadioButton();
             label1 = new System.Windows.Forms.Label();
-            label2 = new System.Windows.Forms.Label();
             label3 = new System.Windows.Forms.Label();
             label4 = new System.Windows.Forms.Label();
             label5 = new System.Windows.Forms.Label();
             label6 = new System.Windows.Forms.Label();
             label7 = new System.Windows.Forms.Label();
             label8 = new System.Windows.Forms.Label();
+            label2 = new System.Windows.Forms.Label();
+            label11 = new System.Windows.Forms.Label();
             label10 = new System.Windows.Forms.Label();
             label9 = new System.Windows.Forms.Label();
+            label12 = new System.Windows.Forms.Label();
             this.menuMain.SuspendLayout();
             this.tabMain.SuspendLayout();
             this.tabSniff.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numTimes)).BeginInit();
             this.tabSenka.SuspendLayout();
-            this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
+            this.groupBox2.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -107,15 +113,6 @@
             label1.Size = new System.Drawing.Size(51, 20);
             label1.TabIndex = 3;
             label1.Text = "Token";
-            // 
-            // label2
-            // 
-            label2.AutoSize = true;
-            label2.Location = new System.Drawing.Point(12, 116);
-            label2.Name = "label2";
-            label2.Size = new System.Drawing.Size(57, 20);
-            label2.TabIndex = 5;
-            label2.Text = "Referer";
             // 
             // label3
             // 
@@ -171,9 +168,45 @@
             label8.TabIndex = 23;
             label8.Text = "终止页码";
             // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.Location = new System.Drawing.Point(12, 116);
+            label2.Name = "label2";
+            label2.Size = new System.Drawing.Size(57, 20);
+            label2.TabIndex = 5;
+            label2.Text = "Referer";
+            // 
+            // label11
+            // 
+            label11.AutoSize = true;
+            label11.Location = new System.Drawing.Point(8, 50);
+            label11.Name = "label11";
+            label11.Size = new System.Drawing.Size(93, 20);
+            label11.TabIndex = 36;
+            label11.Text = "使用线程数量";
+            // 
+            // label10
+            // 
+            label10.AutoSize = true;
+            label10.Location = new System.Drawing.Point(7, 22);
+            label10.Name = "label10";
+            label10.Size = new System.Drawing.Size(65, 20);
+            label10.TabIndex = 29;
+            label10.Text = "起始时间";
+            // 
+            // label9
+            // 
+            label9.AutoSize = true;
+            label9.Location = new System.Drawing.Point(7, 57);
+            label9.Name = "label9";
+            label9.Size = new System.Drawing.Size(65, 20);
+            label9.TabIndex = 31;
+            label9.Text = "结束时间";
+            // 
             // btnTest
             // 
-            this.btnTest.Location = new System.Drawing.Point(14, 127);
+            this.btnTest.Location = new System.Drawing.Point(14, 153);
             this.btnTest.Name = "btnTest";
             this.btnTest.Size = new System.Drawing.Size(75, 34);
             this.btnTest.TabIndex = 0;
@@ -183,7 +216,7 @@
             // 
             // btnSelectAll
             // 
-            this.btnSelectAll.Location = new System.Drawing.Point(299, 127);
+            this.btnSelectAll.Location = new System.Drawing.Point(299, 153);
             this.btnSelectAll.Name = "btnSelectAll";
             this.btnSelectAll.Size = new System.Drawing.Size(75, 34);
             this.btnSelectAll.TabIndex = 2;
@@ -197,13 +230,6 @@
             this.txtToken.Name = "txtToken";
             this.txtToken.Size = new System.Drawing.Size(297, 26);
             this.txtToken.TabIndex = 4;
-            // 
-            // txtReferer
-            // 
-            this.txtReferer.Location = new System.Drawing.Point(75, 113);
-            this.txtReferer.Name = "txtReferer";
-            this.txtReferer.Size = new System.Drawing.Size(114, 26);
-            this.txtReferer.TabIndex = 6;
             // 
             // txtBeginID
             // 
@@ -231,7 +257,7 @@
             // 
             // btnStop
             // 
-            this.btnStop.Location = new System.Drawing.Point(111, 127);
+            this.btnStop.Location = new System.Drawing.Point(111, 153);
             this.btnStop.Name = "btnStop";
             this.btnStop.Size = new System.Drawing.Size(75, 34);
             this.btnStop.TabIndex = 12;
@@ -242,7 +268,7 @@
             // lblCurrCount
             // 
             this.lblCurrCount.AutoSize = true;
-            this.lblCurrCount.Location = new System.Drawing.Point(464, 14);
+            this.lblCurrCount.Location = new System.Drawing.Point(383, 13);
             this.lblCurrCount.Name = "lblCurrCount";
             this.lblCurrCount.Size = new System.Drawing.Size(37, 20);
             this.lblCurrCount.TabIndex = 13;
@@ -300,7 +326,7 @@
             // tsmiConfig
             // 
             this.tsmiConfig.Name = "tsmiConfig";
-            this.tsmiConfig.Size = new System.Drawing.Size(152, 22);
+            this.tsmiConfig.Size = new System.Drawing.Size(124, 22);
             this.tsmiConfig.Text = "修改配置";
             this.tsmiConfig.Click += new System.EventHandler(this.ConfigToolStripMenuItem_Click);
             // 
@@ -313,45 +339,6 @@
             this.chkSaveData.TabIndex = 26;
             this.chkSaveData.Text = "保存数据";
             this.chkSaveData.UseVisualStyleBackColor = true;
-            // 
-            // chkAutoServer
-            // 
-            this.chkAutoServer.AutoSize = true;
-            this.chkAutoServer.Location = new System.Drawing.Point(12, 52);
-            this.chkAutoServer.Name = "chkAutoServer";
-            this.chkAutoServer.Size = new System.Drawing.Size(126, 24);
-            this.chkAutoServer.TabIndex = 31;
-            this.chkAutoServer.Text = "自动判断服务器";
-            this.chkAutoServer.UseVisualStyleBackColor = true;
-            // 
-            // txtExcelFile
-            // 
-            this.txtExcelFile.Location = new System.Drawing.Point(136, 84);
-            this.txtExcelFile.Name = "txtExcelFile";
-            this.txtExcelFile.ReadOnly = true;
-            this.txtExcelFile.Size = new System.Drawing.Size(171, 26);
-            this.txtExcelFile.TabIndex = 33;
-            // 
-            // chkExcel
-            // 
-            this.chkExcel.AutoSize = true;
-            this.chkExcel.Location = new System.Drawing.Point(12, 86);
-            this.chkExcel.Name = "chkExcel";
-            this.chkExcel.Size = new System.Drawing.Size(118, 24);
-            this.chkExcel.TabIndex = 32;
-            this.chkExcel.Text = "更新Excel文件";
-            this.chkExcel.UseVisualStyleBackColor = true;
-            this.chkExcel.CheckedChanged += new System.EventHandler(this.ChkExcel_CheckedChanged);
-            // 
-            // btnOpenExcel
-            // 
-            this.btnOpenExcel.Location = new System.Drawing.Point(317, 82);
-            this.btnOpenExcel.Name = "btnOpenExcel";
-            this.btnOpenExcel.Size = new System.Drawing.Size(57, 28);
-            this.btnOpenExcel.TabIndex = 34;
-            this.btnOpenExcel.Text = "打开";
-            this.btnOpenExcel.UseVisualStyleBackColor = true;
-            this.btnOpenExcel.Click += new System.EventHandler(this.BtnOpenExcel_Click);
             // 
             // tabMain
             // 
@@ -368,15 +355,18 @@
             // tabSniff
             // 
             this.tabSniff.BackColor = System.Drawing.SystemColors.Control;
+            this.tabSniff.Controls.Add(this.rbtnRank);
+            this.tabSniff.Controls.Add(this.rbtnNormal);
+            this.tabSniff.Controls.Add(label12);
+            this.tabSniff.Controls.Add(this.lblTokens);
+            this.tabSniff.Controls.Add(this.numTimes);
+            this.tabSniff.Controls.Add(label11);
+            this.tabSniff.Controls.Add(this.txtTextFile);
+            this.tabSniff.Controls.Add(this.chkTextFile);
             this.tabSniff.Controls.Add(this.btnExport);
-            this.tabSniff.Controls.Add(this.chkMultiThreads);
             this.tabSniff.Controls.Add(this.btnTest);
-            this.tabSniff.Controls.Add(this.btnOpenExcel);
             this.tabSniff.Controls.Add(this.txtSniff);
-            this.tabSniff.Controls.Add(this.txtExcelFile);
             this.tabSniff.Controls.Add(this.btnSelectAll);
-            this.tabSniff.Controls.Add(this.chkExcel);
-            this.tabSniff.Controls.Add(this.chkAutoServer);
             this.tabSniff.Controls.Add(label3);
             this.tabSniff.Controls.Add(this.txtBeginID);
             this.tabSniff.Controls.Add(label4);
@@ -391,15 +381,88 @@
             this.tabSniff.TabIndex = 0;
             this.tabSniff.Text = "嗅探";
             // 
-            // chkMultiThreads
+            // lblTokens
             // 
-            this.chkMultiThreads.AutoSize = true;
-            this.chkMultiThreads.Location = new System.Drawing.Point(358, 13);
-            this.chkMultiThreads.Name = "chkMultiThreads";
-            this.chkMultiThreads.Size = new System.Drawing.Size(70, 24);
-            this.chkMultiThreads.TabIndex = 35;
-            this.chkMultiThreads.Text = "多线程";
-            this.chkMultiThreads.UseVisualStyleBackColor = true;
+            this.lblTokens.AutoSize = true;
+            this.lblTokens.Location = new System.Drawing.Point(183, 50);
+            this.lblTokens.Name = "lblTokens";
+            this.lblTokens.Size = new System.Drawing.Size(0, 20);
+            this.lblTokens.TabIndex = 40;
+            // 
+            // numTimes
+            // 
+            this.numTimes.Location = new System.Drawing.Point(107, 48);
+            this.numTimes.Maximum = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.numTimes.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.numTimes.Name = "numTimes";
+            this.numTimes.Size = new System.Drawing.Size(46, 26);
+            this.numTimes.TabIndex = 39;
+            this.numTimes.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
+            // txtTextFile
+            // 
+            this.txtTextFile.Location = new System.Drawing.Point(88, 80);
+            this.txtTextFile.Name = "txtTextFile";
+            this.txtTextFile.ReadOnly = true;
+            this.txtTextFile.Size = new System.Drawing.Size(286, 26);
+            this.txtTextFile.TabIndex = 38;
+            // 
+            // chkTextFile
+            // 
+            this.chkTextFile.AutoSize = true;
+            this.chkTextFile.Location = new System.Drawing.Point(12, 81);
+            this.chkTextFile.Name = "chkTextFile";
+            this.chkTextFile.Size = new System.Drawing.Size(70, 24);
+            this.chkTextFile.TabIndex = 37;
+            this.chkTextFile.Text = "从文本";
+            this.chkTextFile.UseVisualStyleBackColor = true;
+            this.chkTextFile.CheckedChanged += new System.EventHandler(this.ChkFromFile_CheckedChanged);
+            // 
+            // btnExport
+            // 
+            this.btnExport.Location = new System.Drawing.Point(206, 153);
+            this.btnExport.Name = "btnExport";
+            this.btnExport.Size = new System.Drawing.Size(75, 34);
+            this.btnExport.TabIndex = 36;
+            this.btnExport.Text = "导出到表";
+            this.btnExport.UseVisualStyleBackColor = true;
+            this.btnExport.Click += new System.EventHandler(this.BtnExport_Click);
+            // 
+            // txtSniff
+            // 
+            this.txtSniff.AcceptsReturn = true;
+            this.txtSniff.Location = new System.Drawing.Point(387, 38);
+            this.txtSniff.MaxLength = 3276700;
+            this.txtSniff.Multiline = true;
+            this.txtSniff.Name = "txtSniff";
+            this.txtSniff.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+            this.txtSniff.Size = new System.Drawing.Size(375, 289);
+            this.txtSniff.TabIndex = 1;
+            this.txtSniff.WordWrap = false;
+            // 
+            // txtLog
+            // 
+            this.txtLog.AcceptsReturn = true;
+            this.txtLog.Location = new System.Drawing.Point(12, 200);
+            this.txtLog.MaxLength = 3276700;
+            this.txtLog.Multiline = true;
+            this.txtLog.Name = "txtLog";
+            this.txtLog.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+            this.txtLog.Size = new System.Drawing.Size(367, 127);
+            this.txtLog.TabIndex = 22;
+            this.txtLog.WordWrap = false;
             // 
             // tabSenka
             // 
@@ -429,6 +492,80 @@
             this.btnServerAvailable.Text = "可注册服务器";
             this.btnServerAvailable.UseVisualStyleBackColor = true;
             this.btnServerAvailable.Click += new System.EventHandler(this.BtnServerAvelable_Click);
+            // 
+            // groupBox3
+            // 
+            this.groupBox3.Controls.Add(this.btnDownloadAll);
+            this.groupBox3.Controls.Add(label10);
+            this.groupBox3.Controls.Add(this.btnDownload);
+            this.groupBox3.Controls.Add(label9);
+            this.groupBox3.Controls.Add(this.dateStart);
+            this.groupBox3.Controls.Add(this.dateEnd);
+            this.groupBox3.Location = new System.Drawing.Point(444, 10);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size(186, 138);
+            this.groupBox3.TabIndex = 32;
+            this.groupBox3.TabStop = false;
+            this.groupBox3.Text = "人事表下载";
+            // 
+            // btnDownloadAll
+            // 
+            this.btnDownloadAll.Location = new System.Drawing.Point(82, 96);
+            this.btnDownloadAll.Name = "btnDownloadAll";
+            this.btnDownloadAll.Size = new System.Drawing.Size(92, 31);
+            this.btnDownloadAll.TabIndex = 34;
+            this.btnDownloadAll.Text = "下载全部";
+            this.btnDownloadAll.UseVisualStyleBackColor = true;
+            this.btnDownloadAll.Click += new System.EventHandler(this.BtnDownloadAll_Click);
+            // 
+            // btnDownload
+            // 
+            this.btnDownload.Location = new System.Drawing.Point(11, 96);
+            this.btnDownload.Name = "btnDownload";
+            this.btnDownload.Size = new System.Drawing.Size(65, 31);
+            this.btnDownload.TabIndex = 33;
+            this.btnDownload.Text = "下载";
+            this.btnDownload.UseVisualStyleBackColor = true;
+            this.btnDownload.Click += new System.EventHandler(this.BtnDownload_Click);
+            // 
+            // dateStart
+            // 
+            this.dateStart.CustomFormat = "yyyy/MM";
+            this.dateStart.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.dateStart.Location = new System.Drawing.Point(78, 19);
+            this.dateStart.Name = "dateStart";
+            this.dateStart.Size = new System.Drawing.Size(96, 26);
+            this.dateStart.TabIndex = 28;
+            this.dateStart.Value = new System.DateTime(2013, 7, 1, 15, 47, 0, 0);
+            // 
+            // dateEnd
+            // 
+            this.dateEnd.Checked = false;
+            this.dateEnd.CustomFormat = "yyyy/MM";
+            this.dateEnd.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.dateEnd.Location = new System.Drawing.Point(78, 54);
+            this.dateEnd.Name = "dateEnd";
+            this.dateEnd.Size = new System.Drawing.Size(96, 26);
+            this.dateEnd.TabIndex = 30;
+            // 
+            // txtSenka
+            // 
+            this.txtSenka.AcceptsReturn = true;
+            this.txtSenka.Location = new System.Drawing.Point(13, 60);
+            this.txtSenka.MaxLength = 3276700;
+            this.txtSenka.Multiline = true;
+            this.txtSenka.Name = "txtSenka";
+            this.txtSenka.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+            this.txtSenka.Size = new System.Drawing.Size(407, 270);
+            this.txtSenka.TabIndex = 27;
+            this.txtSenka.WordWrap = false;
+            // 
+            // txtReferer
+            // 
+            this.txtReferer.Location = new System.Drawing.Point(75, 113);
+            this.txtReferer.Name = "txtReferer";
+            this.txtReferer.Size = new System.Drawing.Size(114, 26);
+            this.txtReferer.TabIndex = 6;
             // 
             // groupBox2
             // 
@@ -472,115 +609,6 @@
             this.btnOpenSeedFile.UseVisualStyleBackColor = true;
             this.btnOpenSeedFile.Click += new System.EventHandler(this.BtnOpenSeedFile_Click);
             // 
-            // txtSniff
-            // 
-            this.txtSniff.AcceptsReturn = true;
-            this.txtSniff.Location = new System.Drawing.Point(387, 38);
-            this.txtSniff.MaxLength = 3276700;
-            this.txtSniff.Multiline = true;
-            this.txtSniff.Name = "txtSniff";
-            this.txtSniff.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.txtSniff.Size = new System.Drawing.Size(375, 289);
-            this.txtSniff.TabIndex = 1;
-            this.txtSniff.WordWrap = false;
-            // 
-            // txtLog
-            // 
-            this.txtLog.AcceptsReturn = true;
-            this.txtLog.Location = new System.Drawing.Point(12, 167);
-            this.txtLog.MaxLength = 3276700;
-            this.txtLog.Multiline = true;
-            this.txtLog.Name = "txtLog";
-            this.txtLog.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.txtLog.Size = new System.Drawing.Size(367, 160);
-            this.txtLog.TabIndex = 22;
-            this.txtLog.WordWrap = false;
-            // 
-            // groupBox3
-            // 
-            this.groupBox3.Controls.Add(this.btnDownloadAll);
-            this.groupBox3.Controls.Add(label10);
-            this.groupBox3.Controls.Add(this.btnDownload);
-            this.groupBox3.Controls.Add(label9);
-            this.groupBox3.Controls.Add(this.dateStart);
-            this.groupBox3.Controls.Add(this.dateEnd);
-            this.groupBox3.Location = new System.Drawing.Point(444, 10);
-            this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(186, 138);
-            this.groupBox3.TabIndex = 32;
-            this.groupBox3.TabStop = false;
-            this.groupBox3.Text = "人事表下载";
-            // 
-            // btnDownloadAll
-            // 
-            this.btnDownloadAll.Location = new System.Drawing.Point(82, 96);
-            this.btnDownloadAll.Name = "btnDownloadAll";
-            this.btnDownloadAll.Size = new System.Drawing.Size(92, 31);
-            this.btnDownloadAll.TabIndex = 34;
-            this.btnDownloadAll.Text = "下载全部";
-            this.btnDownloadAll.UseVisualStyleBackColor = true;
-            this.btnDownloadAll.Click += new System.EventHandler(this.BtnDownloadAll_Click);
-            // 
-            // label10
-            // 
-            label10.AutoSize = true;
-            label10.Location = new System.Drawing.Point(7, 22);
-            label10.Name = "label10";
-            label10.Size = new System.Drawing.Size(65, 20);
-            label10.TabIndex = 29;
-            label10.Text = "起始时间";
-            // 
-            // btnDownload
-            // 
-            this.btnDownload.Location = new System.Drawing.Point(11, 96);
-            this.btnDownload.Name = "btnDownload";
-            this.btnDownload.Size = new System.Drawing.Size(65, 31);
-            this.btnDownload.TabIndex = 33;
-            this.btnDownload.Text = "下载";
-            this.btnDownload.UseVisualStyleBackColor = true;
-            this.btnDownload.Click += new System.EventHandler(this.BtnDownload_Click);
-            // 
-            // label9
-            // 
-            label9.AutoSize = true;
-            label9.Location = new System.Drawing.Point(7, 57);
-            label9.Name = "label9";
-            label9.Size = new System.Drawing.Size(65, 20);
-            label9.TabIndex = 31;
-            label9.Text = "结束时间";
-            // 
-            // dateStart
-            // 
-            this.dateStart.CustomFormat = "yyyy/MM";
-            this.dateStart.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.dateStart.Location = new System.Drawing.Point(78, 19);
-            this.dateStart.Name = "dateStart";
-            this.dateStart.Size = new System.Drawing.Size(96, 26);
-            this.dateStart.TabIndex = 28;
-            this.dateStart.Value = new System.DateTime(2013, 7, 1, 15, 47, 0, 0);
-            // 
-            // dateEnd
-            // 
-            this.dateEnd.Checked = false;
-            this.dateEnd.CustomFormat = "yyyy/MM";
-            this.dateEnd.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.dateEnd.Location = new System.Drawing.Point(78, 54);
-            this.dateEnd.Name = "dateEnd";
-            this.dateEnd.Size = new System.Drawing.Size(96, 26);
-            this.dateEnd.TabIndex = 30;
-            // 
-            // txtSenka
-            // 
-            this.txtSenka.AcceptsReturn = true;
-            this.txtSenka.Location = new System.Drawing.Point(13, 60);
-            this.txtSenka.MaxLength = 3276700;
-            this.txtSenka.Multiline = true;
-            this.txtSenka.Name = "txtSenka";
-            this.txtSenka.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.txtSenka.Size = new System.Drawing.Size(407, 270);
-            this.txtSenka.TabIndex = 27;
-            this.txtSenka.WordWrap = false;
-            // 
             // groupBox1
             // 
             this.groupBox1.Controls.Add(this.btnLoadServerFile);
@@ -612,15 +640,36 @@
             this.btnOpenServerFile.UseVisualStyleBackColor = true;
             this.btnOpenServerFile.Click += new System.EventHandler(this.BtnOpenServerFile_Click);
             // 
-            // btnExport
+            // label12
             // 
-            this.btnExport.Location = new System.Drawing.Point(206, 127);
-            this.btnExport.Name = "btnExport";
-            this.btnExport.Size = new System.Drawing.Size(75, 34);
-            this.btnExport.TabIndex = 36;
-            this.btnExport.Text = "导出到表";
-            this.btnExport.UseVisualStyleBackColor = true;
-            this.btnExport.Click += new System.EventHandler(this.BtnExport_Click);
+            label12.AutoSize = true;
+            label12.Location = new System.Drawing.Point(10, 121);
+            label12.Name = "label12";
+            label12.Size = new System.Drawing.Size(113, 20);
+            label12.TabIndex = 41;
+            label12.Text = "Excel表输出格式";
+            // 
+            // rbtnNormal
+            // 
+            this.rbtnNormal.AutoSize = true;
+            this.rbtnNormal.Checked = true;
+            this.rbtnNormal.Location = new System.Drawing.Point(129, 119);
+            this.rbtnNormal.Name = "rbtnNormal";
+            this.rbtnNormal.Size = new System.Drawing.Size(83, 24);
+            this.rbtnNormal.TabIndex = 42;
+            this.rbtnNormal.TabStop = true;
+            this.rbtnNormal.Text = "普通模版";
+            this.rbtnNormal.UseVisualStyleBackColor = true;
+            // 
+            // rbtnRank
+            // 
+            this.rbtnRank.AutoSize = true;
+            this.rbtnRank.Location = new System.Drawing.Point(218, 119);
+            this.rbtnRank.Name = "rbtnRank";
+            this.rbtnRank.Size = new System.Drawing.Size(111, 24);
+            this.rbtnRank.TabIndex = 43;
+            this.rbtnRank.Text = "天下统一模版";
+            this.rbtnRank.UseVisualStyleBackColor = true;
             // 
             // FrmMain
             // 
@@ -653,11 +702,12 @@
             this.tabMain.ResumeLayout(false);
             this.tabSniff.ResumeLayout(false);
             this.tabSniff.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numTimes)).EndInit();
             this.tabSenka.ResumeLayout(false);
             this.tabSenka.PerformLayout();
-            this.groupBox2.ResumeLayout(false);
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
+            this.groupBox2.ResumeLayout(false);
             this.groupBox1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -670,7 +720,6 @@
         private Neetsonic.Control.TextBox txtSniff;
         private System.Windows.Forms.Button btnSelectAll;
         private System.Windows.Forms.TextBox txtToken;
-        private System.Windows.Forms.TextBox txtReferer;
         private System.Windows.Forms.TextBox txtBeginID;
         private System.Windows.Forms.TextBox txtEndID;
         private System.Windows.Forms.Button btnSenka;
@@ -688,10 +737,6 @@
         private System.Windows.Forms.Button btnOpenServerFile;
         private Neetsonic.Control.GroupBox groupBox1;
         private System.Windows.Forms.Button btnLoadServerFile;
-        private System.Windows.Forms.CheckBox chkAutoServer;
-        private System.Windows.Forms.TextBox txtExcelFile;
-        private System.Windows.Forms.CheckBox chkExcel;
-        private System.Windows.Forms.Button btnOpenExcel;
         private Neetsonic.Control.GroupBox groupBox2;
         private System.Windows.Forms.Button btnAutoSeedFile;
         private System.Windows.Forms.Button btnLoadSeedFile;
@@ -705,8 +750,14 @@
         private System.Windows.Forms.DateTimePicker dateEnd;
         private System.Windows.Forms.Button btnDownloadAll;
         private System.Windows.Forms.Button btnDownload;
-        private System.Windows.Forms.CheckBox chkMultiThreads;
         private System.Windows.Forms.Button btnServerAvailable;
         private System.Windows.Forms.Button btnExport;
+        private System.Windows.Forms.TextBox txtTextFile;
+        private System.Windows.Forms.CheckBox chkTextFile;
+        private System.Windows.Forms.Label lblTokens;
+        private System.Windows.Forms.NumericUpDown numTimes;
+        private System.Windows.Forms.TextBox txtReferer;
+        private System.Windows.Forms.RadioButton rbtnRank;
+        private System.Windows.Forms.RadioButton rbtnNormal;
     }
 }

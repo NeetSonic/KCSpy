@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace KCSpy.Model
 {
@@ -11,11 +12,16 @@ namespace KCSpy.Model
         public string MemberID { get; set; }
         public int ServerID { get; set; }
         public IEnumerable<string> Tokens => TokenString?.Split(';');
-        public Server TakeOneToken(string token)
+        public Server TakeOneToken(int seed)
         {
-            Server ret = (Server)MemberwiseClone();
-            ret.Token = token;
-            return ret;
+            if(Tokens?.Count() > 1)
+            {
+                List<string> tokens = Tokens.ToList();
+                Server ret = (Server)MemberwiseClone();
+                ret.Token = tokens[seed % tokens.Count];
+                return ret;
+            }
+            return this;
         }
     }
 }

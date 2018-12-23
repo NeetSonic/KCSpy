@@ -14,7 +14,7 @@ namespace KCSpy
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new FrmMain(args));
+            Application.Run(new FrmMain());
         }
     }
 }

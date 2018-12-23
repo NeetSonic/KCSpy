@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -14,13 +13,10 @@ namespace KCSpy.View
 {
     public partial class FrmMain : Form
     {
-        public FrmMain(string[] cmdArgs)
+        public FrmMain()
         {
-            _cmdArgs = cmdArgs;
             InitializeComponent();
         }
-        private readonly string[] _cmdArgs;
-        private bool _firstFromCmd;
 
         private async void BtnAutoSeedFile_Click(object sender, EventArgs e)
         {
@@ -45,7 +41,7 @@ namespace KCSpy.View
         private async void BtnExport_Click(object sender, EventArgs e)
         {
             Clipboard.SetData(DataFormats.Text, txtSniff.Text);
-            await Spy.ExportClipboardToExcel();
+            await Spy.ExportClipboardToExcel(Path.Combine(Global.Config.ExcelPath, rbtnNormal.Checked ? @"普通模版.xlsx" : @"天下统一模版.xlsx"));
             Clipboard.Clear();
             MessageBoxEx.Info(@"任务执行完成！");
         }
@@ -54,10 +50,6 @@ namespace KCSpy.View
         {
             Spy.LoadServer();
             SetServer();
-        }
-        private void BtnOpenExcel_Click(object sender, EventArgs e)
-        {
-            if(!string.IsNullOrWhiteSpace(txtExcelFile.Text)) { Process.Start(txtExcelFile.Text); }
         }
         private void BtnOpenSeedFile_Click(object sender, EventArgs e) => Spy.OpenSeedFile();
         private void BtnOpenServerFile_Click(object sender, EventArgs e) => Spy.OpenServerFile();
@@ -76,88 +68,44 @@ namespace KCSpy.View
         private async void BtnTest_ClickAsync(object sender, EventArgs e)
         {
             if(txtSniff.Text.Length > 0 && DialogResult.OK == MessageBoxEx.Confirm(@"是否清空当前已有文本？")) txtSniff.Clear();
-            bool fromExcel = chkExcel.Checked;
-            bool autoServer = chkAutoServer.Checked;
-            string filePath = txtExcelFile.Text;
+            bool fromTextFile = chkTextFile.Checked;
+            string textFilePath = txtTextFile.Text;
             Server server = (Server)cmbServer.SelectedItem;
-            if(fromExcel)
+            if(fromTextFile)
             {
-                if(autoServer)
-                {
-                    await Spy.RequestPlayerInfo(filePath, SniffCurr, SniffReport, SniffLog);
-                }
-                else
-                {
-                    await Spy.RequestPlayerInfo(server, filePath, SniffCurr, SniffReport, SniffLog);
-                }
-                string fileName = Path.GetFileName(txtExcelFile.Text);
-                string newName;
-                if(null != fileName)
-                {
-                    int start = fileName.LastIndexOf('(');
-                    if(start > 0)
-                    {
-                        int end = fileName.LastIndexOf(')');
-                        string oldDate = fileName.Substring(start + 1, end - start - 1);
-                        newName = fileName.Replace(oldDate, string.Format($@"{DateTime.Now.Year}.{DateTime.Now.Month}.{DateTime.Now.Day}"));
-                    }
-                    else { newName = fileName.Insert(fileName.LastIndexOf('.'), string.Format($@"({DateTime.Now.Year}.{DateTime.Now.Month}.{DateTime.Now.Day})")); }
-                    BeginInvoke(new MethodInvoker(() => txtExcelFile.Text = FileTool.Rename(filePath, newName)));
-                }
+                await Spy.RequestPlayerInfoTextFile(server, textFilePath, (int)numTimes.Value, SniffCurr, SniffReport, SniffLog);
             }
             else
             {
-                if(chkMultiThreads.Checked)
-                {
-                    int startID = int.Parse(txtBeginID.Text), endID = int.Parse(txtEndID.Text), step = (int)Math.Ceiling((endID - startID + 1) / (double)server.Tokens.Count());
-                    List<Task> tasks = new List<Task>();
-                    foreach(string token in server.Tokens)
-                    {
-                        tasks.Add(Spy.RequestPlayerInfo(server, startID, startID + step - 1, SniffCurr, SniffReport, SniffLog));
-                        startID += step;
-                    }
-                    await Task.WhenAll(tasks);
-                }
-                else
-                {
-                    int startID = int.Parse(txtBeginID.Text), endID = int.Parse(txtEndID.Text);
-                    await Spy.RequestPlayerInfo(server, startID, endID, SniffCurr, SniffReport, SniffLog);
-                }
+                int startID = int.Parse(txtBeginID.Text), endID = int.Parse(txtEndID.Text);
+                await Spy.RequestPlayerInfo(server, startID, endID, (int)numTimes.Value, SniffCurr, SniffReport, SniffLog);
             }
             MessageBoxEx.Info(@"任务执行完成！");
         }
-        private void ChkExcel_CheckedChanged(object sender, EventArgs e)
+        private void ChkFromFile_CheckedChanged(object sender, EventArgs e)
         {
-            if(_firstFromCmd)
+            if(chkTextFile.Checked)
             {
-                _firstFromCmd = false;
-                return;
+                OpenFileDialog dlg = new OpenFileDialog {Filter = @"文本文件|*.txt;"};
+                if(DialogResult.OK == dlg.ShowDialog()) { txtTextFile.Text = dlg.FileName; }
+                else { chkTextFile.Checked = false; }
             }
-            if(chkExcel.Checked)
+            else
             {
-                OpenFileDialog dlg = new OpenFileDialog {Filter = @"Excel文件|*.xlsx;"};
-                if(DialogResult.OK == dlg.ShowDialog()) { txtExcelFile.Text = dlg.FileName; }
-                else { chkExcel.Checked = false; }
+                txtTextFile.Clear();
             }
-            else { txtExcelFile.Clear(); }
         }
         private void CmbServer_SelectedIndexChanged(object sender, EventArgs e)
         {
             Server server = cmbServer.SelectedItem as Server;
             txtToken.Text = server?.Token;
             txtMemberID.Text = server?.MemberID;
-            chkMultiThreads.Enabled = null != server?.TokenString && server.Tokens.Any();
-            if(!chkMultiThreads.Enabled) { chkMultiThreads.Checked = false; }
+            lblTokens.Text = null != server?.TokenString && server.Tokens.Any() ? string.Format($@"({server.Tokens.Count()})个Token") : @"1个Token";
         }
         private void ConfigToolStripMenuItem_Click(object sender, EventArgs e) => new FrmConfig().ShowDialog();
         private void FrmMain_Load(object sender, EventArgs e)
         {
             SetServer();
-            if(_cmdArgs.Length > 0)
-            {
-                chkExcel.Checked = _firstFromCmd = true;
-                txtExcelFile.Text = _cmdArgs[0];
-            }
         }
         private void SenkaReport(string txt) => BeginInvoke(new MethodInvoker(() => txtSenka.AppendLine(txt)));
         private void SetServer()
