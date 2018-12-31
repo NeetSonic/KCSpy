@@ -1,13 +1,16 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using KCSpy.Model;
 using KCSpy.Util;
 using Neetsonic.Tool;
 using Neetsonic.Tool.Extensions;
+using ProcessType = KCSpy.Util.Spy.ProcessType;
 
 namespace KCSpy.View
 {
@@ -67,13 +70,26 @@ namespace KCSpy.View
         private void BtnStop_Click(object sender, EventArgs e) => Spy.StopRequest();
         private async void BtnTest_ClickAsync(object sender, EventArgs e)
         {
+            if(chkSetTime.Checked)
+            {
+                SniffLog(string.Format($@"等待至[{dateTimer.Value.ToString(CultureInfo.CurrentCulture)}]执行..."));
+                TimeSpan sleepSeconds = dateTimer.Value - DateTime.Now;
+                await Task.Run(() =>
+                {
+                    Thread.Sleep(sleepSeconds);
+                });
+            }
             if(txtSniff.Text.Length > 0 && DialogResult.OK == MessageBoxEx.Confirm(@"是否清空当前已有文本？")) txtSniff.Clear();
             bool fromTextFile = chkTextFile.Checked;
             string textFilePath = txtTextFile.Text;
+            txtSniff.Visible = false;
             Server server = (Server)cmbServer.SelectedItem;
             if(fromTextFile)
             {
-                await Spy.RequestPlayerInfoTextFile(server, textFilePath, (int)numTimes.Value, SniffCurr, SniffReport, SniffLog);
+                ProcessType processType = ProcessType.Normal;
+                if(chkAsYear.Checked) {processType = ProcessType.Year;}
+                else if(chkAsMonth.Checked) { processType = ProcessType.Month;}
+                await Spy.RequestPlayerInfoTextFile(server, textFilePath, (int)numTimes.Value, SniffCurr, SniffReport, SniffLog, processType);
             }
             else
             {
@@ -81,6 +97,7 @@ namespace KCSpy.View
                 await Spy.RequestPlayerInfo(server, startID, endID, (int)numTimes.Value, SniffCurr, SniffReport, SniffLog);
             }
             MessageBoxEx.Info(@"任务执行完成！");
+            txtSniff.Visible = true;
         }
         private void ChkFromFile_CheckedChanged(object sender, EventArgs e)
         {
@@ -117,5 +134,7 @@ namespace KCSpy.View
         private void SniffCurr(string content) => BeginInvoke(new MethodInvoker(() => lblCurrCount.Text = content));
         private void SniffLog(string txt) => BeginInvoke(new MethodInvoker(() => txtLog.AppendLine(txt)));
         private void SniffReport(string txt) => BeginInvoke(new MethodInvoker(() => txtSniff.AppendLine(txt)));
+
+        private void ChkSetTime_CheckedChanged(object sender, EventArgs e) => dateTimer.Enabled = chkSetTime.Checked;
     }
 }

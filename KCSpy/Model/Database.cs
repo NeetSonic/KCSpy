@@ -6,16 +6,17 @@ namespace KCSpy.Model
 {
     public class Member
     {
-        public string MemberID { get; set; }
+        public int MemberID { get; set; }
         public string Name { get; set; }
+        public int ServerID { get; set; }
         public int CurrentExp { get; set; }
         public int YearBeginExp { get; set; }
         public int MonthBeginExp { get; set; }
         public string CurrentComment { get; set; }
-        public int? CurrentMedal { get; set; }
+        public int CurrentMedal { get; set; }
         public int LastMonthBonus { get; set; }
         public int CurrSeasonBonusTotal { get; set; }
-        public string UpdateTimeStamp { get; set; }
+        public long UpdateTimeStamp { get; set; }
         // 月次戦果＝[引き継ぎ戦果(1)]＋[期間内の提督経験値から算出される戦果(2)]＋[ボーナス戦果(3)]
         // (1)引き継ぎ戦果＝[同年1月～前月までの累計提督経験値]/50000 + 先月分のボーナス戦果/35
         // (2)戦果は期間内に得た提督経験値に比例していると言われている（[当月に稼いだ提督経験値]*7/10000 ）
@@ -38,27 +39,24 @@ namespace KCSpy.Model
         // 更新 CurrentComment, MonthBeginExp, UpdateTimeStamp
     }
 
-    public sealed class Record
+    public class MemberTemp
     {
-        public int ID { get; set; }
         public int MemberID { get; set; }
         public string Name { get; set; }
-        public string Comment { get; set; }
-        public int Exp { get; set; }
-        public long RecTime { get; set; }
-        public short? Senka { get; set; }
-        public short? EOSenka { get; set; }
+        public int CurrentExp { get; set; }
+        public string CurrentComment { get; set; }
+        public long UpdateTimeStamp { get; set; }
+    }
 
-        public Record FromDataRow(DataRow row) => new Record
-        {
-            ID = row.FieldInt(nameof(ID)),
-            MemberID = row.FieldInt(nameof(MemberID)),
-            Name = row.FieldString(nameof(Name)),
-            Comment = row.FieldString(nameof(Comment)),
-            Exp = row.FieldInt(nameof(Exp)),
-            RecTime = row.FieldLong(nameof(RecTime)),
-            Senka = row.FieldNullableShort(nameof(Senka)),
-            EOSenka = row.FieldNullableShort(nameof(EOSenka))
-        };
+    public sealed class MemberSenka
+    {
+        public int ServerID { get; set; }
+        public int RankNo { get; set; }
+        public string Name { get; set; }
+        public string Comment { get; set; }
+        public int Medal { get; set; }
+        public int Senka { get; set; }
+        public int Exp { get; set; }
+        public DateTime RecordTime { get; set; }
     }
 }

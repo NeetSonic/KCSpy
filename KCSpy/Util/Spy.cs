@@ -10,7 +10,6 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Serialization;
 using KCSpy.Model;
@@ -19,11 +18,19 @@ using Neetsonic.Tool;
 using Neetsonic.Tool.Extensions;
 using Newtonsoft.Json;
 using Application = System.Windows.Forms.Application;
+using Exception = System.Exception;
 
 namespace KCSpy.Util
 {
     public static class Spy
     {
+        public enum ProcessType
+        {
+            Normal,
+            Year,
+            Month
+        }
+
         private static bool _stopRequest;
         private static readonly WebProxy ProxyACGPower = new WebProxy(@"127.0.0.1:8123", true);
         private static readonly string ServerFilePath = Path.Combine(Application.StartupPath, @"server.xml");
@@ -168,11 +175,12 @@ namespace KCSpy.Util
             }
             await Task.WhenAll(tasks);
         }
-        public static async Task RequestPlayerInfoTextFile(Server server, string textFilePath, int singleTokenTimes, Action<string> reportCurr, Action<string> reportResult, Action<string> reportLog)
+        public static async Task RequestPlayerInfoTextFile(Server server, string textFilePath, int singleTokenTimes, Action<string> reportCurr, Action<string> reportResult, Action<string> reportLog, ProcessType processType)
         {
             _stopRequest = false;
-            TextFileTaskKit taskKit = new TextFileTaskKit();
+            TextFileTaskKit taskKit = new TextFileTaskKit {ProcessType = processType};
             List<Task> Tasks = new List<Task>();
+            Task sqlTask = _SaveTextFile(reportLog, taskKit);
             Task readTask = _ReadTextFile(textFilePath, taskKit);
             while(singleTokenTimes > 0)
             {
@@ -183,6 +191,8 @@ namespace KCSpy.Util
             taskKit.TextFileReadCompleted = true;
             reportLog?.BeginInvoke(string.Format($@"读取文件完毕[{DateTime.Now.ToLongTimeString()}]"), null, null);
             await Task.WhenAll(Tasks);
+            taskKit.TextFilePostCompleted = true;
+            await sqlTask;
         }
         public static async Task RequestSenka(Server server, int startPage, int endPage, Action<string> report)
         {
@@ -218,11 +228,34 @@ namespace KCSpy.Util
                         }
                     }
                     List<API_SenkaPlayer> players = JsonConvert.DeserializeObject<API_Senka>(ret.Substring(7)).api_data.api_list;
+                    List<MemberSenka> members = new List<MemberSenka>();
                     foreach(API_SenkaPlayer player in players)
                     {
                         SenkaAndMedal sankaAndMedal = _DecodeSankaAndMedal(memberID, player.RankNo, player.Senka, player.Medal);
-                        report?.BeginInvoke(string.Format($@"提督：{player.PlayerName}    顺位：{player.RankNo}    战果值：{sankaAndMedal.Senka}    甲章数：{sankaAndMedal.Medal}"), null, null);
+                        //report?.Invoke(string.Format($@"提督：{player.Name}    顺位：{player.RankNo}    战果值：{sankaAndMedal.Senka}    甲章数：{sankaAndMedal.Medal}"));
+                        if(!members.Exists(m => m.Name == player.Name))
+                        {
+                            members.Add(new MemberSenka {Name = player.Name, ServerID = server.ServerID, Senka = sankaAndMedal.Senka, Medal = sankaAndMedal.Medal, Comment = player.Comment, RankNo = player.RankNo});
+                        }
                     }
+                    //List<MemberTemp> temps = new List<MemberTemp>();
+                    foreach(MemberSenka member in members)
+                    {
+                        List<Member> mems = DataAccess.SearchMember(member.Name, member.ServerID);
+                        foreach(Member mem in mems)
+                        {
+                            API_EnemyInfo kit = _ProcessPlayerInfo(Servers[mem.ServerID - 1], null, null, report, mem.MemberID);
+                            if(kit.api_cmt == member.Comment)
+                            {
+                                double hand = (mem.CurrentExp - mem.MonthBeginExp) * 7d / 10000;
+                                double inherit = (mem.MonthBeginExp - mem.YearBeginExp) / 50000d + mem.LastMonthBonus / 35d;
+                                double bonus = member.Senka - hand - inherit;
+                                report?.Invoke(string.Format($@"提督：{mem.Name}    ID：{mem.MemberID}    经验：{mem.CurrentExp}    当前战果：{member.Senka}    当月手刷：{hand:F}     当月继承：{inherit:F}    当月累计Bonus：{bonus:F}    季度已打Bonus：{mem.CurrSeasonBonusTotal}    甲章：{member.Medal}    上次记录时间：{TimeTool.UnixStampToDateTime(mem.UpdateTimeStamp).ToString(CultureInfo.CurrentCulture)}"));
+                            }
+                            //temps.Add(new MemberTemp {MemberID = mem.MemberID, CurrentComment = kit.api_cmt, Name = kit.api_nickname, CurrentExp = kit.api_experience[0], UpdateTimeStamp = TimeTool.NowUnixStamp});
+                        }
+                    }
+                    //DataAccess.UpdateMemberCurr(temps);
                 }
             });
         }
@@ -317,10 +350,9 @@ namespace KCSpy.Util
         private static SenkaAndMedal _DecodeSankaAndMedal(int memberId, int rankNo, long obfuscatedRate, long obfuscatedMedal)
         {
             int n = SENKA_API_SEED[rankNo % 13];
-            long medals = obfuscatedMedal / (n + 1853) - 157;
-            long senka = obfuscatedRate;
+            int medals = Convert.ToInt32(obfuscatedMedal / (n + 1853) - 157);
             int seed = _GetPortSeed(memberId);
-            senka = senka / n / seed - 91;
+            int senka = Convert.ToInt32(obfuscatedRate / n / seed - 91);
             return new SenkaAndMedal {Senka = senka, Medal = medals};
         }
         private static void _GenerateServerFile()
@@ -335,6 +367,32 @@ namespace KCSpy.Util
         {
             int e = PORT_API_SEED[t % 10];
             return (e - e % 100) / 100;
+        }
+        private static void _HandleError(Server server, Action<string> reportLog, int id, string ret)
+        {
+            API_Error err = JsonConvert.DeserializeObject<API_Error>(ret.Substring(7));
+            if(null != err)
+            {
+                switch(err.api_result)
+                {
+                    case 100:
+                    {
+                        reportLog?.BeginInvoke(string.Format($@"{id:D8}"), null, null);
+                        break;
+                    }
+                    case 201:
+                    {
+                        reportLog?.BeginInvoke(string.Format($@"Token[{server.Token}] 猫了"), null, null);
+                        break;
+                    }
+                    default:
+                    {
+                        reportLog?.BeginInvoke(ret, null, null);
+                        break;
+                    }
+                }
+            }
+            else { reportLog?.BeginInvoke(ret, null, null); }
         }
         private static string _PostPlayerInfo(string IP, byte[] data)
         {
@@ -365,7 +423,7 @@ namespace KCSpy.Util
             }
             return ret;
         }
-        private static void _ProcessPlayerInfo(PlayerInfo playerInfo, Action<string> reportCurr, Action<string> reportResult, Action<string> reportLog)
+        private static void _ProcessPlayerInfo(PlayerInfo playerInfo, Action<string> reportCurr, Action<string> reportResult, Action<string> reportLog, TextFileTaskKit taskKit = null)
         {
             Server server = Servers[playerInfo.ServerID - 1];
             reportCurr?.BeginInvoke(string.Format($@"当前 {playerInfo.ID:D8}"), null, null);
@@ -377,7 +435,26 @@ namespace KCSpy.Util
                 API_EnemyInfo kit = JsonConvert.DeserializeObject<API_Practice>(ret.Substring(7)).api_data;
                 if(null != kit)
                 {
-                    reportResult?.BeginInvoke(string.Format("{0}\t{1}\t{2:D8}\t{3}\t{4}\t{5}\t{6}\t{7}\t{8}\t{9}", kit.api_nickname.FormatName(), kit.api_experience[0], kit.api_member_id, kit.api_furniture, TimeTool.NowUnixStamp, server.ServerID, server.Name, playerInfo.DateStamp, kit.api_experience[0]-playerInfo.Exp, playerInfo.Flag), null, null);
+                    long timestamp = TimeTool.NowUnixStamp;
+                    if(null != taskKit && taskKit.ProcessType == ProcessType.Year)
+                    {
+                        taskKit.Members.Enqueue(new Member
+                        {
+                                MemberID = playerInfo.ID,
+                                Name = kit.api_nickname.FormatName(),
+                                ServerID = server.ServerID,
+                                CurrentExp = kit.api_experience[0],
+                                YearBeginExp = kit.api_experience[0],
+                                MonthBeginExp = kit.api_experience[0],
+                                CurrentComment = kit.api_cmt,
+                                UpdateTimeStamp = timestamp
+                        });
+                        reportResult?.BeginInvoke(string.Format("{0}\t{1}\t{2:D8}\t{3}\t{4}\t{5}\t{6}", kit.api_nickname.FormatName(), kit.api_experience[0], kit.api_member_id, kit.api_furniture, timestamp, server.ServerID, server.Name), null, null);
+                    }
+                    else
+                    {
+                        reportResult?.BeginInvoke(string.Format("{0}\t{1}\t{2:D8}\t{3}\t{4}\t{5}\t{6}\t{7}\t{8}\t{9}", kit.api_nickname.FormatName(), kit.api_experience[0], kit.api_member_id, kit.api_furniture, timestamp, server.ServerID, server.Name, playerInfo.DateStamp, kit.api_experience[0] - playerInfo.Exp, playerInfo.Flag), null, null);
+                    }
                 }
                 else
                 {
@@ -386,18 +463,19 @@ namespace KCSpy.Util
             }
             catch(Exception ex) { reportLog?.BeginInvoke(string.Format($@"{ex.Message}[{playerInfo.ID:d8}]"), null, null); }
         }
-        private static void _ProcessPlayerInfo(Server server, Action<string> reportCurr, Action<string> reportResult, Action<string> reportLog, int id)
+        private static API_EnemyInfo _ProcessPlayerInfo(Server server, Action<string> reportCurr, Action<string> reportResult, Action<string> reportLog, int id)
         {
+            API_EnemyInfo kit = null;
             reportCurr?.BeginInvoke(string.Format($@"当前 {id:D8}"), null, null);
             string postData = string.Format($@"api_verno=1&api_token={server.Token}&api_member_id={id}");
             byte[] data = Encoding.UTF8.GetBytes(postData);
             try
             {
                 string ret = _PostPlayerInfo(server.IP, data);
-                API_EnemyInfo kit = JsonConvert.DeserializeObject<API_Practice>(ret.Substring(7)).api_data;
+                kit = JsonConvert.DeserializeObject<API_Practice>(ret.Substring(7)).api_data;
                 if(null != kit)
                 {
-                        reportResult?.BeginInvoke(string.Format("{0}\t{1}\t{2:D8}\t{3}\t{4}\t{5}\t{6}", kit.api_nickname.FormatName(), kit.api_experience[0], kit.api_member_id, kit.api_furniture, TimeTool.NowUnixStamp, server.ServerID,server.Name), null, null);
+                    reportResult?.BeginInvoke(string.Format("{0}\t{1}\t{2:D8}\t{3}\t{4}\t{5}\t{6}", kit.api_nickname.FormatName(), kit.api_experience[0], kit.api_member_id, kit.api_furniture, TimeTool.NowUnixStamp, server.ServerID, server.Name), null, null);
                 }
                 else
                 {
@@ -405,32 +483,7 @@ namespace KCSpy.Util
                 }
             }
             catch(Exception ex) { reportLog?.BeginInvoke(string.Format($@"{ex.Message}[{id:d8}]"), null, null); }
-        }
-        private static void _HandleError(Server server, Action<string> reportLog, int id, string ret)
-        {
-            API_Error err = JsonConvert.DeserializeObject<API_Error>(ret.Substring(7));
-            if(null != err)
-            {
-                switch(err.api_result)
-                {
-                    case 100:
-                    {
-                        reportLog?.BeginInvoke(string.Format($@"{id:D8}"), null, null);
-                        break;
-                    }
-                    case 201:
-                    {
-                        reportLog?.BeginInvoke(string.Format($@"Token[{server.Token}] 猫了"), null, null);
-                        break;
-                    }
-                    default:
-                    {
-                        reportLog?.BeginInvoke(ret, null, null);
-                        break;
-                    }
-                }
-            }
-            else { reportLog?.BeginInvoke(ret, null, null); }
+            return kit;
         }
         private static Task _ProcessTextFile(Server server, Action<string> reportCurr, Action<string> reportResult, Action<string> reportLog, TextFileTaskKit taskKit)
         {
@@ -444,7 +497,7 @@ namespace KCSpy.Util
                     {
                         if(data.Contains('|'))
                         {
-                            _ProcessPlayerInfo(PlayerInfo.Parse(data), reportCurr, reportResult, reportLog);
+                            _ProcessPlayerInfo(PlayerInfo.Parse(data), reportCurr, reportResult, reportLog, taskKit);
                         }
                         else
                         {
@@ -495,11 +548,40 @@ namespace KCSpy.Util
                 }
             });
         }
+        private static Task _SaveTextFile(Action<string> reportLog, TextFileTaskKit taskKit)
+        {
+            return Task.Run(() =>
+            {
+                if(taskKit.ProcessType == ProcessType.Year)
+                {
+                    reportLog?.BeginInvoke(string.Format($@"数据库线程启动[{DateTime.Now.ToLongTimeString()}]"), null, null);
+                    while(true)
+                    {
+                        if(taskKit.Members.TryDequeue(out Member member))
+                        {
+                            try
+                            {
+                                DataAccess.NewMember(member);
+                            }
+                            catch(Exception ex)
+                            {
+                                reportLog?.BeginInvoke(ex.Message, null, null);
+                            }
+                        }
+                        else
+                        {
+                            if(taskKit.TextFilePostCompleted) { break; }
+                            Thread.Sleep(1000);
+                        }
+                    }
+                }
+            });
+        }
 
         private sealed class SenkaAndMedal
         {
-            public long Senka { get; set; }
-            public long Medal { get; set; }
+            public int Senka { get; set; }
+            public int Medal { get; set; }
         }
 
         private static class SimpleExcelFileFormat
@@ -512,6 +594,7 @@ namespace KCSpy.Util
             public const int ServerIdCol = 6;
             public const int ServerCol = 7;
         }
+
         private static class ExcelFileFormat
         {
             public const int NameCol = 1;
@@ -530,20 +613,24 @@ namespace KCSpy.Util
         {
             public readonly ConcurrentQueue<string> IDs = new ConcurrentQueue<string>();
             public bool TextFileReadCompleted;
+            public bool TextFilePostCompleted;
+            public ProcessType ProcessType;
+            public readonly ConcurrentQueue<Member> Members = new ConcurrentQueue<Member>();
         }
 
         private sealed class PlayerInfo
         {
+            private PlayerInfo() { }
             public int Exp { get; private set; }
             public int ID { get; private set; }
             public int ServerID { get; private set; }
             public string DateStamp { get; private set; }
             public string Flag { get; private set; }
-            private PlayerInfo(){}
             public static PlayerInfo Parse(string data)
             {
                 List<string> datas = data.Split('|').ToList();
-                return new PlayerInfo{ Exp = int.Parse(datas[0]), ID = int.Parse(datas[1]), ServerID = int.Parse(datas[2]), DateStamp = datas[3], Flag = datas[4]};
+                PlayerInfo ret = datas.Count > 2 ? new PlayerInfo {Exp = int.Parse(datas[0]), ID = int.Parse(datas[1]), ServerID = int.Parse(datas[2]), DateStamp = datas[3], Flag = datas[4]} : new PlayerInfo {ID = int.Parse(datas[0]), ServerID = int.Parse(datas[1])};
+                return ret;
             }
         }
     }

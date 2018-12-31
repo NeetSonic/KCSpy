@@ -21,7 +21,7 @@ namespace KCSpy.Model
                 ret.Token = tokens[seed % tokens.Count];
                 return ret;
             }
-            return this;
+            return this; 
         }
     }
 }

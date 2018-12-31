@@ -84,6 +84,7 @@
     <Compile Include="Model\API.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Util\DataAccess.cs" />
     <Compile Include="Util\Spy.cs" />
     <Compile Include="View\FrmConfig.cs">
       <SubType>Form</SubType>

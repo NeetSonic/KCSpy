@@ -1,18 +1,43 @@
-IF EXISTS (SELECT 1 FROM SYSOBJECTS WHERE name = 'Member')
+IF EXISTS (SELECT 1 FROM sysobjects WHERE name = 'Member')
 DROP TABLE Member
-
 CREATE TABLE Member
 (
-	ID INT NOT NULL IDENTITY(1,1),
-	MemberID NVARCHAR(10)NOT NULL,
-	Name NVARCHAR(50) COLLATE Japanese_CS_AS NOT NULL,
+	MemberID INT NOT NULL,
+	Name NVARCHAR(50) COLLATE Japanese_CS_AS_KS_WS NOT NULL,
+	ServerID INT NOT NULL,
 	CurrentExp INT NOT NULL,
 	YearBeginExp INT NOT NULL,
 	MonthBeginExp INT NOT NULL,
-	CurrentComment NVARCHAR(50) COLLATE Japanese_CS_AS NOT NULL,
+	CurrentComment NVARCHAR(50) COLLATE Japanese_CS_AS_KS_WS NOT NULL,
 	CurrentMedal INT NULL,
 	LastMonthBonus INT NOT NULL,
 	CurrSeasonBonusTotal INT NOT NULL,
-	UpdateTimeStamp NVARCHAR(50) NOT NULL,
-	PRIMARY KEY(ID)
+	UpdateTimeStamp BIGINT NOT NULL,
+	PRIMARY KEY(MemberID, ServerID)
 )
+IF EXISTS (SELECT 1 FROM sysobjects WHERE name = 'MemberTemp')
+DROP TABLE MemberTemp
+CREATE TABLE MemberTemp
+(
+	MemberID INT NOT NULL,
+	Name NVARCHAR(50) COLLATE Japanese_CS_AS_KS_WS NOT NULL,
+	CurrentExp INT NOT NULL,
+	CurrentComment NVARCHAR(50) COLLATE Japanese_CS_AS_KS_WS NOT NULL,
+	UpdateTimeStamp BIGINT NOT NULL,
+	PRIMARY KEY(MemberID)
+)
+
+IF EXISTS (SELECT 1 FROM sysobjects WHERE name = 'MemberSenka')
+DROP TABLE MemberSenka
+CREATE TABLE MemberSenka
+(
+	ID INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
+	ServerID INT NOT NULL,
+	Name NVARCHAR(50) COLLATE Japanese_CS_AS NOT NULL,
+	RankNo INT NOT NULL,
+	Comment NVARCHAR(50) COLLATE Japanese_CS_AS NOT NULL,
+	Medal INT NOT NULL,
+	Senka INT NOT NULL,
+	UpdateTimeStamp BIGINT NOT NULL
+)
+

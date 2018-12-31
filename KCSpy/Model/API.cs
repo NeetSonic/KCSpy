@@ -25,7 +25,7 @@ namespace KCSpy.Model
         public long api_itslcqtmrxtf{ get; set; }
         public long api_wuhnhojjxmke{ get; set; }
         public int RankNo => api_mxltvkpyuklh;
-        public string PlayerName => api_mtjmdcwtvhdr;
+        public string Name => api_mtjmdcwtvhdr;
         public string Comment => api_itbrdpdbkynm;
         public long Medal => api_itslcqtmrxtf;
         public long Senka => api_wuhnhojjxmke;
@@ -47,13 +47,6 @@ namespace KCSpy.Model
         public string api_deckname { get; set; }
         public string api_deckname_id { get; set; }
         public API_Deck api_deck { get; set; }
-        public Record ToRecord() => new Record
-        {
-                MemberID = api_member_id,
-                Exp = api_experience[0],
-                Name = api_nickname,
-                Comment = api_cmt
-        };
     }
     public sealed class API_Deck
     {
